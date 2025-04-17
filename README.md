@@ -5,7 +5,6 @@ A web application for buying and selling used cars, built with Django 4.1.3.
 ## Prerequisites
 
 - Python 3.12+
-- PostgreSQL 15+
 - Git
 
 ## Installation
