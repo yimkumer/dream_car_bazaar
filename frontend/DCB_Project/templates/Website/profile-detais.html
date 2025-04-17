@@ -1,0 +1,197 @@
+{% extends 'Website/layout.html' %}
+{% load static %}
+{% load user_tags %}
+
+{% block body %}
+    <div class="wrapper ovh">
+
+    {% include 'Website/top_header.html' %}
+    {% include 'Website/top_navbar.html' %}
+
+    <!-- Modal -->
+    {% include 'Website/login_modal.html' %}
+<div class="modal" id="qrCodeModal" role="dialog" aria-labelledby="qrCodeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p id="modal">Modal body text goes here.
+                </p>
+           </div>
+       </div>
+   </div>
+</div>
+    {% include 'Website/dealer_form.html' %}
+
+
+
+    <!-- Our Dashbord -->
+        <section class="our-dashbord dashbord bgc-f9">
+            <div class="container">
+                <div class="profile-details-section" style="padding: 50px 30px;background: #fff;box-shadow: 0 0 10px #909090;border-radius: 10px;margin-bottom: 60px;">
+                    <div class="row ">
+                        <div class="col-lg-8 col-xl-8">
+                            <div class="user_profile_details">
+                                <div class="d-flex db-414 align-items-center">
+                                    <div class="flex-shrink-0 mb15-414">
+                                        <div>
+                                            <h2 style="padding: 20px;border: 1px solid #fff;margin: 10px;border-radius: 50%;width: 70px;height: 70px;text-align: center;display: flex;justify-content: center;align-items: center;background: #1a3760;color: #fff;box-shadow: 0 0 10px #898989;font-size: 34px;">{{last_car.created_by.first_name.0|title}}</h2>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h2 class="mt-0 title">{{last_car.created_by.first_name}}</h2>
+                                        <ul class="prop_details mb0">
+                                            <li class="list-inline-item"><a class="mr10" href="tel:+91{{last_car.created_by.phone}}"><span
+                                                        class="flaticon-phone-call pr5 vam"></span> <span
+                                                        class="tdu">(+91)
+                                                        {{last_car.created_by.phone}}</span></a></li>
+                                            <li class="list-inline-item"><a class="mr10" href="#"><span
+                                                        class="fas fa-map-marker-alt pr5 vam"></span> {{last_car.vehicle_location}}</a></li>
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-xl-4">
+                            <div class="user_profile_details"
+                                style="display: flex; justify-content: center; align-items: center;">
+                                <div class="text-end">
+                                    <button class="btn btn-thm btn-block view_car_btn" style="width: 45px;margin-right: 20px;font-size: 18px;font-weight: 800;height: 40px;"><i class="fa fa-thumbs-up"></i></button>
+                                </div>
+
+                                <div class="text-end">
+                                    <button class="btn btn-thm btn-block view_car_btn" type="button" data-toggle="modal" data-target="#qrCodeModal" style="width: 45px;margin-right: 20px;font-size: 18px;font-weight: 800;height: 40px;"><i class="fa fa-share-alt"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- ===================Cards============== -->
+                <div class="row ">
+                    <div class="col-6 col-lg-3">
+                        <div class="ff_one ">
+                            <div class="icon "><span class="flaticon-car"></span></div>
+                            <div class="detais text-end ">
+                                <div class="timer ">{{total_car}}</div>
+                                <p class="para ">Car Posted</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="ff_one style2 ">
+                            <div class="icon "><span class="flaticon-heart "></span></div>
+                            <div class="detais text-end ">
+                                <div class="timer ">74</div>
+                                <p class="para ">Total Likes</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="ff_one style3 ">
+                            <div class="icon "><span class="flaticon-message "></span></div>
+                            <div class="detais text-end ">
+                                <div class="timer ">20</div>
+                                <p class="para ">Total Reviews</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="ff_one style3 ">
+                            <div class="icon "><span class="flaticon-message" style="color: #29b200"></span></div>
+                            <div class="detais text-end ">
+                                <div class="timer " style="color: #29b200">20</div>
+                                <p class="para " style="color: #29b200">Total Reviews</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================Dealer Listing============ -->
+                <div class="row ">
+                    <div class="col-lg-12 ">
+                        <div class="dashboard_favorites_contents p10-520">
+                            <div class="row">
+                                {% for car_detail in all_car_details %}
+                                <div class="col-sm-6 col-xl-12 col-xxl-6">
+                                    <div class="car-listing list_style">
+                                        <div class="thumb">
+                                            <div class="tag">FEATURED</div>
+                                            {% if car_detail.car_image %}
+                                                <img class="img-fluid" src="https://dreamcarbazaar.com/media/{{ car_detail.car_image }}" alt="Car Image">
+                                            {% else %}
+                                                <img class="img-fluid" src="{% static 'images/listing/2.jpg' %}" alt="Default Car Image">
+                                            {% endif %}
+                                            <div class="thmb_cntnt2">
+                                                <ul class="mb0">
+                                                    <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                class="flaticon-photo-camera mr3"></span> 22</a></li>
+                                                    <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                class="flaticon-play-button mr3"></span> 3</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="details">
+                                            <div class="wrapper">
+                                                <h5 class="price">Rs {{car_detail.demand_price}}</h5>
+                                                <h4 class="title"><a href="{% url 'customer:car_details' car_detail.id %}">{{car_detail.variant.model.brand.name}} {{car_detail.variant.model.name}} -
+                                                        {{car_detail.variant.name}}</a></h4>
+                                                <h6 class="dealer-title"><a href="{% url 'profile_details' car_detail.id %}">{{car_detail.created_by.first_name}}</a></h6>
+                                                <!--<div class="listign_review">-->
+                                                <!--    <ul class="mb0">-->
+                                                <!--        <li class="list-inline-item"><a href="#"><i-->
+                                                <!--                    class="fa fa-star"></i></a></li>-->
+                                                <!--        <li class="list-inline-item"><a href="#"><i-->
+                                                <!--                    class="fa fa-star"></i></a></li>-->
+                                                <!--        <li class="list-inline-item"><a href="#"><i-->
+                                                <!--                    class="fa fa-star"></i></a></li>-->
+                                                <!--        <li class="list-inline-item"><a href="#"><i-->
+                                                <!--                    class="fa fa-star"></i></a></li>-->
+                                                <!--        <li class="list-inline-item"><a href="#"><i-->
+                                                <!--                    class="fa fa-star"></i></a></li>-->
+                                                <!--        <li class="list-inline-item"><a href="#">4.7</a></li>-->
+                                                        
+                                                <!--    </ul>-->
+                                                <!--</div>-->
+                                            </div>
+                                            <div class="listing_footer">
+                                                <ul class="mb0">
+                                                    <li class="list-inline-item"><a href="#"><i class="fa fa-gas-pump"></i> {{car_detail.fuel_type}}</a>
+                                                    </li>
+                                                    <li class="list-inline-item"><a href="#"><i class="flaticon-gear me-2"></i> {{car_detail.transmission}}</a>
+                                                    </li>
+                                                    <li class="list-inline-item"><a href="#"><i class="fa fa-clock"></i> {{car_detail.car_year}}</a>
+                                                    </li>
+                                                    <li class="list-inline-item"><a href="#"><i class="flaticon-road-perspective me-2"></i> {{car_detail.total_km_driven}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+    		function myfunction(){
+    		    var current_url = window.location.href;
+    		    var qrcode = new QRCode("modal", current_url);
+    		}
+	</script>
+    <!-- Our Footer -->
+    {% include 'Website/footer.html' %}
+    
+    
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

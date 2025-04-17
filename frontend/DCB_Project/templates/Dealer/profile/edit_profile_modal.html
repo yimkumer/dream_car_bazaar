@@ -1,0 +1,242 @@
+<!-- Basic Name and Company Form -->
+<style>
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password {
+    padding-right: 40px; /* Adjust space for the eye icon */
+}
+
+.togglePassword {
+    background: none;
+    border: none;
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.togglePassword .fa {
+    font-size: 18px;
+    color: #333;
+}
+
+</style>
+<div class="modal fade" id="editDP" tabindex="-1" aria-labelledby="editDP" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <input type="file" class="form-control" id="dealer_dp" name="dealer_dp" value="">
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" name="edit" value="edit_DP">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editName" tabindex="-1" aria-labelledby="editName" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post">
+                <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="dealers-details" class="col-form-label">Name</label>
+                            <input type="text" class="form-control" id="dealers-details" name="dealer_name" value="{{request.user.first_name}} ">
+                        </div>
+                        <div class="mb-3">
+                            <label for="dealers-firm_name" class="col-form-label">Firm Nane</label>
+                            <input type="text" class="form-control" id="dealers-firm_name" name="dealer_firm_name" value="{{request.user.firm_name}}">
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" name="edit" value="edit_name">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Form -->
+
+<!-- Basic phone and email Form -->
+<div class="modal fade" id="editEmail" tabindex="-1" aria-labelledby="editEmail" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post">
+                <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="dealers-number" class="col-form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="dealers-number" name="dealer_number" value="{{request.user.phone}}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="dealers-mail" class="col-form-label">Email Id</label>
+                            <input type="text" class="form-control" id="dealers-mail" name="dealer_email" value="{{request.user.email}}">
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" name="edit" value="edit_email">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Form -->
+
+<!-- Basic Address Form -->
+<div class="modal fade bs-example-modal-center" id="editAddress" tabindex="-1" aria-labelledby="editAddress" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="dealers-address" class="col-form-label">Address</label> 
+                            <input type="text" class="form-control" id="dealers-address" name="dealer_address" value="{{request.user.address}}">
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" name="edit" value="edit_address">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Form -->
+
+
+<!-- Password Change Form -->
+<div class="modal fade bs-example-modal-center" id="editPass" tabindex="-1" aria-labelledby="editPass" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="passwordForm" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="dealer-old-password" class="col-form-label">Old Password</label> 
+                        <div class="password-container">
+                            <input type="password" class="form-control password" id="dealer-old-password" name="dealer_old_password" value="">
+                            <button type="button" class="togglePassword">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dealer-new-password" class="col-form-label">New Password</label> 
+                        <div class="password-container">
+                            <input type="password" class="form-control password" id="dealer-new-password" name="dealer_new_password" value="">
+                            <button type="button" class="togglePassword">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dealer-re-new-password" class="col-form-label">Re-Enter New Password</label> 
+                        <div class="password-container">
+                            <input type="password" class="form-control password" id="dealer-re-new-password" name="dealer_re_new_password" value="">
+                            <button type="button" class="togglePassword">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!--<div id="error-message" style="color: red; display: none;">Passwords do not match!</div>-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" name="edit" value="edit_pass" id="submitButton">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--Update Aadhar or Pan-->
+<div class="modal fade bs-example-modal-center" id="editCard" tabindex="-1" aria-labelledby="editCard" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label> Aadhar </label>
+                            <input type="file" class="form-control" id="dealer_aadhar" name="dealer_aadhar" value="" accept="image/png, image/gif, image/jpeg">
+                        </div>
+                        <div class="mb-3">
+                            <label>PAN</label>
+                            <input type="file" class="form-control" id="dealer_pan" name="dealer_pan" value="" accept="image/png, image/gif, image/jpeg">
+                        </div>
+                        <div class="mb-3">
+                            <label>GST</label>
+                            <input type="file" class="form-control" id="dealer_gst" name="dealer_gst" value="" accept="image/png, image/gif, image/jpeg">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" name="edit" value="update_card">Upload</button>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- End Form -->
+
+
+<!-- KYC Document Form -->
+<!--<div class="modal fade bs-example-modal-center" id="KYCdocument" tabindex="-1" aria-labelledby="KYCdocument" aria-modal="true" role="dialog">-->
+<!--    <div class="modal-dialog modal-dialog-centered">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--            </div>-->
+<!--            <form method="post">-->
+<!--                {% csrf_token %}-->
+<!--                <div class="modal-body">-->
+<!--                        <div class="mb-3">-->
+<!--                            <label for="dealers-address" class="col-form-label">Address</label>-->
+<!--                            <input class="form-control" type="file" id="formFile">-->
+<!--                        </div>-->
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>-->
+<!--                    <button type="button" class="btn btn-primary">Save</button>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!-- End Form -->

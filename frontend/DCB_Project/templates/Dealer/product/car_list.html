@@ -1,0 +1,905 @@
+{% extends 'Dealer/account/layout.html' %}
+{% load static %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+{% block common_css %}
+<style>
+    .edit-icon, .save-icon {
+        cursor: pointer;
+        color: blue;
+    }
+    .delete-icon {
+        cursor: pointer;
+        color: red;
+    }
+    .hidden {
+        display: none;
+    }
+/* Highlight style */
+.highlight {
+        background-color: yellow;
+    }    
+    
+#share-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+#share-button:hover {
+    background-color: #45a049; /* Darker green */
+}
+
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.2); /* Adjust the transparency */
+}
+
+</style>
+
+
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+{% endblock %}
+
+{% block body %}
+
+    <!-- start page title -->
+    <div class="row mb-4">
+        <div class="col-lg-6 col-sm-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">All Cars</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-pills nav-justified" role="tablist">
+                        <li class="nav-item waves-effect waves-light" role="presentation">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#all-cars" role="tab" aria-selected="true">
+                                <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                <span class="d-none d-sm-block">All Car <span class="badge bg-success">{{ cars_count }}</span></span>
+                            </a>
+                        </li>
+                        <li class="nav-item waves-effect waves-light " role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#live-cars" role="tab" aria-selected="false" tabindex="-1">
+                                <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                <span class="d-none d-sm-block">Live <span class="badge bg-success">{{ live_count }}</span></span>
+                            </a>
+                        </li>
+                        <li class="nav-item waves-effect waves-light" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#expired-cars" role="tab" aria-selected="false" tabindex="-1">
+                                <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                                <span class="d-none d-sm-block">Expired  <span class="badge bg-success">{{ expired_count }}</span></span>
+                            </a>
+                        </li>
+                        <li class="nav-item waves-effect waves-light" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#processing-cars" role="tab" aria-selected="false" tabindex="-1">
+                                <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+                                <span class="d-none d-sm-block">Processing <span class="badge bg-success">{{ draft_count }}</span></span>
+                            </a>
+                        </li>
+                        <li class="nav-item waves-effect waves-light" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#sold-cars" role="tab" aria-selected="false" tabindex="-1">
+                                <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+                                <span class="d-none d-sm-block">Sold  <span class="badge bg-success">{{ sold_count }}</span></span>
+                            </a>
+                        </li>
+                        <li class="nav-item waves-effect waves-light" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#deleted-cars" role="tab" aria-selected="false" tabindex="-1">
+                                <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+                                <span class="d-none d-sm-block">Deleted  <span class="badge bg-success">{{ deleted_count }}</span></span>
+                            </a>
+                        </li>
+                        <li class="nav-item waves-effect waves-light" role="presentation">
+                            <a class="nav-link" id="rejected-tab" data-bs-toggle="tab" href="#rejected-cars" role="tab" aria-selected="false" tabindex="-1">
+                                <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+                                <span class="d-none d-sm-block">Rejected</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row mb-2">
+        <div class="col-sm-4">
+            <div class="search-box me-2 mb-2 d-inline-block">
+                <div class="position-relative">
+                    <input type="text" class="form-control" id="searchInput" onkeyup="searchTable()" placeholder="Search..." >
+                    <i class="bx bx-search-alt search-icon"></i>
+                </div>
+            </div>
+        </div>
+    <div class="col-sm-8">
+        <div class="text-sm-end">
+            <!-- Download Button with Dropdown Menu -->
+                <div class="dropdown d-inline">
+                    <a class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2 dropdown-toggle" 
+                       id="downloadButton" 
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false" disabled>
+                        <i class="fa fa-download me-1"></i> Download
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="downloadButton">
+                        <li><a class="dropdown-item" href="{% url 'dealer:download_pdf' %}">Download as PDF</a></li>
+                        <li><a class="dropdown-item" href="{% url 'dealer:download_excel' %}">Download as Excel</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary btn-rounded waves-effect waves-light mb-2 dropdown-toggle"
+                            data-bs-toggle="dropdown" aria-expanded="false" id="selectdownload" disabled>
+                        <i class="fa fa-download me-1"></i> Select & Download
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" >
+                        <!-- PDF Option -->
+                        <li>
+                            <a class="dropdown-item" href="#" id="downloadSelectedPdf">Download as PDF</a>
+                        </li>
+                        <!-- Excel Option -->
+                        <li>
+                            <a class="dropdown-item" href="#" id="downloadSelectedExcel">Download as Excel</a>
+                        </li>
+                    </ul>
+                </div>
+                 <!-- Share Button -->
+                <button id="share-button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2" onclick="shareInvoice()" disabled>Select & Share </button>
+
+                <!-- Add New Order Button -->
+                <a type="button" href="/dealer/add_car" class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2">
+                    <i class="mdi mdi-plus me-1"></i> Add New Order
+                </a>
+            </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+
+            <div class="card">
+                <div class="card-body p-0">
+
+                    <!-- Tab panes -->
+                    <div class="tab-content text-muted">
+                        <div class="tab-pane fade show active" id="all-cars" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <form id="downloadForm" method="POST">
+                                            {% csrf_token %}
+                                        <table id="datatable-buttons" class="table align-middle table-nowrap table-check table-bordered">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th class="align-middle"><input type="checkbox" id="selectAll"></th>
+                                                    <th class="align-middle">S.NO</th>
+                                                    <th class="align-middle">Car Name</th>
+                                                    <th class="align-middle">Registration No.</th>
+                                                    <th class="align-middle">Date</th>
+                                                    <th class="align-middle">Price(INR)</th>
+                                                    <th class="align-middle">Status</th>
+                                                    <th class="align-middle" style="width: 120px">View Details</th>
+                                                    <th class="align-middle">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for car_detail in all_car_detail %}
+                                                    <tr data-id="{{ car_detail.id }}" data-image-urls="{{ car_detail.image_urls|join:',' }}">
+                                                        <td><input type="checkbox" class="carCheckbox" name="car_ids" value="{{ car_detail.id }}"></td>
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td><a class="text-body fw-bold">{{ car_detail.variant.model.brand.name }} {{ car_detail.variant.model.name }} {{ car_detail.variant.name }}</a></td>
+                                                        <td class="reg-no">{{ car_detail.registration_no }}</td>
+                                                        <td class="date">{{ car_detail.updated_at.date }}</td>
+                                                        <td class="price">{{ car_detail.demand_price }}</td>
+                                                        <td class="status">
+                                                            {% if car_detail.status == 'live' %}
+                                                                <span class="badge badge-pill badge-soft-success font-size-12">Live</span>
+                                                            {% elif car_detail.status == 'expired' %}
+                                                                <span class="badge badge-pill badge-soft-danger font-size-12">Expired</span>
+                                                            {% elif car_detail.status == 'sold' %}
+                                                                <span class="badge badge-pill badge-soft-warning font-size-12">Sold</span>
+                                                            {% else %}
+                                                                <span class="badge badge-pill badge-soft-secondary font-size-12">Unknown</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td class=" text-center">
+                                                            <a type="button" href="{% url 'dealer:car_detail' car_detail.id %}" class="btn btn-primary btn-sm" id="view">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <div style="display: flex; gap: 10px; align-items: center;">
+                                                                <form action="{% url 'dealer:markdelete' car_detail.id %}" method="POST" onsubmit="return confirm('Are you sure you want to delete this ad?');" style="display: inline;">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </button>
+                                                                </form>
+                                                                <button type="button" class="btn btn-sm btn-primary" title="Share" data-car-id="{{ car_detail.id }}" onclick="shareTableData(this)">
+                                                                    <i class="fas fa-share"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade " id="live-cars" role="tabpanel ">
+                            <div class="card ">
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle table-nowrap table-check table-bordered">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th class="align-middle">S.NO</th>
+                                                    <th class="align-middle">Car Name</th>
+                                                    <th class="align-middle">Registration No.</th>
+                                                    <th class="align-middle">Date</th>
+                                                    <th class="align-middle">Price(INR)</th>
+                                                    <th class="align-middle">Status</th>
+                                                    <th class="align-middle">View Details</th>
+                                                    <th class="align-middle">Ad Booster</th>
+                                                    <th class="align-middle">Action</th>
+                                                    <th class="align-middle">Edit</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for car_detail in live %}
+                                                    <tr>
+                                                        <tr data-id="{car_detail.id}">
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td><a  class="text-body fw-bold">{{car_detail.variant.model.brand.name}}  {{car_detail.variant.model.name}}  {{car_detail.variant.name}}</a>
+                                                        </td>
+                                                        <td>{{car_detail.registration_no}}</td>
+                                                        <td>
+                                                            {{car_detail.updated_at.date}}
+                                                        </td>
+                                                        <td>
+                                                            {{car_detail.demand_price}}
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge badge-pill badge-soft-success font-size-12">Live</span>
+                                                        </td>
+                                                        <td>
+                                                            <!-- Button trigger modal -->
+                                                            <a type="button" href="{% url 'dealer:car_detail' car_detail.id %}" class="btn btn-primary btn-sm btn-rounded" id="view">
+                                                                View Details
+                                                            </a>
+                                                        </td>
+                                                        <td><a href="#" class="text-warning">Boost Ad</a> </td>
+ 
+                                                        <td>
+                                                            <form action="{% url 'dealer:markdelete' car_detail.id %}" method="POST" onsubmit="return confirm('Are you sure you want to delete this ad?');">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                            </form>
+                                                        </td>
+                                                        <td>
+                                                            <form action="{% url 'dealer:marksold' car_detail.id %}" method="POST" onsubmit="return confirm('Are you sure you want to mark this as Sold?');">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-sm btn-danger">Mark as Sold</button>
+                                                            </form>
+                                                        </td>    
+
+                                                    </tr>
+
+
+                                                {% endfor %}
+                                                       
+                                                        
+                                              
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="expired-cars" role="tabpanel ">
+                            <div class="card ">
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle table-nowrap table-check table-bordered">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th class="align-middle">S.NO</th>
+                                                    <th class="align-middle">Car Name</th>
+                                                    <th class="align-middle">Registration No.</th>
+                                                    <th class="align-middle">Date</th>
+                                                    <th class="align-middle">Price(INR)</th>
+                                                    <th class="align-middle">Status</th>
+                                                    <th class="align-middle">View Details</th>
+                                                    <th class="align-middle">Action</th>
+                                                    <th class="align-middle">Edit</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for car_detail in expired %}
+                                                    <tr>
+                                                        <tr data-id="{car_detail.id}">
+                                                        
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td><a  class="text-body fw-bold">{{car_detail.variant.model.brand.name}}  {{car_detail.variant.model.name}}  {{car_detail.variant.name}}</a>
+                                                        </td>
+                                                        <td>{{car_detail.registration_no}}</td>
+                                                        <td>
+                                                            {{car_detail.created_at.date}}
+                                                        </td>
+                                                        <td>
+                                                            {{car_detail.demand_price}}
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge badge-pill badge-soft-danger font-size-12">Expired</span>
+                                                        </td>
+                                                        <td>
+                                                            <!-- Button trigger modal -->
+                                                            <a type="button" href="{% url 'dealer:car_detail' car_detail.id %}" class="btn btn-primary btn-sm btn-rounded" id="view">
+                                                                View Details
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <form action="{% url 'dealer:markdelete' car_detail.id %}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this ad?');">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                            </form>
+                                                        </td>
+                                                            <td>
+                                                                <form action="{% url 'dealer:repost_ad' car_detail.id %}" method="POST">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit" class="btn btn-sm btn-info">Repost</button>
+                                                                </form>
+                                                            </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="tab-pane fade" id="processing-cars" role="tabpanel ">
+                            <div class="card ">
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle table-nowrap table-check table-bordered">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th class="align-middle">S.NO</th>
+                                                    <th class="align-middle">Car Name</th>
+                                                    <th class="align-middle">Registration No.</th>
+                                                    <th class="align-middle">Date</th>
+                                                    <th class="align-middle">Price(INR)</th>
+                                                    <th class="align-middle">Status</th>
+                                                    <th class="align-middle">View Details</th>
+                                                    <th class="align-middle">Edit</th>
+                                                    <th class="align-middle">Action</th>
+                                                </tr>
+                                            </thead>
+                                             <tbody>
+                                                    {% for draft in drafts %}
+                                                    <tr>
+                                                        
+                                                        <input type="hidden" name="draft_id" id="draft_id"  value="{{ draft.id }}">
+                                                        <tr data-id="{{draft.id}}">
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td><a class="text-body fw-bold">{{ draft.variant.model.brand.name}}   {{draft.variant.model.name}}  {{draft.variant.name}}</a></td>
+                                                        <td>{{draft.registration_no}}</td>
+                                                        <td>{{draft.updated_at.date}}</td>
+                                                        <td class="price">{{draft.demand_price}}</td>
+                                                        <td>
+                                                            {% if draft.is_draft %}
+                                                                <span class="badge badge-pill badge-soft-warning font-size-12">Draft</span>
+                                                            {% else %}
+                                                                <span class="badge badge-pill badge-soft-success font-size-12">Processing</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        
+                                                        
+                                                        <td>
+                                                           
+                                                                <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewModal{{ draft.id }}" >
+                                                                    <i class="fa fa-eye"></i>
+                                                                </button>
+                                                             {% include 'Dealer/product/view-modal.html' with car_detail=draft car_images=draft.images %}
+
+                                                         
+                                                          </td>
+                                                        
+                                                        <td><button type="submit" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#topModal{{draft.id}}" data-draft-id="{{draft.id}}" >
+                                                                    Resume
+                                                                </button>
+                                                            
+                                                        </td>
+                                                        
+                                                        {% include 'Dealer/product/draft-modal.html'  with draft=draft%}
+                                                        <td>
+                                                            <form action="{% url 'dealer:delete-ad' draft.id %}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this ad?');">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div class="tab-pane fade" id="sold-cars" role="tabpanel ">
+                            <div class="card ">
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle table-nowrap table-check table-bordered">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th class="align-middle">S.NO</th>
+                                                    <th class="align-middle">Car Name</th>
+                                                    <th class="align-middle">Registration No.</th>
+                                                    <th class="align-middle">Date</th>
+                                                    <th class="align-middle">Price(INR)</th>
+                                                    <th class="align-middle">Status</th>
+                                                    <th class="align-middle">View Details</th>
+                                                    <th class="align-middle">Action</th>
+                                                    <th class="align-middle">Edit</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for car_detail in sold %}
+                                                    <tr>
+                                                        <tr data-id="{car_detail.id}">
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td><a  class="text-body fw-bold">{{car_detail.variant.model.brand.name}}  {{car_detail.variant.model.name}}  {{car_detail.variant.name}}</a>
+                                                        </td>
+                                                        <td>{{car_detail.registration_no}}</td>
+                                                        <td>
+                                                            {{car_detail.created_at.date}}
+                                                        </td>
+                                                        <td>
+                                                            {{car_detail.demand_price}}
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge badge-pill badge-soft-danger font-size-12">Sold</span>
+                                                        </td>
+                                                        <td>
+                                                            <!-- Button trigger modal -->
+                                                            <a type="button" href="{% url 'dealer:car_detail' car_detail.id %}" class="btn btn-primary btn-sm btn-rounded" id="view">
+                                                                View Details
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <form action="{% url 'dealer:markdelete' car_detail.id %}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this ad?');">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                            </form>
+                                                        </td>
+                                                            <td>
+                                                                <form action="{% url 'dealer:repost_ad' car_detail.id %}" method="POST">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit" class="btn btn-sm btn-info">Repost</button>
+                                                                </form>
+                                                            </td>
+                                                    </tr>
+
+
+                                                {% endfor %}
+                                                       
+                                                        
+                                              
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="deleted-cars" role="tabpanel ">
+                            <div class="card ">
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle table-nowrap table-check table-bordered">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th class="align-middle">S.NO</th>
+                                                    <th class="align-middle">Car Name</th>
+                                                    <th class="align-middle">Registration No.</th>
+                                                    <th class="align-middle">Date</th>
+                                                    <th class="align-middle">Date of Deletion</th>
+                                                    <th class="align-middle">Price(INR)</th>
+                                                    <th class="align-middle">Status</th>
+                                                    <th class="align-middle">View Details</th>
+                                                    <th class="align-middle">Action</th>
+                                                    <th class="align-middle">Edit</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for car_detail in deleted %}
+                                                    <tr>
+                                                        <tr data-id="{car_detail.id}">
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td><a  class="text-body fw-bold">{{car_detail.variant.model.brand.name}}  {{car_detail.variant.model.name}}  {{car_detail.variant.name}}</a>
+                                                        </td>
+                                                        <td>{{car_detail.registration_no}}</td>
+                                                        <td>
+                                                            {{car_detail.updated_at.date}}
+                                                        </td>
+                                                        <td>
+                                                            {{car_detail.deletion_date}}
+                                                        </td>
+                                                        <td>
+                                                            {{car_detail.demand_price}}
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge badge-pill badge-soft-danger font-size-12">Deleted</span>
+                                                        </td>
+                                                        <td>
+                                                            <!-- Button trigger modal -->
+                                                            <a type="button" href="{% url 'dealer:car_detail' car_detail.id %}" class="btn btn-primary btn-sm btn-rounded" id="view">
+                                                                View Details
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <form action="{% url 'dealer:delete-ad' car_detail.id %}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this ad?');">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                            </form>
+                                                        </td>
+                                                            <td>
+                                                                <form action="{% url 'dealer:repost_ad' car_detail.id %}" method="POST">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit" class="btn btn-sm btn-info">Repost</button>
+                                                                </form>
+                                                            </td>
+                                                    </tr>
+
+
+                                                {% endfor %}
+                                                       
+                                                        
+                                             
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="rejected-cars" role="tabpanel ">
+                            <div class="card ">
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle table-nowrap table-check table-bordered">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th class="align-middle">S.NO</th>
+                                                    <th class="align-middle">Car Name</th>
+                                                 
+                                                    <th class="align-middle">Registration No.</th>
+                                                    <th class="align-middle">Date</th>
+                                                    <th class="align-middle">Price</th>
+                                                    <th class="align-middle">Status</th>
+                                                    <th class="align-middle">View Details</th>
+                                                    <th class="align-middle">Remarks</th>
+                                                    <th class="align-middle">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>{% for car_detail in rejected %}
+                                                <tr>
+                                                   
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td><a  class="text-body fw-bold">{{car_detail.variant.model.brand.name}}  {{car_detail.variant.model.name}}  {{car_detail.variant.name}}</a>
+                                                        </td>
+                                                    <td>{{car_detail.registration_no}} </td>
+                                                    <td>
+                                                        07 Oct, 2019
+                                                    </td>
+                                                    <td>
+                                                        {{car_detail.demand_price}}
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-pill badge-soft-danger font-size-12">Rejected</span>
+                                                    </td>
+                                                    <td>
+                                                        <!-- Button trigger modal -->
+                                                        <a type="button" href="{% url 'dealer:car_detail' car_detail.id %}" class="btn btn-primary btn-sm btn-rounded" id="view">
+                                                                View Details
+                                                        </a>
+                                                    </td>
+                                                    
+                                                    
+                                                    <td> {{car_detail.remarks}} </td>
+                                                    <td>
+                                                            <form action="{% url 'dealer:delete-ad' car_detail.id %}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this ad?');">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                            </form>
+                                                    </td>
+                                                                <!--<i class="mdi mdi-delete font-size-18"></i>-->
+                                                        
+                                                
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+    </div>
+
+
+
+{% endblock %}
+
+{% block js %}
+
+<!-- Bootstrap JS and Popper.js (for dropdowns) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+<!-- JavaScript for "Select All" functionality -->
+<script>
+    document.getElementById('selectAll').addEventListener('click', function() {
+        let checkboxes = document.querySelectorAll('.carCheckbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+    });
+</script>
+
+<script>
+    // Handle PDF download for selected records
+    document.getElementById('downloadSelectedPdf').addEventListener('click', function (e) {
+        e.preventDefault();
+        let form = document.getElementById('downloadForm');
+        form.action = "{% url 'dealer:download_selected_pdf' %}"; // URL for downloading selected records as PDF
+        form.method = "POST";
+        form.submit();
+    });
+
+    // Handle Excel download for selected records
+    document.getElementById('downloadSelectedExcel').addEventListener('click', function (e) {
+        e.preventDefault();
+        let form = document.getElementById('downloadForm');
+        form.action = "{% url 'dealer:download_selected_excel' %}"; // URL for downloading selected records as Excel
+        form.method = "POST";
+        form.submit();
+    });
+</script>
+
+<script>
+    // Function to search in the currently active tab's table
+    function searchTable() {
+        const input = document.getElementById("searchInput").value.toUpperCase();
+        const activeTabContent = document.querySelector(".tab-pane.show.active"); // Find the active tab's content
+        const table = activeTabContent.querySelector("table"); // Get the table in the active tab
+        const tr = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < tr.length; i++) {
+            const tds = tr[i].getElementsByTagName("td");
+            let matchFound = false;
+            let flag = false;
+            for (let j = 0; j < tds.length; j++) {
+                const td = tds[j];
+                const txtValue = td.textContent || td.innerText;
+                if (td.querySelector("button") || td.querySelector("#view")) {
+                        continue; // Skip this iteration if a button or an anchor with id="view" exists
+                    }
+
+
+                if (txtValue.toUpperCase().indexOf(input) > -1) {
+                    matchFound = true;
+                    const regex = new RegExp(`(${input})`, "gi");
+                    td.innerHTML = txtValue.replace(regex, "<span class='highlight'>$1</span>"); // Highlight matches
+                } else {
+                    td.innerHTML = txtValue; // Reset the cell content if no match
+                }
+            }
+           
+            
+            tr[i].style.display = matchFound ? "" : "none"; // Show or hide rows based on the search
+        }
+    }
+</script>
+<script>
+    // Handle share button click
+    document.getElementById('share-button').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        // Get all the checkboxes or selection mechanism for records
+        let selectedRecords = document.querySelectorAll('input[name="car_ids"]:checked');
+
+        // Check if any record is selected
+        if (selectedRecords.length === 0) {
+            // Alert the user if no record is selected and stop the redirection
+            alert('Please select at least one record to share.');
+            return; // Stop the form submission and prevent redirection
+        }
+
+        // If records are selected, proceed with form submission
+        let form = document.getElementById('downloadForm');
+        form.action = "{% url 'dealer:invoice' %}"; 
+        form.method = "POST";
+        form.submit();
+    });
+</script>
+
+
+
+<script>
+    async function shareTableData(button) {
+        console.log('Share button clicked');
+
+        // Get the row that contains the clicked button
+        const row = button.closest('tr');
+        
+        // Extract data from the row
+        const carId = button.getAttribute('data-car-id');
+        const carName = row.querySelector('.text-body').innerText.trim();
+        const regNo = row.querySelector('.reg-no').innerText.trim();
+        const date = row.querySelector('.date').innerText.trim();
+        const price = row.querySelector('.price').innerText.trim();
+        const status = row.querySelector('.status span').innerText.trim();
+        const imageUrls = row.getAttribute('data-image-urls') ? row.getAttribute('data-image-urls').split(',') : []; 
+
+        // Construct the car link using the car ID
+        const carLink = `https://www.dreamcarbazaar.com/car_detail/${carId}`;
+
+        // Format the message
+        let message = `Thank you for contacting us. The car details are as follows:\n`;
+        message += `Car Name: ${carName}\n`;
+        message += `Registration No.: ${regNo}\n`;
+        message += `Date: ${date}\n`;
+        message += `Price: ${price}\n`;
+        message += `Status: ${status}\n`;
+        message += `Dealer Name: {{ request.user.first_name }}\n`;
+        message += `Phone Number: {{ request.user.phone }}\n`;
+        message += `Click Here: ${carLink}\n`;
+        message += `Images:\n`;
+
+        // Fetch image files from URLs
+        const files = await Promise.all(imageUrls.map(async (url) => {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            return new File([blob], url.split('/').pop(), { type: blob.type });
+        }));
+
+        // Check if Web Share API is supported
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Car Details',
+                    text: message,
+                    files: files // Attach the image files here
+                });
+                console.log('Thanks for sharing!');
+            } catch (error) {
+                console.error('Error sharing:', error);
+            }
+        } else {
+            // Fallback for platforms that do not support Web Share API
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            const gmailUrl = `mailto:?subject=Car Details&body=${encodeURIComponent(message)}`;
+
+            // Open WhatsApp
+            window.open(whatsappUrl, '_blank');
+            // Uncomment the line below to open Gmail
+            // window.open(gmailUrl, '_blank');
+        }
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const liveButton = document.getElementById('live');
+    const draftInput = document.getElementById('draft_id');
+    const form = document.getElementById('draftform'); // Select the form element
+
+    liveButton.addEventListener('click', function(event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+
+        // Check if the form is completely filled (HTML5 built-in validation)
+        if (form.checkValidity()) {
+            const draftId = draftInput.value;
+            var url = "/make-live/" + draftId + "/";
+        
+        // Set the form action to the new URL
+        
+            if (draftId) {
+                // Dynamically set formaction based on the draft_id
+                // form.setAttribute('action', `/make-live/${draftId}/`);
+                form.setAttribute('action', url);
+                form.submit(); // Manually submit the form if it's valid
+                // document.getElementById('draftForm').submit();
+            }
+        } else {
+            // Display an alert if the form is not completely filled
+            window.alert('Please fill out all required fields before making the form live.');
+        }
+    });
+});
+
+
+</script>
+<script>
+    $(document).ready(function() {
+        function formatNumber(num) {
+            num = num.toString();
+            // Split the integer part if there's a decimal part
+            let integerPart = num.split(".")[0];
+
+            // Format the integer part according to the Indian numbering system
+            let lastThreeDigits = integerPart.slice(-3);
+            let otherDigits = integerPart.slice(0, -3);
+            if (otherDigits !== '') {
+                lastThreeDigits = ',' + lastThreeDigits;
+            }
+            // Add commas after every two digits for the Indian numbering system
+            let formattedNumber = otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThreeDigits;
+
+            return formattedNumber;
+        }
+
+        $('#demand_price').on('input', function() {
+            let value = $(this).val().replace(/,/g, ''); // Remove existing commas
+            if (!isNaN(value) && value.length > 0) {
+                $(this).val(formatNumber(value));
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // Get references to the download button and the tabs
+    var downloadBtn = document.getElementById('downloadButton');
+    var selectBtn = document.getElementById('selectdownload');
+    var shareBtn = document.getElementById('share-button');
+    var tabs = document.querySelectorAll('[data-bs-toggle="tab"]');
+
+    // Loop through tabs and add an event listener
+    tabs.forEach(function(tab) {
+        tab.addEventListener('shown.bs.tab', function (event) {
+            // Get the tab ID of the activated tab
+            var activatedTab = event.target.getAttribute('href');
+
+            // Enable the download button if the "Downloads" tab is active, otherwise disable it
+            if (activatedTab === '#rejected-cars') {
+                downloadBtn.disabled = true;  // disable button
+                shareBtn.disabled = true;
+                selectBtn.disabled = true;
+                
+            } else {
+                downloadBtn.disabled = false;   // enable button
+                shareBtn.disabled = false;
+                selectBtn.disabled = false;
+            }
+        });
+    });
+});
+</script>
+
+{% endblock %}

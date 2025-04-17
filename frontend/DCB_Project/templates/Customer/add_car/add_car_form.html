@@ -1,0 +1,709 @@
+<form class="contact_form needs-validation" name="contact_form" method="post" action="{% url 'save_car' %}" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+<div class="row">
+    
+    <div class="col-lg-12">
+        <div style="background-color: #fff;border: 1px solid #EAEAEA;border-radius: 8px;margin-bottom: 30px;padding: 30px;position: relative;">
+            <div class="upload__box">
+              <div class="upload__btn-box">
+                <label class="upload__btn">
+                  <p>Upload images</p>
+                  <input type="file" multiple="" data-max_length="19" data-min_length="7" class="upload__inputfile" name="car_images">
+                </label>
+              </div>
+              <div class="upload__img-wrap"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-12">
+        <div class="new_property_form">
+            <h4 class="title mb30">Key Information</h4>
+
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <div class="ui_kit_select_search add_new_property mb20">
+                            <label class="form-label">Car Brands</label>
+                            <div class="dropdown bootstrap-select" style="width: 100%;">
+                                <select class="form-select addcar-select" data-live-search="true" data-width="100%" name="car_brand" id="car_brand" required>
+                                     <option selected disabled>Select Brands</option>
+                                        {% for car_brand in car_brands %}
+                                            <option value="{{car_brand.id}}">{{car_brand.name}}</option>
+                                        {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="ui_kit_select_search add_new_property mb20">
+                            <label class="form-label">Car Model</label>
+                            <div class="dropdown bootstrap-select car_models" id="car_models" style="width: 100%;">
+                                <select class="form-select addcar-select" data-live-search="true" data-width="100%" name="car_model" id="car_model" required>
+                                    <option value="">---------</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="ui_kit_select_search add_new_property mb20">
+                            <label class="form-label">Car Variants</label>
+                            <div class="dropdown bootstrap-select" style="width: 100%;">
+                                <select class="form-select addcar-select" data-live-search="true" data-width="100%" name="car_variants" id="car_variants" required>
+                                    <option value="">---------</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="mb20">
+                            <label class="form-label">Year</label>
+                            <input name="car_year" id="car_year" class="form-control form_control error-border" type="number" min="1900" max="2099" step="1" value="" placeholder="Year" required>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6 col-md-4">
+                        <div class="mb20">
+                            <label class="form-label">Location</label>
+                            <input name="vehicle_location" id="vehicle_location" class="form-control form_control error-border" type="text" placeholder="Location..." required>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6 col-md-4">
+                        <div class="ui_kit_select_search add_new_property mb20">
+                            <label class="form-label">Ownership</label>
+                            <div class="dropdown bootstrap-select" style="width: 100%;">
+                                <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="ownership" id="ownership" required>
+                                    <option value="">Select</option>
+                                    <option data-tokens="1st Owner">First</option>
+                                    <option data-tokens="2nd Owner">Second</option>
+                                    <option data-tokens="3rd Owner">Third</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="mb20">
+                            <label class="form-label">Total Km Driven</label>
+                            <input name="total_km" id="total_km" class="form-control form_control " type="number" placeholder="km" required>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="mb20">
+                            <label class="form-label">Car Color</label>
+                            <input name="car_color" id="car_color" class="form-control form_control" type="text" placeholder="Color" required>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="ui_kit_select_search add_new_property mb20">
+                            <label class="form-label">Fuel Type</label>
+                            <div class="dropdown bootstrap-select" style="width: 100%;">
+                                <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="fuel_type" id="fuel_type" required>
+                                    <option value="">Select</option>
+                                    <option data-tokens="CNG">CNG</option>
+                                    <option data-tokens="Hybrid">Hybrid</option>
+                                    <option data-tokens="Diesel">Diesel</option>
+                                    <option data-tokens="Petrol">Petrol</option>
+                                </select>
+                                <div class="dropdown-menu ">
+                                    <div class="bs-searchbox"><input type="search" class="form-control" autocomplete="off" role="combobox" aria-label="Search" aria-controls="bs-select-4" aria-autocomplete="list"></div>
+                                    <div class="inner show" role="listbox" id="bs-select-4" tabindex="-1">
+                                        <ul class="dropdown-menu inner show" role="presentation"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="ui_kit_select_search add_new_property mb20">
+                            <label class="form-label">Transmission</label>
+                            <div class="dropdown bootstrap-select" style="width: 100%;">
+                                <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="car_transmission" id="car_transmission" required>
+                                    <option value="">Select</option>
+                                    <option data-tokens="Manual">Manual</option>
+                                    <option data-tokens="Automatic">Automatic</option>
+                                </select>
+                                <div class="dropdown-menu ">
+                                    <div class="bs-searchbox"><input type="search" class="form-control" autocomplete="off" role="combobox" aria-label="Search" aria-controls="bs-select-4" aria-autocomplete="list"></div>
+                                    <div class="inner show" role="listbox" id="bs-select-4" tabindex="-1">
+                                        <ul class="dropdown-menu inner show" role="presentation"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="ui_kit_select_search add_new_property mb20">
+                            <label class="form-label">Total No Of Keys</label>
+                            <div class="dropdown bootstrap-select" style="width: 100%;">
+                                <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="total_keys" id="total_keys">
+                                    <option value="">Select</option>
+                                    <option data-tokens="1" value=1>1 Keys</option>
+                                    <option data-tokens="2" value=2>2 Keys</option>
+                                </select>
+                                <div class="dropdown-menu ">
+                                    <div class="bs-searchbox"><input type="search" class="form-control" autocomplete="off" role="combobox" aria-label="Search" aria-controls="bs-select-4" aria-autocomplete="list"></div>
+                                    <div class="inner show" role="listbox" id="bs-select-4" tabindex="-1">
+                                        <ul class="dropdown-menu inner show" role="presentation"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="mb20">
+                            <label class="form-label">Engine Capacity</label>
+                            <input name="engine_capacity" id="engine_capacity" class="form-control form_control" type="text" placeholder="Capacity..." required>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="ui_kit_select_search add_new_property mb20">
+                            <label class="form-label">Insurance Type</label>
+                            <div class="dropdown bootstrap-select" style="width: 100%;">
+                                <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="insurance_type" required>
+                                    <option value="">Select</option>
+                                    <option data-tokens="Zero Debt">Zero Debt</option>
+                                    <option data-tokens="Comprehensive">Comprehensive</option>
+                                    <option data-tokens="Third Party">Third Party</option>
+                                    <option data-tokens="No Insurance">No Insurance</option>
+                                </select>
+                                <div class="dropdown-menu ">
+                                    <div class="bs-searchbox"><input type="search" class="form-control" autocomplete="off" role="combobox" aria-label="Search" aria-controls="bs-select-4" aria-autocomplete="list"></div>
+                                    <div class="inner show" role="listbox" id="bs-select-4" tabindex="-1">
+                                        <ul class="dropdown-menu inner show" role="presentation"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="mb20">
+                            <label class="form-label">Insurance Valid Till</label>
+                            <input name="insurance_validity" id="insurance_validity" class="form-control form_control" type="date" placeholder=" Insurance valid..." required>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="mb20">
+                            <label class="form-label">Fitness Valid Till</label>
+                            <input name="fitness_validity" id="fitness_validity" class="form-control form_control" type="date" placeholder="Fitness Valid Till..." >
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="mb20">
+                            <label class="form-label">Pollution Valid Till</label>
+                            <input name="pollution_validity" id="pollution_validity" class="form-control form_control" type="date" placeholder="Pollution Valid Till..." >
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="mb20">
+                            <label class="form-label">Registration Place</label>
+                            <input name="registration_place" id="registration_place" class="form-control form_control" type="text" placeholder="Registration Place..." required>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="mb20">
+                            <label class="form-label">Registration Number</label>
+                            <input name="registration_no" id="registration_no" class="form-control form_control" type="text" placeholder="Registration Number..." required>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="mb20">
+                            <label class="form-label">Demand Pricing</label>
+                            <input name="demand_price" id="demand_price" class="form-control form_control" type="number" min="100000.00" max="1000000.00" step="0.01" placeholder="Demand Pricing..." required>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="new_property_form">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h4 class="title mb30">Interior and Exterior Features</h4>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Power Steering</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="power_steering" id="power_steering" required>
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Cruise Control</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="cruise_control" id="cruise_control" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Navigation System</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="navigation_system" id="navigation_system" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Adjustable Steering</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="adjustable_steering" id="adjustable_steering" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Adjustable ORVMs</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="adjustable_orvm" id="adjustable_orvm" >
+                                <option value="">Select</option>
+                                <option data-tokens="Electrically Adjustable">Electrically Adjustable</option>
+                                <option data-tokens="Manually Adjustable">Manually Adjustable</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Steering Control</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="steering_control" id="steering_control" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Air Conditioning</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="air_conditioning" id="air_conditioning" required>
+                                <option value="">Select</option>
+                                <option data-tokens="Automatic Climate Control">Automatic Climate Control</option>
+                                <option data-tokens="Manual With Heater">Manual With Heater</option>
+                                <option data-tokens="Manual Without Heater">Manual Without Heater</option>
+                                <option data-tokens="Dual Channel Air Control">Dual Channel Climate Control</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Power Window</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="power_window" id="power_window" required>
+                                <option value="">Select</option>
+                                <option data-tokens="Front Power Window">Front Power Window</option>
+                                <option data-tokens="All Four Power Window">All Four Power Window</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Alloy Wheel</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="alloy_wheel" id="alloy_wheel" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Sun Roof</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="sun_roof" id="sun_roof" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="new_property_form">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h4 class="title mb30">Infotainment Features</h4>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Bluetooth</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="bluetooth" id="bluetooth" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">AUX Compatibility</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="aux_compatibility" id="aux_compatibility" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">AM/FM Radio</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="am_radio" id="am_radio" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Android Auto/ Apple Car Play</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="android_car_play" id="android_car_play" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">USB Compatibility</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="usb_compatibility" id="usb_compatibility" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Wireless Charger</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="wireless_charger" id="wireless_charger" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="new_property_form">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h4 class="title mb30">Safety Features</h4>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">ABS</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="abs" id="abs" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Parking Sensors</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="rear_parking_sensor" id="rear_parking_sensor" >
+                                <option value="">Select</option>
+                                <option data-tokens="Rear Parking Sensors">Rear Parking Sensors</option>
+                                <option data-tokens="Front & Rear Parking Sensors">Front & Rear Parking Sensors</option>
+                                <option data-tokens="No Parking Sensors">No Parking Sensors</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">EBD</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="ebd" id="ebd" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Lock System</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="lock_sensor" id="lock_sensor" required>
+                                <option value="">Select</option>
+                                <option data-tokens="Central Locking">Central Locking</option>
+                                <option data-tokens="Remote Control Central Locking">Remote Control Central Locking</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Anti-Theft Device</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="anti_theft_device" id="anti_theft_device" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">No. Of Air Bags</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="total_air_bag" id="total_air_bag" required>
+                                <option value="">Select</option>
+                                <option value=1>1 Bags</option>
+                                <option value=2>2 Bags</option>
+                                <option value=4>4 Bags</option>
+                                <option value=6>6 Bags</option>
+                                <option value=8>8 Bags</option>
+                                <option value=10>10 Bags</option>
+                                <option value=0>None</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Rear Packing Camera</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="rear_parking_camera" id="rear_parking_camera" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="new_property_form">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h4 class="title mb30">Vehicle Condition</h4>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Battery Status</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="battery_status" required>
+                                <option value="">Select</option>
+                                <option data-tokens="New">New</option>
+                                <option data-tokens="Old">Old</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Vehicle Certification/ Company Warranty(If Any)</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="vehicle_certificate" id="vehicle_certificate" >
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="mb20">
+                        <label class="form-label">If Yes</label>
+                        <input name="vehicle_certificate_validity" id="vehicle_certificate_validity" class="form-control form_control" type="date" placeholder="Capacity..." disabled>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Tyre Condition</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="tyre_condition" id="tyre_condition" required>
+                                <option value="">Select</option>
+                                <option data-tokens="New">New</option>
+                                <option data-tokens="Old">Old</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Accidental</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="accidental" id="accidental" required>
+                                <option value="">Select</option>
+                                <option data-tokens="Yes">Yes</option>
+                                <option data-tokens="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="new_property_form">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h4 class="title mb30">Additional Service</h4>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Finance Facility</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="finance" id="finance" required>
+                                <option value="">Select</option>
+                                <option data-tokens="Availabe">Availabe</option>
+                                <option data-tokens="Not Available">Not Available</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Extended Warranty</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="extended_warranty" id="extended_warranty" >
+                                <option value="">Select</option>
+                                <option data-tokens="Under Warranty">Under Warranty</option>
+                                <option data-tokens="Not Applicable">Not Applicable</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="ui_kit_select_search add_new_property mb20">
+                        <label class="form-label">Exchange Facility</label>
+                        <div class="dropdown bootstrap-select" style="width: 100%;">
+                            <select class="selectpicker error-border" data-live-search="true" data-width="100%" name="exchange" id="exchange" required>
+                                <option value="">Select</option>
+                                <option data-tokens="Available">Available</option>
+                                <option data-tokens="Not Available">Not Available</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="mb20">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" id="description" class="form-control" rows="10" placeholder="Description"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-12">
+        <div class="">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="new_propertyform_btn">
+                        <button type="submit" class="btn btn-thm ad_flor_btn">Add Listing</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+
+

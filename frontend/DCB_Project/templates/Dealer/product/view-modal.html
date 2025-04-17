@@ -1,0 +1,622 @@
+
+{% load static %}
+
+{% block common_css %}
+<!-- Bootstrap CSS -->
+
+
+{% endblock %}
+
+
+
+
+<!-- Modal structure -->
+<div class="modal" id="viewModal{{ draft.id }}" tabindex="-1" aria-labelledby="viewModalLabel{{ draft.id }}" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="modal-title dropdown text-end" style="right: 69px;">
+            <button type="submit" class="btn btn-warning btn-resume-form" data-bs-toggle="modal" data-bs-target="#topModal{{draft.id}}" data-draft-id="{{draft.id}}" ><i class="fa fa-edit "></i> <span class="d-none d-sm-inline-block ">Resume</span></button>
+        </div>
+        <!-- Place your HTML page content (form) here -->
+        <form method="POST"  id="draftform">
+                 {% csrf_token %}
+                 <input type="hidden" name="draft_id" id="draft_id"  value="{{ draft.id }}">
+        
+
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0 font-size-18">Car Detail</h4>
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="product-detai-imgs">
+                            <div class="row">
+                         
+                             <div class="col-md-2 col-sm-3 col-4">
+                                <!-- Arrow Controls for Scrolling -->
+                                <div class="d-flex flex-column align-items-center">
+                                    <!-- Up Arrow -->
+                                    <p id="scroll-up" class="btn btn-outline-secondary mb-2" style="font-size: 20px; border: none">
+                                        <i class="fas fa-chevron-up"></i>
+                                    </p>
+                        
+                                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="max-height: 400px; overflow-y: auto; overflow-x: hidden; border-right: 1px solid #ddd; padding-right: 15px;">
+                                        {% for image in car_images %}
+                                            <a class="nav-link {% if forloop.first %}active{% endif %}" id="product-{{ forloop.counter }}-tab" data-bs-toggle="pill" href="#product-{{ forloop.counter }}" role="tab" aria-controls="product-{{ forloop.counter }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" onclick="changeImage({{ forloop.counter0 }})">
+                                                <img src="{{ image.image.url }}" alt="{{ car.name }}" class="img-fluid mx-auto d-block rounded">
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                        
+                                    <!-- Down Arrow -->
+                                    <p id="scroll-down" class="btn btn-outline-secondary mt-2" style="font-size: 20px; border: none">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-7 offset-md-1 col-sm-9 col-8">
+                                <div class="tab-content" id="v-pills-tabContent">
+                                        <div id="image-slider" class="d-flex justify-content-center mb-6">
+                                            <img id="main-image" src="{{ car_images.0.image.url }}" alt="Main Image" class="img-fluid rounded" style="width: 100%; height: auto; max-height: 500px; object-fit: cover;">
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                                <!-- Arrow Controls Below the Image -->
+                                <div class="row justify-content-center align-items-center">
+                                    <!-- Left Arrow -->
+                                    <div class="col-auto">
+                                        <p id="prev-btn" class="btn btn-outline-secondary" style="font-size: 20px; border: none">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </p>
+                                    </div>
+                            
+                                    <!-- Right Arrow -->
+                                    <div class="col-auto">
+                                        <p id="next-btn" class="btn btn-outline-secondary" style="font-size: 20px; border: none">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </p>
+                                    </div>
+                                </div>
+                            
+
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xl-6">
+                        <div class="mt-4 mt-xl-3">
+                            <p href="j#" class="text-primary">{{car_detail.variant.model.brand.name}}</p>
+                            <h4 class="mt-1 mb-3">{{car_detail.variant.model.name}} | {{car_detail.variant.name}} | Month, Year </h4>
+
+                            <h5 class="mb-4"><span class="text-muted me-2"></span> <b>Pricing in RS {{car_detail.demand_price}}</b></h5>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div>
+                                        <p class="text-muted"><i class="bx bx-unlink font-size-16 align-middle text-primary me-1"></i><span style="font-weight: 600;"> OwnerShip </span> - {{car_detail.ownership}}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-muted"><i class="bx bx-battery font-size-16 align-middle text-primary me-1"></i><span style="font-weight: 600;"> Fuel type </span>- {{car_detail.fuel_type}}</p>
+                                    </div>
+
+                                    <div>
+                                        <p class="text-muted"><i class="bx bx-shape-triangle font-size-16 align-middle text-primary me-1"></i><span style="font-weight: 600;"> Engine Capacity </span>- {{car_detail.engine_capacity}}</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div>
+                                        <p class="text-muted"><i class="bx bx-shape-triangle font-size-16 align-middle text-primary me-1"></i><span style="font-weight: 600;"> Color </span>- {{car_detail.color}}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-muted"><i class="bx bx-unlink font-size-16 align-middle text-primary me-1"></i><span style="font-weight: 600;"> Transmission</span> - {{car_detail.transmission}}</p>
+                                    </div>
+
+                                    <div>
+                                        <p class="text-muted"><i class="bx bx-battery font-size-16 align-middle text-primary me-1"></i><span style="font-weight: 600;"> KM Driven </span>- {{car_detail.total_km_driven}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                    <div class="col-md-12">
+                                        <!--<div class="dropdown text-end">-->
+                                        <!--    <button  data-bs-toggle="modal" data-bs-target="#topModal" class="btn btn-danger "><i class="fa fa-edit "></i> <span class="d-none d-sm-inline-block ">Resume</span></button>-->
+                                        <!--</div>-->
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+           
+            <div class="mt-5 p-3">
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item car-details-accordion">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            1- Key Informations
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                
+                                <div class="table-responsive">
+                                    <table class="table mb-0 table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">Insurance Type</th>
+                                                <td>{{car_detail.insurance_type}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Insurance Company</th>
+                                                <td>{{car_detail.insurance_by}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Fitness Valid Till </th>
+                                                <td>{{car_detail.fitness_validity}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Pollution Valid Till </th>
+                                                <td>{{car_detail.pollution_validity}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Registration Place </th>
+                                                <td>{{car_detail.registration_place}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Registration Number</th>
+                                                <td>{{car_detail.registration_no}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Last Service</th>
+                                                <td> {{car_detail.last_service_date}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Location of the Vehicle </th>
+                                                <td>{{car_detail.vehicle_location}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ............................Interior Features....................... -->
+                    <div class="accordion-item car-details-accordion">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            2- Interior Features
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                
+                                <div class="table-responsive">
+                                    <table class="table mb-0 table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">Power Steering</th>
+                                                <td>{{car_detail.power_steering}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Cruise Control</th>
+                                                <td>{{car_detail.cruise_control}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Navigation System</th>
+                                                <td>{{car_detail.navigation_system}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Adjustable Steering</th>
+                                                <td>{{car_detail.adjustable_steering}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Steering Control</th>
+                                                <td>{{car_detail.steering_control}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Air Conditioning</th>
+                                                <td>{{car_detail.air_conditioning}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Power Windows</th>
+                                                <td>{{car_detail.power_window}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ...................Exterior Features............. -->
+                    <div class="accordion-item car-details-accordion">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            3- Exterior Features
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                
+                                <div class="table-responsive">
+                                    <table class="table mb-0 table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">Alloy Wheel</th>
+                                                <td>{{car_detail.alloy_wheel}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Sun Roof</th>
+                                                <td>{{car_detail.sun_roof}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Adjustable ORVMs</th>
+                                                <td>{{car_detail.adjustable_orvm}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ....................Infotainment............... -->
+                    <div class="accordion-item car-details-accordion">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            4- Infotainment Features
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                
+                                <div class="table-responsive">
+                                    <table class="table mb-0 table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">Bluetooth</th>
+                                                <td>{{car_detail.bluetooth}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">AM/FM Radio</th>
+                                                <td>{{car_detail.am_fm_radio}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">USB Compatibility</th>
+                                                <td>{{car_detail.usb_compatibility}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">AUX Compatibility</th>
+                                                <td>{{car_detail.aux_compatibility}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Andriod Auto / Apple Car Play</th>
+                                                <td>{{car_detail.android_car_play}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Wireless Charger</th>
+                                                <td>{{car_detail.wireless_charger}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ..................Safety Features.................... -->
+                    <div class="accordion-item car-details-accordion">
+                        <h2 class="accordion-header" id="headingFive">
+                            <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            5- Safety Features
+                            </button>
+                        </h2>
+                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                               
+                                <div class="table-responsive">
+                                    <table class="table mb-0 table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">ABS</th>
+                                                <td>{{car_detail.abs}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">EBD</th>
+                                                <td>{{car_detail.ebd}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Anti-Theft Device </th>
+                                                <td>{{car_detail.anti_theft_device}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Rear Parking Camera </th>
+                                                <td>{{car_detail.rear_parking_camera}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Rear Parking Sensors </th>
+                                                <td>{{car_detail.rear_parking_sensor}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Front Parking Sensors </th>
+                                                <td>{{car_detail.front_parking_camera}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Lock System </th>
+                                                <td>{{car_detail.lock_system}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Number of Airbags </th>
+                                                <td>{{car_detail.total_air_bag}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ..................Vehicle Conditions.................... -->
+                    <div class="accordion-item car-details-accordion">
+                        <h2 class="accordion-header" id="headingSix">
+                            <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                            6- Vehicle Conditions
+                            </button>
+                        </h2>
+                        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                
+                                <div class="table-responsive">
+                                    <table class="table mb-0 table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">Battery Status </th>
+                                                <td>{{car_detail.battery_status}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Tyre Condition </th>
+                                                <td>{{car_detail.tyre_condition}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Vehicle Certification / Company Warranty [If Any] </th>
+                                                <td>{{car_detail.vehicle_warranty}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">IF YES then mentioned Company Warranty Valid Till</th>
+                                                <td>{{car_detail.vehicle_warranty_date}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Accidental </th>
+                                                <td>{{car_detail.accidental}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ..................Additional Information.................... -->
+                    <div class="accordion-item car-details-accordion">
+                        <h2 class="accordion-header" id="headingSeven">
+                            <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                            7- Additional Information
+                            </button>
+                        </h2>
+                        <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                
+                                <div class="table-responsive">
+                                    <table class="table mb-0 table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">Finance </th>
+                                                <td>{{car_detail.finance}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Exchange </th>
+                                                <td>{{car_detail.exchange}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Extended Warranty </th>
+                                                <td>{{car_detail.extended_warranty}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Additional Information if Any</th>
+                                                <td>{{car_detail.description}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end Specifications -->
+
+
+        </div>
+    </div>
+    <!-- end card -->
+</div>
+        <!-- ...........................................End Row............................................ -->
+
+                                                                      
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+    
+{% block js %}
+
+
+<!-- Bootstrap JS (for modal functionality) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        function formatNumber(num) {
+            num = num.toString();
+            // Split the integer part if there's a decimal part
+            let integerPart = num.split(".")[0];
+
+            // Format the integer part according to the Indian numbering system
+            let lastThreeDigits = integerPart.slice(-3);
+            let otherDigits = integerPart.slice(0, -3);
+            if (otherDigits !== '') {
+                lastThreeDigits = ',' + lastThreeDigits;
+            }
+            // Add commas after every two digits for the Indian numbering system
+            let formattedNumber = otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThreeDigits;
+
+            return formattedNumber;
+        }
+
+        $('#demand_price').on('input', function() {
+            let value = $(this).val().replace(/,/g, ''); // Remove existing commas
+            if (!isNaN(value) && value.length > 0) {
+                $(this).val(formatNumber(value));
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+
+    $('#car_brand').change(async function() {
+        var brandID = $(this).val();
+        console.log('brandID = ', brandID)
+        await $.get('/get_car_model/', { car_brand_id: brandID }, async function(data) {
+            var carModelSelect = $('#car_model');
+            console.log('carModelSelect= ',carModelSelect)
+            var model_text = '<option value="">Select Model</option>'
+            await $.each(data, function(index, model) {
+                console.log('data = ',data)
+                var a = '<option value='+model.id+'>'+model.name+'</option>'
+                model_text += a
+<!--                carModelSelect.append('<option data-tokens="" value='+model.id+'>'+model.name+'</option>');-->
+            });
+             carModelSelect.html(model_text);
+
+        });
+    });
+
+    $('#car_model').change(function() {
+        var carModelId = $(this).val();
+        $.get('/get_car_variant/', { car_model_id: carModelId }, function(data) {
+            var carVariantSelect = $('#car_variants');
+            carVariantSelect.empty();
+            carVariantSelect.append($('<option>', {
+                    value: "",
+                    text: "Select Variants"
+                }));
+            $.each(data, function(index, variant) {
+                carVariantSelect.append($('<option>', {
+                    value: variant.id,
+                    text: variant.name
+                }));
+            });
+        });
+    });
+});
+
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const carImages = [
+            {% for image in car_images %}
+                "{{ image.image.url }}",
+            {% endfor %}
+        ];
+
+        let currentIndex = 0;
+        const mainImage = document.getElementById('main-image');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const vPillsTab = document.getElementById('v-pills-tab');
+        const upBtn = document.getElementById('scroll-up');
+        const downBtn = document.getElementById('scroll-down');
+        // Function to update the main image based on the current index
+        function updateImage() {
+            mainImage.src = carImages[currentIndex];
+        }
+
+        // Previous button click event
+        prevBtn.addEventListener('click', function() {
+            currentIndex = (currentIndex === 0) ? carImages.length - 1 : currentIndex - 1;
+            updateImage();
+        });
+
+        // Next button click event
+        nextBtn.addEventListener('click', function() {
+            currentIndex = (currentIndex === carImages.length - 1) ? 0 : currentIndex + 1;
+            updateImage();
+        });
+        
+        upBtn.addEventListener('click', function() {
+            currentIndex = (currentIndex === 0) ? carImages.length - 1 : currentIndex - 1;
+            updateImage();
+        });
+        
+        downBtn.addEventListener('click', function() {
+            currentIndex = (currentIndex === carImages.length - 1) ? 0 : currentIndex + 1;
+            updateImage();
+        });
+        
+
+        // Function to change the main image when clicking the vertical icons
+        window.changeImage = function(index) {
+            currentIndex = index; // Update current index
+            updateImage(); // Update the main image
+        };
+
+        // Scroll up and down functionality
+        const scrollAmount = 5; // Adjust this value to change the scroll speed
+        const scrollUpButton = document.getElementById('scroll-up');
+        const scrollDownButton = document.getElementById('scroll-down');
+
+        scrollUpButton.addEventListener('click', function() {
+            vPillsTab.scrollBy({ top: -scrollAmount, behavior: 'smooth' });
+        });
+
+        scrollDownButton.addEventListener('click', function() {
+            vPillsTab.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+        });
+    });
+</script>
+
+
+
+{% endblock %}              
+
+                                

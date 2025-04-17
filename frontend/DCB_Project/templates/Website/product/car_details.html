@@ -1,0 +1,789 @@
+{% extends 'Website/layout.html' %}
+{% load static %}
+{% load user_tags %}
+
+{% block common_css %}
+<style>
+    {% if car_images %}
+        {% for car_image in car_images %}
+            {% if forloop.counter == 1 %}
+                .single_product_slider.owl-theme .owl-dots .owl-dot:first-child span {
+                    background-image: url({{car_image.image.url}});
+                }
+            {% else %}
+                    .single_product_slider.owl-theme .owl-dots .owl-dot:nth-child({{forloop.counter}}) span {
+                    background-image: url({{car_image.image.url}});
+                }
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</style>
+{% endblock %}
+{% block body %}
+
+<!-- Modal Structure -->
+<div class="modal fade" id="spamModal" tabindex="-1" aria-labelledby="spamModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="spamModalLabel">Report as Spam</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <form id="spamForm" method="POST" action="{% url 'customer:mark_spam' %}">
+            <div class="modal-body">
+            {% csrf_token %}
+            <input type="hidden" name="draft_id" value="{{ car_details.id }}">
+            <div class="modal-body">
+                <p>Please select the reason(s) for marking this object as spam:</p>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="remark" id="checkbox1" value="Fraudulent">
+                    <label class="form-check-label" for="checkbox1">Fraudulent</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="remark" id="checkbox2" value="Misleading">
+                    <label class="form-check-label" for="checkbox2">Misleading</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="remark" id="checkbox3" value="Harassment">
+                    <label class="form-check-label" for="checkbox3">Harassment</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="remark" id="checkbox4" value="Inappropriate Content">
+                    <label class="form-check-label" for="checkbox4">Inappropriate Content</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="remark" id="checkbox5" value="Other">
+                    <label class="form-check-label" for="checkbox5">Other</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Submit Report</button>
+            </div>
+        </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<div class="wrapper">
+
+    {% include 'Website/top_header.html' %}
+    {% include 'Website/top_navbar.html' %}
+
+
+    <!-- Modal -->
+    {% include 'Website/login_modal.html' %}
+    {% include 'Website/dealer_form.html' %}
+
+<!-- Agent Single Grid View -->
+<section class="our-agent-single pb90 mt70-992 pt30 bt1">
+    <div class="container">
+        <div class="row mb30">
+            <div class="col-xl-12 col-lg-12 col-sm-12">
+                <span class="meta-tags-badge">For Sale</span>
+                <h3 class="mt20">{{car_details.variant.model.brand.name}} {{car_details.variant.model.name}} {{car_details.variant.name}}</h3>
+                <div class="iv-meta">
+                    <span><i class="fa-solid fa-clock"></i>Listed on: {{car_details.created_at|date:"D, M j, Y"}}</span>
+                    <span><i class="fa-solid fa-eye"></i>Views: 568</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+              <div class="single_product_grid single_page4">
+                <div class="single_page6_single_slider dots_none">
+                {% if car_images %}    
+                    {% for car_image in car_images %}    
+                        <div class="item">
+                          <div class="sp6_single_slider">
+                            <div class="thumb">
+                              <img class="img-fluid slider-image-products popup-img" src="{{car_image.image.url}}" alt="" style="height: 300px; object-fit: cover;">
+                            </div>
+                          </div>
+                        </div>
+                    {% endfor %}
+                 {% endif %} 
+                 
+                </div>
+              </div>
+            </div>
+      </div>
+        
+        <div class="row mb-30">
+            <div class="col-md-12">
+                <div class="details-nav">
+                    <ul>
+                        <!--   Schedule Test Drive        -->
+                        <li>
+                            <a data-bs-toggle="modal" data-bs-target="#exampleModal2" data-whatever="@mdo"
+                                href="#" class="css_btn"><i class="fa fa-dashboard"></i>Schedule Test Drive</a>
+                            <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="exampleModalLabel2">Schedule Test Drive
+                                            </h4>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="std_notice" class="form-notice" style="display:none;">
+                                            </div>
+                                            <form class="gray-form reset_css login_form" id="std_form"
+                                                method="post" action="{% url 'dealer:update_lead' car_details.id %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" class="form-control"
+                                                    value="schedule_test_drive">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Name*</label>
+                                                    <input type="text" class="form-control" id="std_firstname"
+                                                        name="std_firstname">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Email address*</label>
+                                                    <input type="text" class="form-control" id="std_email"
+                                                        name="std_email">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Phone*</label>
+                                                    <input type="text" class="form-control" id="std_phone"
+                                                        name="std_phone" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Preferred Day*</label>
+                                                    <input type="date" class="form-control" id="std_day"
+                                                        name="std_day">
+                                                </div>
+
+                                                <div>
+                                                
+                                                    <button type="submit" class="button red" style="width: 150px; background: #0a2357; color: #fff; display: flex; justify-content: center; align-items: center; font-weight: 600; padding: 10px;">
+                                                        Schedule Now
+                                                    </button>
+                                                    
+                                                  
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <!--    Email to friend         -->
+                        <li>
+                            <a data-bs-toggle="modal" data-bs-target="#exampleModal4" data-whatever="@mdo"
+                                href="#" class="css_btn"><i class="fa fa-envelope"></i>Email to a Friend</a>
+                            <div class="modal fade" id="exampleModal4" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="exampleModalLabel4">Email to a Friend
+                                            </h4>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close">×</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="etf_notice" class="form-notice" style="display:none;">
+                                            </div>
+                                            <form class="gray-form reset_css" action="post" id="etf_form">
+                                                <input type="hidden" name="action" value="email_to_friend"
+                                                    style="border: 1px solid transparent;">
+                                                <div>
+                                                    <span style="color: red;" class="sp"></span>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Name*</label>
+                                                    <input name="etf_name" type="text" id="etf_name"
+                                                        class="form-control"
+                                                        style="border: 1px solid transparent;">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Email address*</label>
+                                                    <input type="text" class="form-control" id="etf_email"
+                                                        name="etf_email" style="border: 1px solid transparent;">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Friends Email*</label>
+                                                    <input type="Email" class="form-control" id="etf_fmail"
+                                                        name="etf_fmail" style="border: 1px solid transparent;">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Message to friend*</label>
+                                                    <textarea class="form-control input-message"
+                                                        id="etf_fmessage" name="etf_fmessage" rows="4"
+                                                        style="border: 1px solid transparent;"></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <div id="recaptcha4">
+                                                        <div style="width: 304px; height: 78px;">
+                                                            <div><iframe title="reCAPTCHA"
+                                                                    src="https://www.google.com/recaptcha/api2/anchor?ar=1&amp;k=6LfYqRkUABCZYBMrLp0FdD0G3j8MwP8kBbwMJMHi&amp;co=aHR0cHM6Ly90aGVtZXMucG90ZW56YWdsb2JhbHNvbHV0aW9ucy5jb206NDQz&amp;hl=en-GB&amp;v=RGRQD9tdxHtnt-Bxkx9pM75S&amp;theme=light&amp;size=normal&amp;cb=lpba3yn17hp8"
+                                                                    width="304" height="78" role="presentation"
+                                                                    name="a-m0ojutwq8367" frameborder="0"
+                                                                    scrolling="no"
+                                                                    sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"></iframe>
+                                                            </div>
+                                                            <textarea id="g-recaptcha-response-3"
+                                                                name="g-recaptcha-response"
+                                                                class="g-recaptcha-response"
+                                                                style="width: 250px; height: 40px; border: 1px solid transparent; margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <a class="button red" id="email_to_friend_submit">Submit <i
+                                                            class="fa fa-spinner fa-spin fa-fw btn-loader"
+                                                            style="display: none;"></i></a>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li><a href="javascript:window.print()"><i class="fa fa-print"></i>Print this page</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-xl-6 col-sm-12">
+                    <div class="single_page_heading_content text-start">
+                        <div class="price_content">
+                            <!-- <div class="offer_btns">
+                                <div class="text-end d-flex">
+                                    <button class="btn btn-thm ofr_btn1 btn-block mt0 mb20 mr20"><span class="flaticon-coin mr10 fz18 vam"></span>Make an Offer Price</button>
+                                    <button class="btn ofr_btn2 btn-block mt0 mb20"><span class="flaticon-profit-report mr10 fz18 vam"></span>Check Challan Status</button>
+                                </div>
+                            </div> -->
+                            <!-- <div class="price">
+                                <h3><small class="mr15"><del>$92,480</del></small>$89,480</h3>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row mb30">
+            <!-- <div class="col-lg-7 col-xl-8">
+                <div class="single_page_heading_content">
+                    <div class="car_single_content_wrapper">
+                        <ul class="car_info mb20-md">
+                            <li class="list-inline-item"><a target="_blank" href="#">Request More Info</a></li>
+                            <li class="list-inline-item"><a target="_blank" href="#">Schedule Test Drive</a></li>
+                            <li class="list-inline-item"><a href="#">Share to Friend</a></li>
+                        </ul>
+                        <h2 class="title">Volvo XC 90</h2>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-sm-12 mb30">
+                <div class="cars-details-features">
+                    <div class="row car-details-row">
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Car Brand</p>
+                                <h4>{{car_details.variant.model.brand.name}}</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Car Model</p>
+                                <h4>{{car_details.variant.model.name}}</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Car Varient</p>
+                                <h4>{{car_details.variant.name}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row car-details-row">
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Year</p>
+                                <h4>{{car_details.car_year}}</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Ownership</p>
+                                <h4>{{car_details.ownership}}</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Car Color</p>
+                                <h4>{{car_details.color}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row car-details-row">
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Fuel Type</p>
+                                <h4>{{car_details.fuel_type}}</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Transmission</p>
+                                <h4>{{car_details.transmission}}</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Total No. Of Keys</p>
+                                <h4>{{car_details.total_keys}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row car-details-row">
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Engine Capacity</p>
+                                <h4>{{car_details.engine_capacity}}</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Insurance Type</p>
+                                <h4>{{car_details.insurance_type}}</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Insurance Valid Till</p>
+                                <h4>{{car_details.insurance_validity}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row car-details-row">
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Fitness Valid</p>
+                                <h4>{{car_details.fitness_validity}}</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Pollution Valid</p>
+                                <h4>{{car_details.pollution_validity}}</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Registration Place</p>
+                                <h4>{{car_details.registration_place}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row car-details-row">
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Registration Number</p>
+                                <h4>{{car_details.registration_no}}</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Demand Pricing</p>
+                                <h4>{{car_details.demand_price}}</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Location</p>
+                                <h4>{{car_details.vehicle_location}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-12">
+                <div class="offer_btns">
+                    <div class="text-end">
+                        <div class="iv_sidebar_widget iv_pricing_widget widget-padding rounded">
+                            <h3 class="mb-2 text-white text-start">Rs {{car_details.demand_price}}</h3>
+                            <div class="widget_meta text-start">
+                                <span class="text-white mr20"><i class="fa-solid fa-gauge-high mr5"></i>{{car_details.total_km_driven}}
+                                    Km</span><br>
+                                <span class="text-white"><i class="fa-solid fa-eye mr5"></i>{{car_details.vehicle_location}}
+                                    ,INDIA</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end mt30 d-flex">
+                        <button class="btn btn-thm ofr_btn1 btn-block mt0 mb20 mr20">Make an Offer Price</button>
+                        <button class="btn ofr_btn2 btn-block mt0 mb20">Check Challan Status</button>
+                        
+                    </div>
+                    <div class="text-end mt30 d-flex">
+                        <button class="btn btn-thm ofr_btn1 btn-block mt0 mb20 mr20" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#spamModal">Mark Spam</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-xl-8">
+                <div class="row">
+
+
+                    <!-- ................Interior and Exterior Features -->
+                    <div class="col-lg-6 col-sm-12 mt40">
+                        <div class="opening_hour_widgets p30 mb30">
+                            <div>
+                                <h3 class="mb20" style="text-decoration: underline;">Interior and Exterior
+                                    Features</h3>
+                            </div>
+                            <div class="wrapper">
+                                <ul class="list-group">
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Power Steering</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.power_steering %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <!--<li-->
+                                    <!--    class="list-group-item d-flex justify-content-between align-items-start">-->
+                                    <!--    <div class="me-auto">-->
+                                    <!--        <div class="day">Steering Control</div>-->
+                                    <!--    </div>-->
+                                    <!--    <span class="schedule">{{car_details.steering_control}}</span>-->
+                                    <!--</li>-->
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Cruise Control</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.cruise_control %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Air Conditioning</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.air_conditioning %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Navigation System</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.navigation_system %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Power Window</div>
+                                        </div>
+                                        <span class="schedule">{{car_details.power_window}}</span>
+                                    </li>
+                                    <!--<li-->
+                                    <!--    class="list-group-item d-flex justify-content-between align-items-start">-->
+                                    <!--    <div class="me-auto">-->
+                                    <!--        <div class="day">Adjustable Steering</div>-->
+                                    <!--    </div>-->
+                                    <!--    <span class="schedule">{{car_details.adjustable_steering}}</span>-->
+                                    <!--</li>-->
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Alloy Wheel</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.alloy_wheel %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Adjustable ORVMs</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.adjustable_orvm %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Sun Roof</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.sun_roof %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- .........................End......................... -->
+                    
+                    
+                    <!-- .........................Safety Features........................... -->
+                    <div class="col-lg-6 col-sm-12 mt40">
+                        <div class="opening_hour_widgets p30 mb30">
+                            <div>
+                                <h3 class="mb20" style="text-decoration: underline;">Safety Features</h3>
+                            </div>
+                            <div class="wrapper">
+                                <ul class="list-group">
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">ABS</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.abs %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Rear Parking Sensors</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.rear_parking_sensor %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">EBD</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.ebd %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Lock System</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.lock_system %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Anti-Theft Device</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.anti_theft_device %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">No. of Airbags</div>
+                                        </div>
+                                        <span class="schedule">{{car_details.total_air_bag}}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Rear Parking Camera</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.rear_parking_camera %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ..........................End Section.......................... -->
+
+
+
+                    <!-- .........................Infotainment Features........................... -->
+                    <div class="col-lg-6 col-sm-12 mt40">
+                        <div class="opening_hour_widgets p30 mb30">
+                            <div>
+                                <h3 class="mb20" style="text-decoration: underline;">Infotainment Features</h3>
+                            </div>
+                            <div class="wrapper">
+                                <ul class="list-group">
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Bluetooth</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.bluetooth %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">AUX Compatibility</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.aux_compatibility %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">AM/FM Radio</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.am_fm_radio %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Android Auto/ Apple Play Car</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.android_car_play %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">USB Compatibility</div>
+                                        </div>
+                                        <span class="schedule">{{car_details.usb_compatibility}}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Wireless Charger</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.wireless_charger %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ..........................End Section.......................... -->
+
+                    <!-- .........................Vehicle Conditions........................... -->
+                    <div class="col-lg-6 col-sm-12 mt40">
+                        <div class="opening_hour_widgets p30 mb30">
+                            <div>
+                                <h3 class="mb20" style="text-decoration: underline;">Vehicle Conditions</h3>
+                            </div>
+                            <div class="wrapper">
+                                <ul class="list-group">
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Battery Status</div>
+                                        </div>
+                                        <span class="schedule">{{car_details.battery_status}}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Tyre Conditions</div>
+                                        </div>
+                                        <span class="schedule">{{car_details.tyre_condition}}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Accidental</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.accidental %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Vehicle Certification/ Company Warranty (If Any)
+                                            </div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.vehicle_warranty %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">If Yes</div>
+                                        </div>
+                                        <span class="schedule">{{car_details.vehicle_warranty_date}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ..........................End Section.......................... -->
+
+                    <!-- .........................Additional Service........................... -->
+                    <div class="col-lg-12 col-sm-12 mt10">
+                        <div class="opening_hour_widgets p30 mb30">
+                            <div>
+                                <h3 class="mb20" style="text-decoration: underline;">Additional Service</h3>
+                            </div>
+                            <div class="wrapper">
+                                <ul class="list-group">
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Finance</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.finance %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Extended Warranty</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.extended_warranty %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Exchange</div>
+                                        </div>
+                                        <span class="schedule">{% if car_details.exchange %} Yes {% else %} No {% endif %}</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="me-auto">
+                                            <div class="day">Additional Information</div>
+                                        </div>
+                                        <span class="schedule">{{car_details.description}}</span>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ..........................End Section.......................... -->
+
+
+                    <!--{% include 'Website/product/car_review.html' %}-->
+                </div>
+            </div>
+            {% include 'Website/product/contact_seller_form.html' %}
+        </div>
+    </div>
+</section>
+
+
+{% include 'Website/product/car_list.html' %}
+{% include 'Website/footer.html' %}
+</div>
+{% endblock %}
+
+{% block js%}
+<script>
+    let startTime = Date.now();
+
+    // When the user is about to leave the page (unload event)
+    window.addEventListener('beforeunload', function() {
+        let endTime = Date.now();
+        let timeSpent = Math.round((endTime - startTime) / 1000); // Time in seconds
+        let carId = "{{car_details.id}}"
+        // Send the data to the server via a fetch request
+        fetch("{% url 'dealer:update_duration' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',  // Ensure CSRF protection
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'time_spent': timeSpent,
+                'car': carId
+            })
+        });
+    });
+</script>
+
+{% endblock %}
+
+

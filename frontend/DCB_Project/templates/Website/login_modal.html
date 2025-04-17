@@ -1,0 +1,102 @@
+<div class="sign_up_modal modal fade" id="logInModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body container p60">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <ul class="sign_up_tab nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Register</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-content container p0" id="myTabContent">
+                    <div class="row mt30 tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="col-lg-12">
+                            <div class="login_form">
+                                <!--<p>New to DreamCarBazaar <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab">Sign up.</a> Are you a dealer?</p>-->
+                                <form action="{% url 'login' %}" method="post">
+                                  {% csrf_token %}
+                                  {% load widget_tweaks %}
+                                  {{form.password.errors}}
+
+                                      {% if error_message %}
+                                        <p>{{ error_message }}</p>
+                                      {% endif %}
+                                    <div class="mb-2 mr-sm-2">
+                                        {{form.email_or_phone|add_class:"form-control"|attr:"placeholder:Phone no. and Email"|attr:"maxlength:75"}}
+
+<!--                                        <input type="text" class="form-control" placeholder="Username or Email..." name="username">-->
+                                    </div>
+                                    <div class="form-group mb5">
+                                        {{form.password|add_class:"form-control" |attr:"placeholder:Password" }}
+
+<!--                                        <input type="password" class="form-control" placeholder="Password..." name="password">-->
+                                    </div>
+                                    <!--<div class="custom-control custom-checkbox">-->
+                                    <!--    <input type="checkbox" class="custom-control-input" id="exampleCheck3">-->
+                                    <!--    <label class="custom-control-label" for="exampleCheck3">Remember me</label>-->
+                                    <!--    <a class="btn-fpswd float-end" href="#">Lost your password?</a>-->
+                                    <!--</div>-->
+                                    <button type="submit" class="btn btn-log btn-thm mt5">Sign in</button>
+                                    
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt30 tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="col-lg-12">
+                            <div class="sign_up_form">
+                                <!--<p>Already have a profile? <a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#home" role="tab">Sign in.</a></p>-->
+                                <form action="{% url 'signup' %}" method="post" name="register-form" onsubmit ="return validateForm()">
+                                    {% csrf_token %}
+
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <input name="name" type="text" class="form-control" placeholder="Full Name..." required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <input name="email" type="email" class="form-control" id="register-email" placeholder="Email..." onchange="validation()">
+                                                <p class="text-danger p-0 m-0" id="validation"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <input name="phone_no" type="phone" class="form-control" id="register-phone" placeholder="Phone Number..." onchange="validation1()">
+                                                <p class="text-danger p-0 m-0" id="validation1"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <input name="address" type="text" class="form-control" id="register-pass" placeholder="Your Address..." >
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group mb20" style="position: relative;">
+                                                <input type="password" name="password" class="form-control" placeholder="Password..."  onchange="validation2()" id="id_password">
+                                                <i class="far fa-eye" id="togglePassword" style="position: absolute;top: 15px;right: 15px;"></i>
+                                                <p class="text-danger p-0 m-0" id="validation2"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-signup btn-thm mb0">Sign Up</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

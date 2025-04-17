@@ -1,0 +1,60 @@
+<div class="sign_up_modal modal fade" id="dealerFormModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body container p60">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="sign_up_form">
+                            <form action="{% url 'dealer_signup' %}" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <input name="name" type="text" class="form-control" placeholder="Full Name..." value="{{request.user.first_name}}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <input name="firm_name" id="firm_name" type="text" class="form-control" placeholder="Firm Name..." value="{{request.user.firm_name}}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <input name="email" type="email" class="form-control" placeholder="Email..." value="{{request.user.email}}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <input name="phone_no" type="phone" class="form-control" placeholder="Phone Number..." value="{{request.user.phone}}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <input name="address" type="text" class="form-control" placeholder="Your Address..." value="{{request.user.address}}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class=" mb10">
+                                            <input type="file" name="aadhar_card" id="aadhar_card" class="form-control" placeholder="Aadhar Card" style="border: none; height: 25px;" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class=" mb20">
+                                            <input type="file" name="pan_card" id="pan_card" class="form-control" placeholder="Pan Card" style="border: none;" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-signup btn-thm mb0">Sign Up</button>
+                           </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

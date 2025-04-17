@@ -1,0 +1,43 @@
+ <div class="customer-prfile-card">
+    <div>
+        <div class="mb-5 text-center user-profile-details">
+            <i class="fa-solid fa-user image"></i>
+            <h3 class="font-size:18px">{{user.first_name}}</h3>
+            <p class="mb-1"><a href="#" class="text-white" style="font-size: 12px">+91 {{user.phone}}</a> / <a class="text-white" href="#" style="font-size: 12px">{{user.email}}</a></p>
+        </div>
+    </div>
+    <div class="box">
+        <a href="{% url 'logout' %}" class="logout-button">Logout</a>
+
+        <ul class="dcb-profile-links ">
+            <li>
+                <a href="{% url 'profile' %}" class="dcb-customer-active"><i class="fa fa-user"></i>Profile Setting</a>
+            </li>
+
+            <li>
+                <a href="{% url 'whislist_car' %}"><i class="fa fa-heart"></i>Wishlisted Car</a>
+            </li>
+
+            <li>
+                <a href="{% url 'add_car' %}"><i class="fa fa-heart"></i>Add Car</a>
+            </li>
+
+            <li>
+                <a href="{% url 'order_car' %}"><i class="fa fa-heart"></i>My Order</a>
+            </li>
+
+            <li>
+                <a href="{% url 'customer:my_vehicle' %}"><i class="fa fa-heart"></i>My Vehicles</a>
+            </li>
+
+            <!--<li>-->
+            <!--    <a href="#"><i class="fa fa-heart"></i>Purchase History</a>-->
+            <!--</li>-->
+
+            <li>
+                <a href="#"><i class="fa fa-heart"></i>Other Services</a>
+            </li>
+        </ul>
+
+    </div>
+</div>

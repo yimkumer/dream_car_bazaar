@@ -1,0 +1,163 @@
+{% extends 'Dealer/account/layout.html' %}
+{% load static %}
+
+{% block common_css %}
+
+    <style>
+        .fileinput-button {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            min-height: 200px;
+            background-color: #fff;
+            border: 2px dashed #000;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .fileinput-button input {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            opacity: 0;
+            -ms-filter: "alpha(opacity=0)";
+            font-size: 200px;
+            direction: ltr;
+            cursor: pointer;
+        }
+
+        .fileinput-button span {
+            font-size: 22px;
+            font-weight: 600;
+            opacity: 0.5;
+        }
+
+        .fileinput-button:hover span {
+            opacity: 1;
+        }
+
+        .thumb {
+            height: 80px;
+            width: 100px;
+            border: 1px solid #000;
+        }
+
+        ul.thumb-Images li {
+            width: 120px;
+            float: left;
+            display: inline-block;
+            vertical-align: top;
+            height: 120px;
+        }
+
+        .img-wrap {
+            position: relative;
+            display: inline-block;
+            font-size: 0;
+        }
+
+        .img-wrap .close {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            z-index: 100;
+            background-color: #d0e5f5;
+            padding: 5px 2px 2px;
+            color: #000;
+            font-weight: bolder;
+            cursor: pointer;
+            opacity: 0.5;
+            font-size: 23px;
+            line-height: 10px;
+            border-radius: 50%;
+        }
+
+        .img-wrap:hover .close {
+            opacity: 1;
+            background-color: #ff0000;
+        }
+
+        .FileNameCaptionStyle {
+            font-size: 12px;
+        }
+        .customer-cars-image{
+            height: 305px !important;
+            object-fit: cover;
+        }
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="col-lg-12">
+    <div class="row mb-3">
+        <div class="col-xl-3 col-sm-6">
+            <div class="mt-2">
+                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                    <h4 class="mb-sm-0 font-size-18">Customer Cars</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {% for car_detail in all_car_detail %}
+            <div class="col-xl-4 col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mt-2 mb-3 text-center">
+                            <h5 class="mb-1 text-danger" style="font-size: 12px;"><a href="https://www.dreamcarbazaar.com/car_detail/{{car_detail.id}}" target="_blank" class="text-primary">{{car_detail.variant.model.brand.name}} {{car_detail.variant.model.name}} -
+                                                                {{car_detail.variant.name}}</a></h5>
+                            <p class="my-0" style="font-size: 10px"><span class="text-muted me-2">Uploaded - {{car_detail.created_at.date}}</span></p>
+                        </div>
+                        <div class="product-img position-relative">
+                            {% if car_detail.car_image %}
+                                <a href="https://www.dreamcarbazaar.com/car_detail/{{car_detail.id}}" target="_blank"><img src="https://dreamcarbazaar.com/media/{{car_detail.car_image}}" alt="{{car_detail.car_image}}" class="img-fluid mx-auto d-block customer-cars-image"></a>
+                            {% else %}
+                                <img src="{% static 'dealer/images/dcb-image/customer-cars-2.jpg' %}" alt="" class="img-fluid mx-auto d-block">
+                            {% endif %}
+                        </div>
+                        <div class="mt-4 text-center mb-2">
+                           <div class="row">
+                                <div class="col-lg-4 col-sm-4">
+                                    <p style="font-size: 10px; font-weight: 600;">{{car_detail.total_km_driven}} Km</p>
+                                </div>
+                                <div class="col-lg-4 col-sm-4">
+                                    <p style="font-size: 10px; font-weight: 600;">{{car_detail.fuel_type}}</p>
+                                </div>
+                                <div class="col-lg-4 col-sm-4">
+                                    <p style="font-size: 10px; font-weight: 600;">{{car_detail.color}}</p>
+                                </div>
+                                <div class="col-lg-4 col-sm-4">
+                                    <p style="font-size: 10px; font-weight: 600;">{{car_detail.ownership}}</p>
+                                </div>
+                                <div class="col-lg-4 col-sm-4">
+                                    <p style="font-size: 10px; font-weight: 600;">{{car_detail.car_year}}</p>
+                                </div>
+                                <div class="col-lg-4 col-sm-4">
+                                    <p style="font-size: 10px; font-weight: 600;">{{car_detail.vehicle_location}}</p>
+                                </div>
+                           </div>
+                        </div>
+                        <h4 class="customer-car-pricing text-center">Exp. Price: Rs. {{car_detail.demand_price}}/-</h4>
+                        <div class="contact-customer text-center mt-3 mb-3">
+                            <a href="tel: {{car_detail.created_by}}" class="btn btn-danger">Contact Customer</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <!-- end row -->
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

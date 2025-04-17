@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+
+<head>
+
+    <meta charset="utf-8" />
+    <title>DreamCarBazaar Dealer Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Bootstrap Css -->
+    <link href="{% static 'dealer/css/bootstrap.min.css' %}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="{% static 'dealer/css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="{% static 'dealer/css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" />
+    
+    <link href="{% static 'dealer/css/new-style.css' %}" id="app-style" rel="stylesheet" type="text/css" />
+
+    {% block common_css %}
+    {% endblock %}
+
+</head>
+
+<body data-sidebar="dark" data-layout-mode="light">
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+            <!-- header top -->
+            {% include 'Dealer/account/top_header.html' %}
+            <!-- Side Nav -->
+            {% include 'Dealer/account/side_navbar.html' %}
+
+
+            <!-- Main Content -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+                        {% block body %}
+
+                        {% endblock %}
+                    </div>
+                    <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+            </div>
+            <!-- End Section -->
+        </div>
+        <!-- END layout-wrapper -->
+
+        <!-- JAVASCRIPT -->
+        <script src="{% static 'dealer/libs/jquery/jquery.min.js' %}"></script>
+        <script src="{% static 'dealer/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'dealer/libs/metismenu/metisMenu.min.js' %}"></script>
+        <script src="{% static 'dealer/libs/simplebar/simplebar.min.js' %}"></script>
+        <script src="{% static 'dealer/libs/node-waves/waves.min.js' %}"></script>
+
+        <!-- apexcharts -->
+        <script src="{% static 'dealer/libs/apexcharts/apexcharts.min.js' %}"></script>
+
+        <!-- dashboard init -->
+        <script src="{% static 'dealer/js/pages/dashboard.init.js' %}"></script>
+
+        <!-- App js -->
+        <script src="{% static 'dealer/js/app.js' %}"></script>
+
+        <!-- Bootstrap Notify -->
+        <script src="{% static 'js/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
+        
+        
+        <!--=================Download Button================-->
+        <script src="{% static 'dealer/libs/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+        <script src="{% static 'dealer/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js' %}"></script>
+        <script src="{% static 'dealer/libs/jszip/jszip.min.js' %}"></script>
+        <script src="{% static 'dealer/libs/pdfmake/build/pdfmake.min.js' %}"></script>
+        <script src="{% static 'dealer/libs/pdfmake/build/vfs_fonts.js' %}"></script>
+        <script src="{% static 'dealer/libs/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+        <script src="{% static 'dealer/libs/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+        <script src="{% static 'dealer/libs/datatables.net-buttons/js/buttons.colVis.min.js' %}"></script>
+        <!-- Bootstrap Notify -->
+    <script src="{% static 'js/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+
+<script>
+    var imgArray = [];
+    var minLength = 5;  // Minimum number of images
+    var maxLength = 20; // Maximum number of images
+
+    jQuery(document).ready(function () {
+        ImgUpload();
+        validateImageCount();  // Initially validate the image count (if no images are selected)
+    });
+
+    function ImgUpload() {
+        $('.upload__inputfile').each(function () {
+            $(this).on('change', function (e) {
+                var imgWrap = $(this).closest('.upload__box').find('.upload__img-wrap');
+                var errorMessage = $('#error-message');
+
+                var files = e.target.files;
+                var filesArr = Array.prototype.slice.call(files);
+
+                // Check if the total selected files exceed the max length
+                if (imgArray.length + filesArr.length > maxLength) {
+                    errorMessage.text('You can only upload a maximum of ' + maxLength + ' images.').show();
+                    return;
+                } else {
+                    errorMessage.hide();
+                }
+
+                filesArr.forEach(function (f, index) {
+                    if (!f.type.match('image.*')) {
+                        return;
+                    }
+
+                    if (imgArray.length >= maxLength) {
+                        alert('You can upload up to ' + maxLength + ' images.');
+                        return false;
+                    } else {
+                        imgArray.push(f);
+
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            var html = "<div class='upload__img-box' data-file='" + f.name + "'><div style='background-image: url(" + e.target.result + ")' class='img-bg'><input type='checkbox' class='img-select' onchange='toggleDeleteButton()' /><div class='upload__img-close'>×</div></div></div>";
+                            imgWrap.append(html);
+                        }
+                        reader.readAsDataURL(f);
+                    }
+                });
+
+                validateImageCount(); // Validate image count after images are added
+            });
+        });
+
+        // Delete selected images
+        $('#delete-selected').on('click', function () {
+            $('.img-select:checked').each(function () {
+                var file = $(this).parent().parent().data("file");
+                for (var i = 0; i < imgArray.length; i++) {
+                    if (imgArray[i].name === file) {
+                        imgArray.splice(i, 1);
+                        break;
+                    }
+                }
+                $(this).parent().parent().remove();
+            });
+            validateImageCount(); // Validate image count after deletion
+            toggleDeleteButton(); // Hide delete button if no image is selected
+        });
+
+        // Delete single image
+        $('body').on('click', ".upload__img-close", function (e) {
+            if (confirm("Are you sure you want to delete this image?")) {
+                var file = $(this).parent().parent().data("file");
+                for (var i = 0; i < imgArray.length; i++) {
+                    if (imgArray[i].name === file) {
+                        imgArray.splice(i, 1);
+                        break;
+                    }
+                }
+                $(this).parent().parent().remove();
+                validateImageCount(); // Re-validate after deletion
+                toggleDeleteButton(); // Hide delete button if no image is selected
+            }
+        });
+    }
+
+    // Function to validate the number of images
+    function validateImageCount() {
+        var errorMessage = $('#error-message');
+
+        if (imgArray.length < minLength) {
+            errorMessage.text('You need to upload at least ' + minLength + ' images.').show();
+        } else if (imgArray.length > maxLength) {
+            errorMessage.text('You can upload a maximum of ' + maxLength + ' images.').show();
+        } else {
+            errorMessage.hide(); // Hide the error message if the count is valid
+        }
+
+        // Automatically handle UI interactions without a submit button
+    }
+
+    // Function to show or hide the delete button based on image selection
+    function toggleDeleteButton() {
+        var checkedImages = $('.img-select:checked').length;
+        if (checkedImages > 0) {
+            $('#delete-selected').show(); // Show delete button if at least one image is selected
+        } else {
+            $('#delete-selected').hide(); // Hide delete button if no image is selected
+        }
+    }
+
+    // Initialize sortable for drag-and-drop image reordering
+    var sortable = new Sortable(document.querySelector('.upload__img-wrap'), {
+        animation: 150,
+        onEnd: function (evt) {
+            var sortedFiles = sortable.toArray();
+            imgArray = sortedFiles.map(function (fileName) {
+                return imgArray.find(img => img.name === fileName);
+            });
+        }
+    });
+</script>
+
+        {% if messages %}
+        {% for message in messages %}
+        <script>
+            //Notify
+         console.log('messages')
+         console.log('mes = ', "{{message}}")
+        $.notify({
+            icon: '{% if message.tags == 'success' %}fas fa-check-circle{% else %}fas fa-times-circle{% endif %}',
+            title: '',
+            message: '{{message}}',
+        },{
+            type: '{% if message.tags == 'warning' %}danger{% else %}{{message.tags}}{% endif %}',
+            placement: {
+                from: "top",
+                align: "center"
+            },
+            time: 1000,
+        });
+        </script>
+        {% endfor %}
+        {% endif %}
+
+
+        {% block js %}
+
+        {% endblock %}
+</body>
+
+</html>

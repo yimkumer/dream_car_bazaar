@@ -1,0 +1,166 @@
+{% extends 'Executive/account/layout.html' %}
+{% load static %}
+
+{% block common_css %}
+
+<link rel="stylesheet" href="{% static 'css/customer-dash.css' %}">
+
+{% endblock %}
+
+{% block body %}
+
+     <!-- start page title -->
+    <div class="row mb-4">
+        <div class="col-lg-6 col-sm-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">All Pending Approval</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row mb-2">
+        <div class="col-sm-4">
+            <div class="search-box me-2 mb-2 d-inline-block">
+                <div class="position-relative">
+                    <input type="text" class="form-control" placeholder="Search...">
+                    <i class="bx bx-search-alt search-icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+
+            <div class="card">
+                <div class="card-body p-0">
+
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table align-middle table-nowrap table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="align-middle">S. No</th>
+                                            <th class="align-middle">Dealer Name</th>
+                                            <th class="align-middle">Location</th>
+                                            <th class="align-middle">Car Name</th>
+                                            <th class="align-middle">Date Of Posting</th>
+                                            <th class="align-middle">Details</th>
+                                            <th class="align-middle">Action</th>
+                                            <th class="align-middle">Save</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                1
+                                            </td>
+                                            <td>
+                                                Rahul <br> <a class="text-dark" href="tel:+91999999999">+91999999999</a>
+                                            </td>
+                                            <td>
+                                                Dehradun
+                                            </td>
+                                            <td>
+                                                Mahindra XUV </td>
+                                            <td>
+                                                04/Mar/2023 12:30PM
+                                            </td>
+                                            <td>
+                                                <a href="car-details.html">Details</a>
+                                            </td>
+                                            <td>
+                                                <select name="" id="">
+                                                    <option value="">Approve</option>
+                                                    <option value="">Reject</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary">Save</button>
+                                            </td>
+                                        </tr>
+                                            
+                                        
+                                        {% for car_detail in all_car_details %}
+                                            <tr>
+                                                <td>
+                                                    {{forloop.counter}}
+                                                </td>
+                                                <td>
+                                                    {{car_detail.created_by.first_name}} <br> <a class="text-dark" href="tel:+91999999999">+91{{car_detail.created_by.phone}}</a>
+                                                </td>
+                                                <td>
+                                                    {{car_detail.vehicle_location}}
+                                                </td>
+                                                <td>
+                                                    {{car_detail.variant.model.name}} {{car_detail.variant.name}} </td>
+                                                <td>
+                                                    {{car_detail.created_at.date}} {{car_detail.created_at.time}}
+                                                </td>
+                                                <td class=" text-center">
+                                                            <a type="button" href="{% url 'dealer:car_detail' car_detail.id %}" class="btn btn-primary btn-sm" id="view">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+                                                        </td>
+                                               <td>
+                                                    <form method="POST" action="{% url 'executive:car_review' %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="car_id" value="{{ car_detail.id }}">
+                                                        <select name="approval" id="approval-{{ car_detail.id }}">
+                                                            <option value="yes">Approve</option>
+                                                            <option value="no">Reject</option>
+                                                        </select>
+                                                        <td>
+                                                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                                        </td>
+                                                    </form>
+                                                </td>
+                                                
+                                        </tr>
+
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <ul class="pagination pagination-rounded justify-content-end mb-2">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="javascript: void(0);" aria-label="Previous">
+                                        <i class="mdi mdi-chevron-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="javascript: void(0);">1</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="javascript: void(0);">3</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                                        <i class="mdi mdi-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+    <!-- end row -->
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

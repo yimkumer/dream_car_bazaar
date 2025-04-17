@@ -1,0 +1,770 @@
+
+
+{% block common_css %}
+    <!-- Flatpickr Styles -->
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css" rel="stylesheet">
+{% endblock %}
+
+<!--top modal-->
+<div class="modal" id="topModal{{ draft.id }}" tabindex="-1" aria-labelledby="topModalLabel{{ draft.id }}">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form method="POST"  id="draftform" >
+                {% csrf_token %}
+                 <input type="hidden" name="draft_id" id="draft_id"  value="{{ draft.id }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="topModalLabel">Edit Car Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Pre-filled form inputs with current data -->
+                   
+                     <div class="card">
+                        <div class = "card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="car_variants" class="form-label">Brand Name</label>
+                                    <!--<input type="text" class="form-control" id="car_brand" name="car_brand" >-->
+                                    <select class="form-select addcar-select" data-live-search="true" data-width="100%" name="car_brand" id="car_brand" required>
+                                     <option>Select Brands</option>
+                                        {% for car_brand in car_brands %}
+                                            {% if draft.variant.model.brand.id == car_brand.id %}
+                                                <option value="{{car_brand.id}}" selected>{{car_brand.name}}</option>
+                                            {% else %}
+                                                <option value="{{car_brand.id}}">{{car_brand.name}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                </select>
+                                   
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="car_model" class="form-label">Model Name</label>
+                                    <!--<input type="text" class="form-control" id="car_model" name="car_model" >-->
+                                    <!--<select class="form-control select2-templating" data-live-search="true" name="car_model" id="car_model">-->
+                                    <!--        <option value="">---------</option>-->
+                                    <!--</select>-->
+                                    <select class="form-select addcar-select" data-live-search="true" data-width="100%" name="car_model" id="car_model" required>
+                                    <option value="{{draft.variant.model.id}}" selected>{{draft.variant.model.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="car_variants" class="form-label">Variant Name</label>
+                                    <!--<input type="text" class="form-control" id="car_variants" name="car_variants" >-->
+                                    <!--<select class="form-control select2-templating" data-live-search="true" name="car_variants" id="car_variants" required>-->
+                                    <!--        <option value="">---------</option>-->
+                                    <!--    </select>-->
+                                    <select class="form-select addcar-select" data-live-search="true" data-width="100%" name="car_variants" id="car_variants" required>
+                                    <option value="{{draft.variant.id}}" selected>{{draft.variant.name}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="demand_price" class="form-label">Demand Price</label>
+                                    <input type="text" class="form-control" id="demand_price" name="demand_price" value="{{ draft.demand_price|default:'' }}">
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="ownership">Ownership</label>
+                                    <!--<select class="form-control select2-templating" data-live-search="true" name="ownership" id="ownership">-->
+                                    <!--    <option value="" selected disabled>---Select---</option>-->
+                                    <!--    <option value="1st Owner" >1st Owner</option>-->
+                                    <!--    <option value="2nd Owner">2nd Owner</option>-->
+                                    <!--    <option value="3rd Owner">3rd Owner</option>-->
+                                    <!--    <option value="4th Owner">4th Owner</option>-->
+                                    <!--</select>-->
+                                    <select class="form-select addcar-select" data-live-search="true" data-width="100%" name="ownership" id="ownership" required>
+                                    <option value="">Select</option>
+                                    <option value="1st Owner" {% if draft.ownership == "1st Owner"  %}selected{% endif %}>First</option>
+                                    <option value="2nd Owner" {% if draft.ownership == "2nd Owner"  %}selected{% endif %}>Second</option>
+                                    <option value="3rd Owner" {% if draft.ownership == "3rd Owner"  %}selected{% endif %}>Third</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="fuel_type">Fuel Type</label>
+                                    <!--<select class="form-control select2-templating" data-live-search="true" name="fuel_type" id="fuel_type">-->
+                                    <!--    <option value="" selected disabled>---Select---</option>-->
+                                    <!--    <option value="CNG" >CNG</option>-->
+                                    <!--    <option value="Hybrid">Hybrid</option>-->
+                                    <!--    <option value="Diesel">Diesel</option>-->
+                                    <!--    <option value="Petrol">Petrol</option>-->
+                                    <!--    <option value="Electric">Electric</option>-->
+                                    <!--    <option value="LPG">LPG</option>-->
+                                    <!--</select>-->
+                                        <select class="form-control select2-templating" data-live-search="true" name="fuel_type" id="fuel_type">
+                                            <option value="">Select</option>
+                                            <option data-tokens="CNG" {% if draft.fuel_type == "CNG"  %} selected {% endif %}>CNG</option>
+                                            <option data-tokens="Hybrid" {% if draft.fuel_type == "Hybrid"  %} selected {% endif %}>Hybrid</option>
+                                            <option data-tokens="Diesel" {% if draft.fuel_type == "Diesel"  %} selected {% endif %}>Diesel</option>
+                                            <option data-tokens="Petrol" {% if draft.fuel_type == "Petrol"  %} selected {% endif %}>Petrol</option>
+                                        </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="engine_capacity" class="form-label">Engine Capacity</label>
+                                    <input type="text" class="form-control" name="engine_capacity" id="engine_capacity" value="{{ draft.engine_capacity|default:'' }}">
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="car_color" class="form-label"> Color </label>
+                                    <input type="text" class="form-control" name="car_color" id="car_color" value="{{ draft.color|default:'' }}">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="car_transmission">Transmission</label>
+                                    <!--<select name="car_transmission" id="car_transmission" class="form-control select2-templating" data-live-search="true">-->
+                                    <!--    <option value="" selected disabled>---Select---</option>-->
+                                    <!--    <option value="Manual">Manual</option>-->
+                                    <!--    <option value="Automatic">Automatic</option>-->
+                                    <!--</select>-->
+                                    <select name="car_transmission" id="car_transmission" class="form-control select2-templating" data-live-search="true"  required>
+                                    <option value="">Select</option>
+                                    <option value="Manual" {% if draft.transmission == "Manual"  %} selected {% endif %}>Manual</option>
+                                    <option value="Automatic" {% if draft.transmission == "Automatic"  %} selected {% endif %}>Automatic</option>
+                                </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="total_km" class="form-label"> KM Driven</label>
+                                    <input type="text" class="form-control" name="total_km" id="total_km" value="{{draft.total_km_driven}}">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="total_keys">Total No. of Keys</label>
+                                        <select name="total_keys" id="total_keys" class="form-control select2-templating" data-live-search="true" required>
+                                            <option value="">Select</option>
+                                            <option value=1 {% if draft.total_keys == "1"  %} selected {% endif %}>1 Keys</option>
+                                            <option value=2 {% if draft.total_keys == "2"  %} selected {% endif %}>2 Keys</option>
+                                        </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">  
+                                    <label for="car_year">Year</label>
+                                    <input name="car_year" id="car_year" class="form-control form_control" type="text"  placeholder="Year" required>  
+                                        
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+               
+                        <!-- Add other fields similarly -->
+                      <div class="card">    
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="insurance_type">Insurance Type</label>
+                                    <select name="insurance_type" id="insurance_type" class="form-control select2-templating" data-live-search="true">
+                                           <option value="">Select</option>
+                                    <option value="Zero Debt" {% if draft.insurance_type == "Zero Debt"  %} selected {% endif %}>Zero Debt</option>
+                                    <option value="Comprehensive" {% if draft.insurance_type == "Comprehensive"  %} selected {% endif %}>Comprehensive</option>
+                                    <option value="Third Party" {% if draft.insurance_type == "Third Party"  %} selected {% endif %}>Third Party</option>
+                                    <option value="No Insurance" {% if draft.insurance_type == "No Insurance"  %} selected {% endif %}>No Insurance</option>
+                                </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="insurance_validity">Insurance Valid Till</label>
+                                    <input name="insurance_validity" id="insurance_validity" class="form-control form_control" type="date" placeholder="valid..." value="{{draft.insurance_validity|date:'Y-m-d'}}">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="fitness_validity">Fitness Valid Till</label>
+                                    <input name="fitness_validity" id="fitness_validity" class="form-control form_control" type="date" placeholder="valid..." value="{{draft.fitness_validity|date:'Y-m-d'}}">
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                   
+                                    <label for="pollution_validity">Pollution Valid Till</label>
+                                    <input name="pollution_validity" id="pollution_validity" class="form-control form_control" type="date" placeholder="valid..." value="{{draft.pollution_validity|date:'Y-m-d'}}">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="registration_place" class="form-label">Registration Place</label>
+                                <input type="text" class="form-control" id="registration_place" name="registration_place" value="{{draft.registration_place}}">
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="registration_no" class="form-label">Registration Number</label>
+                                    <input type="text" class="form-control" id="registration_no" name="registration_no" value="{{draft.registration_no}}">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="last_service" class="form-label">Last Service</label>
+                                <input type="date" class="form-control" id="last_service" name="last_service" value="{{draft.last_service_date|date:'Y-m-d'}}">
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="vehicle_loc" class="form-label">Location of Vehicle</label>
+                                    <input type="text" class="form-control" id="vehicle_location" name="vehicle_location" value="{{draft.vehicle_location}}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <!--Interior&Exterior-->
+                 <div class="card">
+                        <div class = "card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="power_steering">Power Steering</label>
+                                    <select name="power_steering" id="power_steering" class="form-control select2-templating" data-live-search="true">
+                                        <option value="" selected disabled>---Select---</option>
+                                        <option value="Yes" >Yes</option>
+                                        <option value="No">No</option>
+                                        <!--{% for value, display in yes_no_options %}-->
+                                        <!--<option value="{{ value }}" {% if value == car.power_steering %}selected{% endif %}>{{ display }}</option>-->
+                                        <!--{% endfor %}-->
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="cruise_control">Cruise Control</label>
+                                    <select name="cruise_control" id="cruise_control" class="form-control select2-templating" data-live-search="true">
+                                        <!--<option value="" selected disabled>---Select---</option>-->
+                                        <!--<option value="Yes" >Yes</option>-->
+                                        <!--<option value="No">No</option>-->
+                                        <option value="">Select</option>
+                                        {% if draft.cruise_control %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="navigation_system">Navigation System</label>
+                                    <select name="navigation_system" id="navigation_system" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if draft.navigation_system %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="adjustable_steering">Adjustable Steering</label>
+                                    <select name="adjustable_steering" id="adjustable_steering" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if draft.adjustable_steering %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="steering_control">Steering Control</label>
+                                    <select name="steering_control" id="steering_control" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if draft.steering_control %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="air_conditioning">Air Conditioning</label>
+                                    <select name="air_conditioning" id="air_conditioning" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        <option value="Automatic Air Control" {% if draft.air_conditioning == "Automatic Air Control"  %} selected {% endif %}>Automatic Air Control</option>
+                                        <option value="Manual Control" {% if draft.air_conditioning == "Manual Control"  %} selected {% endif %}>Manual Control</option>
+                                        <option value="With Heater" {% if draft.air_conditioning == "With Heater"  %} selected {% endif %}>With Heater</option>
+                                        <option value="Without Heater" {% if draft.air_conditioning == "Without Heater"  %} selected {% endif %}>Without Heater</option>
+                                        <option value="No AC" {% if draft.air_conditioning == "No AC"  %} selected {% endif %}>No AC</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="power_window">Power Window</label>
+                                    <select name="power_window" id="power_window" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        <option value="Front Window Only" {% if draft.power_window == "Front Window Only"  %} selected {% endif %}>Front Window Only</option>
+                                        <option value="All Four Power Window" {% if draft.power_window == "All Four Power Window"  %} selected {% endif %}>All Four Power Window</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="sun_roof">Sun Roof</label>
+                                    <select name="sun_roof" id="sun_roof" class="form-control select2-templating" data-live-search="true">
+                                       <option value="">Select</option>
+                                        {% if draft.sun_roof %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12"><label for="alloy_wheel">Alloy Wheel</label>
+                                    <select name="alloy_wheel" id="alloy_wheel" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if draft.alloy_wheel %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                
+                                <div class="col-lg-6 col-sm-12">
+                                     <label for="adjustable_orvm">Adjustable ORVMs</label>
+                                    <select name="adjustable_orvm" id="adjustable_orvm" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        <option value="Electrically Adjustable" {% if draft.adjustable_orvm == "Electrically Adjustable"  %} selected {% endif %}>Electrically Adjustable</option>
+                                        <option value="Manually Adjustable" {% if draft.adjustable_orvm == "Manually Adjustable"  %} selected {% endif %}>Manually Adjustable</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                        </div>
+                     </div>
+                
+                <!--Infotainment-->
+                 <div class="card">
+                        <div class = "card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="bluetooth">Bluetooth</label>
+                                    <select name="bluetooth" id="bluetooth" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                            {% if draft.bluetooth %}
+                                                <option data-tokens="Yes" selected>Yes</option>
+                                                <option data-tokens="No">No</option>
+                                            {% else %}
+                                                <option data-tokens="Yes">Yes</option>
+                                                <option data-tokens="No" selected>No</option>
+                                            {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="am_radio">AM/FM Radio</label>
+                                    <select name="am_radio" id="am_radio" class="form-control select2-templating" data-live-search="true">
+                                       <option value="">Select</option>
+                                        {% if draft.am_fm_radio %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="usb_compatibility">USB Compatibility</label>
+                                    <select name="usb_compatibility" id="usb_compatibility" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        <option value="Electrically Adjustable" {% if draft.usb_compatibility == "Electrically Adjustable"  %} selected {% endif %}>Electrically Adjustable</option>
+                                        <option value="Manually Adjustable" {% if draft.usb_compatibility == "Manually Adjustable"  %} selected {% endif %}>Manually Adjustable</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="aux_compatibility">AUX Compatibility</label>
+                                    <select name="aux_compatibility" id="aux_compatibility" class="form-control select2-templating" data-live-search="true">
+                                         <option value="">Select</option>
+                                            {% if draft.aux_compatibility %}
+                                                <option data-tokens="Yes" selected>Yes</option>
+                                                <option data-tokens="No">No</option>
+                                            {% else %}
+                                                <option data-tokens="Yes">Yes</option>
+                                                <option data-tokens="No" selected>No</option>
+                                            {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="android_car_play">Android Auto/ Apple Car Play</label>
+                                    <select name="android_car_play" id="android_car_play" class="form-control select2-templating" data-live-search="true">
+                                       <option value="">Select</option>
+                                        {% if draft.android_car_play %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="wireless_charger">Wireless Charger</label>
+                                    <select name="wireless_charger" id="wireless_charger" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if draft.wireless_charger %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                
+                <!--Safety-->
+                <div class="card">
+                        <div class = "card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="abs">ABS</label>
+                                    <select id="abs" name="abs" class="form-control select2-templating" data-live-search="true">
+                                       <option value="">Select</option>
+                                        {% if draft.abs %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="ebd">EBD</label>
+                                    <select name="ebd" id="ebd" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if draft.ebd %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="anti_theft_device">Anti-Theft Device</label>
+                                    <select name="anti_theft_device" id="anti_theft_device" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if draft.anti_theft_device %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="rear_parking_camera">Rear Parking Camera</label>
+                                    <select name="rear_parking_camera" id="rear_parking_camera" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if draft.rear_parking_camera %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>    
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="rear_parking_sensor">Rear Parking Sensors</label>
+                                    <select name="rear_parking_sensor" id="rear_parking_sensor" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if draft.rear_parking_sensor %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="front_parking_camera">Front Parking Camera</label>
+                                    <select name="front_parking_camera" id="front_parking_camera" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if draft.front_parking_camera %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>    
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="lock_sensor">Lock System</label>
+                                    <select name="lock_sensor" id="lock_sensor" class="form-control select2-templating" data-live-search="true">
+                                       <option value="">Select</option>
+                                        <option value="Central Locking" {% if draft.lock_sensor == "Central Locking" %} selected {% endif %}>Central Locking</option>
+                                        <option value="Remote Control Central Locking" {% if draft.lock_sensor == "Remote Control Central Locking" %} selected {% endif %}>Remote Control Central Locking</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="total_air_bag">No of Air Bags</label>
+                                    <select name="total_air_bag" id="total_air_bag" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        <option value=1 {% if draft.total_air_bag == 1 %} selected {% endif %}>1 Bags</option>
+                                        <option value=2 {% if draft.total_air_bag == 2 %} selected {% endif %}>2 Bags</option>
+                                        <option value=4 {% if draft.total_air_bag == 4 %} selected {% endif %}>4 Bags</option>
+                                        <option value=6 {% if draft.total_air_bag == 6 %} selected {% endif %}>6 Bags</option>
+                                        <option value=8 {% if draft.total_air_bag == 8 %} selected {% endif %}>8 Bags</option>
+                                        <option value=10 {% if draft.total_air_bag == 10 %} selected {% endif %}>10 Bags</option>
+                                        <option value=0 {% if draft.total_air_bag == 0 %} selected {% endif %}>None</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                     
+                <!--vehicle conditions-->
+                <div class="card">
+                        <div class = "card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="battery_status">Battery Status</label>
+                                    <select name="battery_status" id="battery_status" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        <option data-tokens="New" {% if draft.battery_status == "New" %} selected {% endif %}>New</option>
+                                        <option data-tokens="Old" {% if draft.battery_status == "Old" %} selected {% endif %}>Old</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="tyre_condition">Tyre Condition</label>
+                                    <select name="tyre_condition" id="tyre_condition" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        <option data-tokens="New" {% if draft.tyre_condition == "New" %} selected {% endif %}>New</option>
+                                        <option data-tokens="Old" {% if draft.tyre_condition == "Old" %} selected {% endif %}>Old</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                     <label for="vehicle_certificate" onchange="selectedvalYes()">Vehicle Certification/ Company Warranty (If Any)</label>
+                                    <select name="vehicle_certificate" id="vehicle_certificate" class="form-control select2-templating" data-live-search="true">
+                                         <option value="">Select</option>
+                                        {% if draft.vehicle_warranty %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="If Yes">If Yes</label>
+                                    <div class="input-group" id="datepicker2">
+                                        <input type="text" class="form-control" placeholder="dd MM yyyy" data-date-format="dd M, yyyy" data-date-container='#datepicker2' data-provide="datepicker" data-date-autoclose="true"
+                                        value="{{draft.vehicle_certificate_validity|date:'Y-m-d'}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="accidental">Accidental</label>
+                                    <select name="accidental" id="accidental" class="form-control select2-templating" data-live-search="true">
+                                         <option value="">Select</option>
+                                        {% if draft.accidental %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                     
+                <!--additional-->
+                <div class="card">
+                        <div class = "card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                     <label for="finance">Finance</label>
+                                    <select name="finance" id="finance" class="form-control select2-templating" data-live-search="true">
+                                       <option value="">Select</option>
+                                        {% if draft.finance %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="exchange">Exchange</label>
+                                    <select name="exchange" id="exchange" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if draft.exchange %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                     <label for="extended_warranty">Extended Warranty</label>
+                                    <select name="extended_warranty" id="extended_warranty" class="form-control select2-templating" data-live-search="true">
+                                         <option value="">Select</option>
+                                        {% if draft.extended_warranty %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                     <label for="description">Additional Information</label>
+                                    <textarea name="description" id="description" class="form-control" maxlength="225" rows="5" placeholder="If any additional information about the car" value="{{draft.description}}"></textarea>
+                                </div>
+                            </div>
+                            
+                        </div>
+                </div>
+                
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" formaction="{% url 'save_draft'  %}"> Save changes</button>
+                        <button type="submit" class="btn btn-primary"  id="live">Make Live</button>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        function formatNumber(num) {
+            num = num.toString();
+            // Split the integer part if there's a decimal part
+            let integerPart = num.split(".")[0];
+
+            // Format the integer part according to the Indian numbering system
+            let lastThreeDigits = integerPart.slice(-3);
+            let otherDigits = integerPart.slice(0, -3);
+            if (otherDigits !== '') {
+                lastThreeDigits = ',' + lastThreeDigits;
+            }
+            // Add commas after every two digits for the Indian numbering system
+            let formattedNumber = otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThreeDigits;
+
+            return formattedNumber;
+        }
+
+        $('#demand_price').on('input', function() {
+            let value = $(this).val().replace(/,/g, ''); // Remove existing commas
+            if (!isNaN(value) && value.length > 0) {
+                $(this).val(formatNumber(value));
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+
+    $('#car_brand').change(async function() {
+        var brandID = $(this).val();
+        console.log('brandID = ', brandID)
+        await $.get('/get_car_model/', { car_brand_id: brandID }, async function(data) {
+            var carModelSelect = $('#car_model');
+            console.log('carModelSelect= ',carModelSelect)
+            var model_text = '<option value="">Select Model</option>'
+            await $.each(data, function(index, model) {
+                console.log('data = ',data)
+                var a = '<option value='+model.id+'>'+model.name+'</option>'
+                model_text += a
+<!--                carModelSelect.append('<option data-tokens="" value='+model.id+'>'+model.name+'</option>');-->
+            });
+             carModelSelect.html(model_text);
+
+        });
+    });
+
+    $('#car_model').change(function() {
+        var carModelId = $(this).val();
+        $.get('/get_car_variant/', { car_model_id: carModelId }, function(data) {
+            var carVariantSelect = $('#car_variants');
+            carVariantSelect.empty();
+            carVariantSelect.append($('<option>', {
+                    value: "",
+                    text: "Select Variants"
+                }));
+            $.each(data, function(index, variant) {
+                carVariantSelect.append($('<option>', {
+                    value: variant.id,
+                    text: variant.name
+                }));
+            });
+        });
+    });
+});
+</script>
+<!-- Flatpickr Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+
+<script>
+    // Initialize flatpickr to allow only month and year selection
+    flatpickr("#car_year", {
+        dateFormat: "Y-m",  // Year and month only
+        plugins: [new monthSelectPlugin({
+            shorthand: true, // Display shorthand months
+            dateFormat: "Y-m", // Format the display value
+            altFormat: "F Y",  // Format for showing in the input field
+        })],
+        onChange: function(selectedDates, dateStr, instance) {
+            // When a date is selected, calculate the fitness validity date (after 15 years)
+            if (selectedDates.length > 0) {
+                // Get selected year and month
+                const selectedDate = new Date(selectedDates[0]);
+
+                // Add 15 years to the selected date
+                const fitnessValidityDate = new Date(selectedDate.setFullYear(selectedDate.getFullYear() + 15));
+
+                // Set the fitness validity date to the first day of the same month after 15 years
+                fitnessValidityDate.setDate(1);  // First day of the month
+
+                // Format the fitness validity date as YYYY-MM-DD
+                const formattedFitnessValidity = fitnessValidityDate.toISOString().split('T')[0];
+
+                // Set the fitness validity field
+                document.getElementById('fitness_validity').value = formattedFitnessValidity;
+            }
+        }
+    });
+</script>
+{% endblock %}

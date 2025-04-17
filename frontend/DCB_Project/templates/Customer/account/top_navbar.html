@@ -1,0 +1,42 @@
+{% load static %}
+<header class="header-nav menu_style_home_one home3_style dashbord_style main-menu">
+    <!-- Ace Responsive Menu -->
+    <nav class="posr">
+        <div class="container-fluid">
+            <!-- Menu Toggle btn-->
+            <div class="menu-toggle">
+                <button type="button" id="menu-btn">
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button>
+            </div>
+            <a href="index.html" class="navbar_brand float-start dn-md">
+                <img class="logo1 img-fluid" src="{% static 'images/header-logo2.svg' %}" alt="{% static 'images/header-logo2.png' %}">
+                <img class="logo2 img-fluid" src="{% static 'images/header-logo2.svg' %}" alt="{% static 'images/header-logo2.svg' %}">
+            </a>
+            <!-- Responsive Menu Structure-->
+            <ul id="respMenu" class="ace-responsive-menu menu_list_custom_code wa text-end" data-menu-style="horizontal">
+                <li> <a href="#"><span class="title">Home</span></a>
+                    <!-- Level Two-->
+                    <ul>
+                        <li><a href="index.html">Home V1</a></li>
+                        <li><a href="index2.html">Home V2</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<!-- Main Header Nav For Mobile -->
+<div id="page" class="stylehome1 h0">
+    <div class="mobile-menu">
+        <div class="header stylehome1">
+            <div class="mobile_menu_bar">
+                <a class="menubar" href="#menu"><small>Menu</small><span></span></a>
+            </div>
+            <div class="mobile_menu_main_logo"><img class="nav_logo_img img-fluid" src="{% static 'images/header-logo2.svg' %}" alt="{% static 'images/header-logo2.png' %}"></div>
+        </div>
+    </div>
+</div>

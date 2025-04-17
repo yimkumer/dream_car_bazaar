@@ -1,0 +1,1097 @@
+{% extends 'Dealer/account/layout.html' %}
+{% load static %}
+
+{% block common_css %}
+<!-- FullCalendar CSS -->
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-gap: 1rem;
+            margin: 20px 0;
+            max-width: 350px; /* Adjust to make the calendar compact */
+            margin: 0 auto; /* Center the calendar */
+        }
+        .calendar .day {
+            text-align: center;
+            padding: 10px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            border-radius: 5px;
+            position: relative;
+        }
+        .calendar .day:hover {
+            background-color: #d1e7fd;
+        }
+        .calendar .current-day {
+            background-color: #007bff;
+            color: white;
+        }
+        .calendar .empty-day {
+            background-color: transparent;
+            cursor: default;
+        }
+        .event-marker {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background-color: red;
+            border-radius: 50%;
+        }
+        /* Compact calendar style */
+        .calendar-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+        .calendar-header button,
+        .calendar-header select {
+            font-size: 1rem;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+<!-- Main Content -->
+<!--<div class="main-content">-->
+
+<!--            <div class="page-content">-->
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <div class="col-xl-3">
+                            <a href="my-profile.html">
+                                <div class="card overflow-hidden">
+                                    <div class="" style="background-color: #0a2357; ">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div class="text-primary p-3">
+                                                    <h5 class="text-white">{{user.first_name}}</h5>
+                                                    <p class="font-size-11">DreamCarBazaar</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-4 align-self-end">
+                                                <img src="{% static 'dealer/images/profile-img.png' %}" alt="" class="img-fluid">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="avatar-md profile-user-wid mb-4">
+                                                    <img src="{% static 'dealer/images/users/avatar-1.jpg' %}" alt="" class="img-thumbnail rounded-circle">
+                                                </div>
+                                                <h5 class="font-size-12">+91 {{user.phone}}</h5>
+                                                <p class="text-muted mb-0">{{user.address}}</p>
+
+                                                <div class="d-flex">
+                                                    <button class="btn btn-success font-size-12">Followers 23</button>
+                                                    <button class="btn btn-danger font-size-12">Following 10</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="card" style="background-color: #0a2357; border: 2px solid #c90000; box-shadow: 0 10px 20px #8e8e8e;">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4 text-white">Your Plan Details</h4>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <p class="text-white">Uploaded</p>
+                                            <h3 class="mb-3 text-white">7/15 Cars</h3>
+                                            <p class="text-muted">Expires in<span class="text-danger"> 12 Days </span></p>
+
+                                            <div class="mt-4">
+                                                <a href="javascript: void(0);" class="btn btn-light waves-effect waves-light btn-sm">Upgrade <i class="mdi mdi-arrow-right ms-1"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="mt-4 mt-sm-0">
+                                                <div id="radialBar-chart" data-colors='["--bs-primary"]' class="apex-charts"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <p class="text-muted mb-0">We craft digital, graphic and dimensional thinking.</p> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-9">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <a href="{% url 'dealer:car_list' %}">
+                                        <div class="card mini-stats-wid">
+                                            <div class="card-body">
+                                                <div class="d-flex">
+                                                    <div class="flex-grow-1">
+                                                        <p class="text-muted fw-medium font-size-12">All Cars</p>
+                                                        <h4 class="mb-0">{{total_car}}</h4>
+                                                    </div>
+
+                                                    <div class="flex-shrink-0 align-self-center">
+                                                        <div class="mini-stat-icon avatar-sm rounded-circle bg-primary">
+                                                            <span class="avatar-title">
+                                                                <i class="bx bx-copy-alt font-size-24"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="{% url 'dealer:follow_up'%}">
+                                        <div class="card mini-stats-wid">
+                                            <div class="card-body">
+                                                <div class="d-flex">
+                                                    <div class="flex-grow-1">
+                                                        <p class="text-muted fw-medium font-size-12">All Follow Ups</p>
+                                                        <h4 class="mb-0">35</h4>
+                                                    </div>
+
+                                                    <div class="flex-shrink-0 align-self-center ">
+                                                        <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                                            <span class="avatar-title rounded-circle bg-primary">
+                                                                    <i class="bx bx-archive-in font-size-24"></i>
+                                                                </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                 
+                                <div class="col-md-4">
+                                    <a href="">
+                                        <div class="card mini-stats-wid">
+                                            <div class="card-body">
+                                                <div class="d-flex">
+                                                    <div class="flex-grow-1">
+                                                        <p class="text-muted fw-medium font-size-12">Scheduled Test Drive</p>
+                                                        <h4 class="mb-0">10</h4>
+                                                    </div>
+
+                                                    <div class="flex-shrink-0 align-self-center">
+                                                        <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                                            <span class="avatar-title rounded-circle bg-primary">
+                                                                    <i class="bx bx-purchase-tag-alt font-size-24"></i>
+                                                                </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- end row -->
+
+                            <div class="row">
+                                <div class="col-12">
+
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <div class="card">
+                                                <div class="card-body">
+
+                                                    <div id="external-events" class="mt-2">
+                                                        <div class="external-event fc-event bg-success" data-class="bg-success">
+                                                            Cold Leads
+                                                        </div>
+                                                        <!-- <div class="external-event fc-event bg-info" data-class="bg-info">
+                                                            Cold Leads
+                                                        </div> -->
+                                                        <div class="external-event fc-event bg-warning" data-class="bg-warning">
+                                                            Warm Lead
+                                                        </div>
+                                                        <div class="external-event fc-event bg-danger" data-class="bg-danger">
+                                                            Hot theme
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end col-->
+
+                                        <div class="col-lg-9">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="container calendar-container">
+                                                        <h2 class="my-4 text-center">Calendar & Events </h2>
+                                                
+                                                        <!-- Calendar Navigation -->
+                                                        <div class="calendar-header">
+                                                            <button id="prevMonth" class="btn btn-secondary">&lt;</button>
+                                                            <div>
+                                                                <span id="monthYearLabel"></span>
+                                                                <select id="yearSelect" class="form-select d-inline-block w-auto ml-2"></select>
+                                                            </div>
+                                                            <button id="nextMonth" class="btn btn-secondary">&gt;</button>
+                                                        </div>
+                                                        <!-- Calendar Container -->
+                                                        <br></br>
+                                                        <div id="calendar" class="calendar"></div>
+                                                    </div>
+                                                    <!-- Modal for Scheduling Event -->
+                                                    <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="eventModalLabel">Schedule an Event</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form id="eventForm">
+                                                                        <div class="mb-3">
+                                                                            <label for="eventDate" class="form-label">Date</label>
+                                                                            <input type="text" class="form-control" id="eventDate" disabled>
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label for="eventTitle" class="form-label">Event Title</label>
+                                                                            <input type="text" class="form-control" id="eventTitle" placeholder="Enter event title">
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label for="eventDescription" class="form-label">Event Description</label>
+                                                                            <textarea class="form-control" id="eventDescription" placeholder="Enter event description"></textarea>
+                                                                        </div>
+                                                                        <button type="submit" class="btn btn-primary">Save Event</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end col -->
+
+                                    </div>
+
+                                    <div style='clear:both'></div>
+
+
+                                    <!-- Add New Event MODAL -->
+                                    <div class="modal fade" id="event-modal" tabindex="-1">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header py-3 px-4 border-bottom-0">
+                                                    <h5 class="modal-title" id="modal-title">Event</h5>
+
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+
+                                                </div>
+                                                <div class="modal-body p-4">
+                                                    <form class="needs-validation" name="event-form" id="form-event" novalidate>
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Event Name</label>
+                                                                    <input class="form-control" placeholder="Insert Event Name" type="text" name="title" id="event-title" required value="" />
+                                                                    <div class="invalid-feedback">Please provide a valid event name</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Category</label>
+                                                                    <select class="form-control form-select" name="category" id="event-category">
+                                                                            <option  selected> --Select-- </option>
+                                                                            <option value="bg-danger">Danger</option>
+                                                                            <option value="bg-success">Success</option>
+                                                                            <option value="bg-primary">Primary</option>
+                                                                            <option value="bg-info">Info</option>
+                                                                            <option value="bg-dark">Dark</option>
+                                                                            <option value="bg-warning">Warning</option>
+                                                                        </select>
+                                                                    <div class="invalid-feedback">Please select a valid event category</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-2">
+                                                            <div class="col-6">
+                                                                <button type="button" class="btn btn-danger" id="btn-delete-event">Delete</button>
+                                                            </div>
+                                                            <div class="col-6 text-end">
+                                                                <button type="button" class="btn btn-light me-1" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-success" id="btn-save-event">Save</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <!-- end modal-content-->
+                                        </div>
+                                        <!-- end modal dialog-->
+                                    </div>
+                                    <!-- end modal-->
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+
+
+
+
+                <div class="row">
+                    <div class="col-xl-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4">Social Source</h4>
+                                <div class="text-center">
+                                    <div class="avatar-sm mx-auto mb-4">
+                                        <span class="avatar-title rounded-circle bg-primary bg-soft font-size-24">
+                                                        <i class="mdi mdi-facebook text-primary"></i>
+                                                    </span>
+                                    </div>
+                                    <p class="font-16 text-muted mb-2"></p>
+                                    <h5><a href="javascript: void(0);" class="text-dark">Facebook - <span class="text-muted font-16">125 sales</span> </a></h5>
+                                    <p class="text-muted">Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus tincidunt.</p>
+                                    <a href="javascript: void(0);" class="text-primary font-16">Learn more <i class="mdi mdi-chevron-right"></i></a>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-4">
+                                        <div class="social-source text-center mt-3">
+                                            <div class="avatar-xs mx-auto mb-3">
+                                                <span class="avatar-title rounded-circle bg-primary font-size-16">
+                                                                <i class="mdi mdi-facebook text-white"></i>
+                                                            </span>
+                                            </div>
+                                            <h5 class="font-size-15">Facebook</h5>
+                                            <p class="text-muted mb-0">125 sales</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="social-source text-center mt-3">
+                                            <div class="avatar-xs mx-auto mb-3">
+                                                <span class="avatar-title rounded-circle bg-info font-size-16">
+                                                                <i class="mdi mdi-twitter text-white"></i>
+                                                            </span>
+                                            </div>
+                                            <h5 class="font-size-15">Twitter</h5>
+                                            <p class="text-muted mb-0">112 sales</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="social-source text-center mt-3">
+                                            <div class="avatar-xs mx-auto mb-3">
+                                                <span class="avatar-title rounded-circle bg-pink font-size-16">
+                                                                <i class="mdi mdi-instagram text-white"></i>
+                                                            </span>
+                                            </div>
+                                            <h5 class="font-size-15">Instagram</h5>
+                                            <p class="text-muted mb-0">104 sales</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4">Recent Customer Chats</h4>
+
+                                <ul class="list-group" data-simplebar="init" style="max-height: 390px;">
+                                    <div class="simplebar-wrapper" style="margin: 0px;">
+                                        <div class="simplebar-height-auto-observer-wrapper">
+                                            <div class="simplebar-height-auto-observer"></div>
+                                        </div>
+                                        <div class="simplebar-mask">
+                                            <div class="simplebar-offset" style="right: -20.8333px; bottom: 0px;">
+                                                <div class="simplebar-content-wrapper" style="height: auto; overflow: hidden scroll;">
+                                                    <div class="simplebar-content" style="padding: 0px;">
+                                                        <li class="list-group-item border-0">
+                                                            <div class="d-flex">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <div class="avatar-xs">
+                                                                        <span class="avatar-title rounded-circle bg-light">
+                                                        <img src="{% static 'dealer/images/companies/img-1.png' %}" alt="" height="18">
+                                                    </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex-grow-1">
+                                                                    <h5 class="font-size-14">Car Name or Url</h5>
+                                                                    <p class="text-muted">If several languages coalesce, the grammar of the resulting language</p>
+
+                                                                    <div class="float-end">
+                                                                        <p class="text-muted mb-0"><i class="mdi mdi-account me-1"></i> Joseph</p>
+                                                                    </div>
+                                                                    <p class="text-muted mb-0">12 Mar, 2020</p>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="list-group-item border-0">
+                                                            <div class="d-flex">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <div class="avatar-xs">
+                                                                        <span class="avatar-title rounded-circle bg-light">
+                                                        <img src="{% static 'dealer/images/companies/img-2.png' %}" alt="" height="18">
+                                                    </span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="flex-grow-1">
+                                                                    <h5 class="font-size-14">Car Name or Url</h5>
+                                                                    <p class="text-muted">To an English person, it will seem like simplified English, as a skeptical cambridge</p>
+
+                                                                    <div class="float-end">
+                                                                        <p class="text-muted mb-0"><i class="mdi mdi-account me-1"></i> Jerry</p>
+                                                                    </div>
+                                                                    <p class="text-muted mb-0">13 Mar, 2020</p>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="list-group-item border-0">
+                                                            <div class="d-flex">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <div class="avatar-xs">
+                                                                        <span class="avatar-title rounded-circle bg-light">
+                                                        <img src="{% static 'dealer/images/companies/img-3.png' %}" alt="" height="18">
+                                                    </span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="flex-grow-1">
+                                                                    <h5 class="font-size-14">Car Name or Url</h5>
+                                                                    <p class="text-muted">It va esser tam simplic quam occidental in fact, it va esser occidental.</p>
+
+                                                                    <div class="float-end">
+                                                                        <p class="text-muted mb-0"><i class="mdi mdi-account me-1"></i> Calvin</p>
+                                                                    </div>
+                                                                    <p class="text-muted mb-0">14 Mar, 2020</p>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="list-group-item border-0">
+                                                            <div class="d-flex">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <div class="avatar-xs">
+                                                                        <span class="avatar-title rounded-circle bg-light">
+                                                        <img src="{% static 'dealer/images/companies/img-1.png' %}" alt="" height="18">
+                                                    </span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="flex-grow-1">
+                                                                    <h5 class="font-size-14">Car Name or Url</h5>
+                                                                    <p class="text-muted">If several languages coalesce, the grammar of the resulting language</p>
+
+                                                                    <div class="float-end">
+                                                                        <p class="text-muted mb-0"><i class="mdi mdi-account me-1"></i> Joseph</p>
+                                                                    </div>
+                                                                    <p class="text-muted mb-0">12 Mar, 2020</p>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="simplebar-placeholder" style="width: auto; height: 493px;"></div>
+                                    </div>
+                                    <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                        <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none;"></div>
+                                    </div>
+                                    <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+                                        <div class="simplebar-scrollbar" style="height: 308px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4">Top Cities Selling Product</h4>
+
+                                <div class="text-center">
+                                    <div class="mb-4">
+                                        <i class="bx bx-map-pin text-primary display-4"></i>
+                                    </div>
+                                    <h3>1,456</h3>
+                                    <p>San Francisco</p>
+                                </div>
+
+                                <div class="table-responsive mt-4">
+                                    <table class="table align-middle table-nowrap">
+                                        <tbody>
+                                            <tr>
+                                                <td style="width: 30%">
+                                                    <p class="mb-0">San Francisco</p>
+                                                </td>
+                                                <td style="width: 25%">
+                                                    <h5 class="mb-0">1,456</h5>
+                                                </td>
+                                                <td>
+                                                    <div class="progress bg-transparent progress-sm">
+                                                        <div class="progress-bar bg-primary rounded" role="progressbar" style="width: 94%" aria-valuenow="94" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p class="mb-0">Los Angeles</p>
+                                                </td>
+                                                <td>
+                                                    <h5 class="mb-0">1,123</h5>
+                                                </td>
+                                                <td>
+                                                    <div class="progress bg-transparent progress-sm">
+                                                        <div class="progress-bar bg-success rounded" role="progressbar" style="width: 82%" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p class="mb-0">San Diego</p>
+                                                </td>
+                                                <td>
+                                                    <h5 class="mb-0">1,026</h5>
+                                                </td>
+                                                <td>
+                                                    <div class="progress bg-transparent progress-sm">
+                                                        <div class="progress-bar bg-warning rounded" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4">Vehicle Uploaded This Month</h4>
+                                <div class="table-responsive">
+                                    <table class="table align-middle table-nowrap table-check">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="width: 20px;" class="align-middle">
+                                                    <div class="form-check font-size-16">
+                                                        <input class="form-check-input" type="checkbox" id="checkAll">
+                                                        <label class="form-check-label" for="checkAll"></label>
+                                                    </div>
+                                                </th>
+                                                <th class="align-middle">Car Name</th>
+                                                <th class="align-middle">Date</th>
+                                                <th class="align-middle">Price</th>
+                                                <th class="align-middle">Status</th>
+                                                <th class="align-middle">Dealer Name</th>
+                                                <th class="align-middle">View Details</th>
+                                                <th class="align-middle">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check font-size-16">
+                                                        <input class="form-check-input" type="checkbox" id="orderidcheck01">
+                                                        <label class="form-check-label" for="orderidcheck01"></label>
+                                                    </div>
+                                                </td>
+                                                <td><a href="car-details.html" class="text-body fw-bold">Skoda1</a>
+                                                </td>
+                                                <td>
+                                                    07 Oct, 2019
+                                                </td>
+                                                <td>
+                                                    $400
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-pill badge-soft-success font-size-12">Paid</span>
+                                                </td>
+                                                <td>
+                                                    Dealer Name </td>
+                                                <td>
+                                                    <!-- Button trigger modal -->
+                                                    <a type="button" href="car-details.html" class="btn btn-primary btn-sm btn-rounded">
+                                                        View Details
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex gap-3">
+                                                        <a href="javascript:void(0);" class="text-success"><i
+                                                                class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger"><i
+                                                                class="mdi mdi-delete font-size-18"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check font-size-16">
+                                                        <input class="form-check-input" type="checkbox" id="orderidcheck02">
+                                                        <label class="form-check-label" for="orderidcheck02"></label>
+                                                    </div>
+                                                </td>
+                                                <td><a href="car-details.html" class="text-body fw-bold">Skoda</a>
+                                                </td>
+                                                <td>
+                                                    07 Oct, 2019
+                                                </td>
+                                                <td>
+                                                    $380
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-pill badge-soft-danger font-size-12">Chargeback</span>
+                                                </td>
+                                                <td>
+                                                    Dealer Name
+                                                </td>
+                                                <td>
+                                                    <!-- Button trigger modal -->
+                                                    <a type="button" href="car-details.html" class="btn btn-primary btn-sm btn-rounded">
+                                                        View Details
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex gap-3">
+                                                        <a href="javascript:void(0);" class="text-success"><i
+                                                                class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger"><i
+                                                                class="mdi mdi-delete font-size-18"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check font-size-16">
+                                                        <input class="form-check-input" type="checkbox" id="orderidcheck03">
+                                                        <label class="form-check-label" for="orderidcheck03"></label>
+                                                    </div>
+                                                </td>
+                                                <td><a href="car-details.html" class="text-body fw-bold">Skoda</a>
+                                                </td>
+                                                <td>
+                                                    06 Oct, 2019
+                                                </td>
+                                                <td>
+                                                    $384
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-pill badge-soft-success font-size-12">Paid</span>
+                                                </td>
+                                                <td>
+                                                    Dealer Name
+                                                </td>
+                                                <td>
+                                                    <!-- Button trigger modal -->
+                                                    <a type="button" href="car-details.html" class="btn btn-primary btn-sm btn-rounded">
+                                                        View Details
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex gap-3">
+                                                        <a href="javascript:void(0);" class="text-success"><i
+                                                                class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger"><i
+                                                                class="mdi mdi-delete font-size-18"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check font-size-16">
+                                                        <input class="form-check-input" type="checkbox" id="orderidcheck04">
+                                                        <label class="form-check-label" for="orderidcheck04"></label>
+                                                    </div>
+                                                </td>
+                                                <td><a href="car-details.html" class="text-body fw-bold">Skoda</a>
+                                                </td>
+                                                <td>
+                                                    05 Oct, 2019
+                                                </td>
+                                                <td>
+                                                    $412
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-pill badge-soft-success font-size-12">Paid</span>
+                                                </td>
+                                                <td>
+                                                    Dealer Name </td>
+                                                <td>
+                                                    <!-- Button trigger modal -->
+                                                    <a type="button" href="car-details.html" class="btn btn-primary btn-sm btn-rounded">
+                                                        View Details
+                                        </a>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex gap-3">
+                                                        <a href="javascript:void(0);" class="text-success"><i
+                                                                class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger"><i
+                                                                class="mdi mdi-delete font-size-18"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check font-size-16">
+                                                        <input class="form-check-input" type="checkbox" id="orderidcheck05">
+                                                        <label class="form-check-label" for="orderidcheck05"></label>
+                                                    </div>
+                                                </td>
+                                                <td><a href="car-details.html" class="text-body fw-bold">Skoda</a>
+                                                </td>
+                                                <td>
+                                                    04 Oct, 2019
+                                                </td>
+                                                <td>
+                                                    $404
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-pill badge-soft-warning font-size-12">Refund</span>
+                                                </td>
+                                                <td>
+                                                    Dealer Name
+                                                </td>
+                                                <td>
+                                                    <!-- Button trigger modal -->
+                                                    <a type="button" href="car-details.html" class="btn btn-primary btn-sm btn-rounded">
+                                                        View Details
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex gap-3">
+                                                        <a href="javascript:void(0);" class="text-success"><i
+                                                                class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger"><i
+                                                                class="mdi mdi-delete font-size-18"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check font-size-16">
+                                                        <input class="form-check-input" type="checkbox" id="orderidcheck06">
+                                                        <label class="form-check-label" for="orderidcheck06"></label>
+                                                    </div>
+                                                </td>
+                                                <td><a href="car-details.html" class="text-body fw-bold">Skoda</a>
+                                                </td>
+                                                <td>
+                                                    04 Oct, 2019
+                                                </td>
+                                                <td>
+                                                    $392
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-pill badge-soft-success font-size-12">Paid</span>
+                                                </td>
+                                                <td>
+                                                    Dealer Name
+                                                </td>
+                                                <td>
+                                                    <!-- Button trigger modal -->
+                                                    <a type="button" href="car-details.html" class="btn btn-primary btn-sm btn-rounded">
+                                                        View Details
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex gap-3">
+                                                        <a href="javascript:void(0);" class="text-success"><i
+                                                                class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger"><i
+                                                                class="mdi mdi-delete font-size-18"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check font-size-16">
+                                                        <input class="form-check-input" type="checkbox" id="orderidcheck07">
+                                                        <label class="form-check-label" for="orderidcheck07"></label>
+                                                    </div>
+                                                </td>
+                                                <td><a href="car-details.html" class="text-body fw-bold">Skoda</a>
+                                                </td>
+                                                <td>
+                                                    03 Oct, 2019
+                                                </td>
+                                                <td>
+                                                    $374
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-pill badge-soft-success font-size-12">Paid</span>
+                                                </td>
+                                                <td>
+                                                    Dealer Name
+                                                </td>
+                                                <td>
+                                                    <!-- Button trigger modal -->
+                                                    <a type="button" href="car-details.html" class="btn btn-primary btn-sm btn-rounded">
+                                                        View Details
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex gap-3">
+                                                        <a href="javascript:void(0);" class="text-success"><i
+                                                                class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger"><i
+                                                                class="mdi mdi-delete font-size-18"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check font-size-16">
+                                                        <input class="form-check-input" type="checkbox" id="orderidcheck08">
+                                                        <label class="form-check-label" for="orderidcheck08"></label>
+                                                    </div>
+                                                </td>
+                                                <td><a href="car-details.html" class="text-body fw-bold">Skoda</a>
+                                                </td>
+                                                <td>
+                                                    02 Oct, 2019
+                                                </td>
+                                                <td>
+                                                    $350
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-pill badge-soft-success font-size-12">Paid</span>
+                                                </td>
+                                                <td>
+                                                    Dealer Name </td>
+                                                <td>
+                                                    <!-- Button trigger modal -->
+                                                    <a type="button" href="car-details.html" class="btn btn-primary btn-sm btn-rounded">
+                                                        View Details
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex gap-3">
+                                                        <a href="javascript:void(0);" class="text-success"><i
+                                                                class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger"><i
+                                                                class="mdi mdi-delete font-size-18"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check font-size-16">
+                                                        <input class="form-check-input" type="checkbox" id="orderidcheck09">
+                                                        <label class="form-check-label" for="orderidcheck09"></label>
+                                                    </div>
+                                                </td>
+                                                <td><a href="car-details.html" class="text-body fw-bold">Skoda</a>
+                                                </td>
+                                                <td>
+                                                    01 Oct, 2019
+                                                </td>
+                                                <td>
+                                                    $345
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-pill badge-soft-warning font-size-12">Refund</span>
+                                                </td>
+                                                <td>
+                                                    Dealer Name
+                                                </td>
+                                                <td>
+                                                    <!-- Button trigger modal -->
+                                                    <a type="button" href="car-details.html" class="btn btn-primary btn-sm btn-rounded">
+                                                        View Details
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex gap-3">
+                                                        <a href="javascript:void(0);" class="text-success"><i
+                                                                class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="text-danger"><i
+                                                                class="mdi mdi-delete font-size-18"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+
+                </div>
+                <!-- end row -->
+                
+            <!--</div>-->
+            <!-- container-fluid -->
+        <!--</div>-->
+<!-- End Page-content -->
+
+
+{% endblock %}
+
+{% block js %}
+        <!-- jQuery & Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Get current date
+            const today = new Date();
+            let currentMonth = today.getMonth(); // Current month (0-11)
+            let currentYear = today.getFullYear(); // Current year (yyyy)
+
+            // Store events in an object: date as key, events as values
+            let events = {};
+
+            // Days of the week
+            const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+            // Function to generate the calendar
+            function generateCalendar(month, year) {
+                // Clear the calendar
+                $('#calendar').empty();
+
+                // Get the first day of the month and the number of days in the month
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                // Display the days of the week
+                daysOfWeek.forEach(day => {
+                    $('#calendar').append(`<div class="day">${day}</div>`);
+                });
+
+                // Add empty days before the start of the month
+                for (let i = 0; i < firstDay; i++) {
+                    $('#calendar').append('<div class="day empty-day"></div>');
+                }
+
+                // Add the actual days of the month
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const currentDate = new Date(year, month, day);
+                    const isToday = currentDate.toDateString() === today.toDateString();
+                    const dayClass = isToday ? 'day current-day' : 'day';
+
+                    // Format date as YYYY-MM-DD
+                    const formattedDate = `${year}-${month + 1}-${day}`;
+
+                    // Create the day cell
+                    const dayCell = $(`<div class="${dayClass}" data-date="${formattedDate}">${day}</div>`);
+
+                    // Check if there are any events for this day
+                    if (events[formattedDate] && events[formattedDate].length > 0) {
+                        // Add a marker for events
+                        dayCell.append('<div class="event-marker"></div>');
+                    }
+
+                    // Add the day cell to the calendar
+                    $('#calendar').append(dayCell);
+                }
+
+                // Update the month and year label
+                const monthNames = [
+                    'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+                ];
+                $('#monthYearLabel').text(`${monthNames[month]} ${year}`);
+
+                // Update year dropdown
+                const startYear = 2020;
+                const endYear = 2030;
+                $('#yearSelect').empty();
+                for (let y = startYear; y <= endYear; y++) {
+                    $('#yearSelect').append(`<option value="${y}" ${y === year ? 'selected' : ''}>${y}</option>`);
+                }
+            }
+
+            // Generate the calendar for the current month
+            generateCalendar(currentMonth, currentYear);
+
+            // Handle previous month button click
+            $('#prevMonth').click(function() {
+                currentMonth -= 1;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear -= 1;
+                }
+                generateCalendar(currentMonth, currentYear);
+            });
+
+            // Handle next month button click
+            $('#nextMonth').click(function() {
+                currentMonth += 1;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear += 1;
+                }
+                generateCalendar(currentMonth, currentYear);
+            });
+
+            // Handle year select change
+            $('#yearSelect').change(function() {
+                currentYear = parseInt($(this).val());
+                generateCalendar(currentMonth, currentYear);
+            });
+
+            // Handle click event on a day
+            $('#calendar').on('click', '.day', function() {
+                const selectedDate = $(this).data('date');
+                if (!selectedDate || $(this).hasClass('empty-day')) return;
+
+                // Show the modal
+                $('#eventDate').val(selectedDate);
+                $('#eventModal').modal('show');
+            });
+
+            // Handle form submission (event scheduling)
+            $('#eventForm').on('submit', function(event) {
+                event.preventDefault();
+
+                const eventDate = $('#eventDate').val();
+                const eventTitle = $('#eventTitle').val();
+                const eventDescription = $('#eventDescription').val();
+
+                if (!eventTitle || !eventDescription) {
+                    alert('Please provide both event title and description.');
+                    return;
+                }
+
+                // Save the event in the events object
+                if (!events[eventDate]) {
+                    events[eventDate] = [];
+                }
+                events[eventDate].push({
+                    title: eventTitle,
+                    description: eventDescription
+                });
+
+                // Close the modal and reset the form
+                $('#eventModal').modal('hide');
+                $('#eventForm')[0].reset();
+
+                // Re-generate the calendar to show the event markers
+                generateCalendar(currentMonth, currentYear);
+            });
+        });
+    </script>
+{% endblock %}

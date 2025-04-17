@@ -1,0 +1,202 @@
+{% extends 'Dealer/account/layout.html' %}
+{% load static %}
+
+{% block common_css %}
+<style>
+    .edit-icon, .save-icon {
+        cursor: pointer;
+        color: blue;
+    }
+    .delete-icon {
+        cursor: pointer;
+        color: red;
+    }
+    .hidden {
+        display: none;
+    }
+/* Highlight style */
+.highlight {
+        background-color: yellow;
+    }    
+    
+#share-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+#share-button:hover {
+    background-color: #45a049; /* Darker green */
+}
+
+</style>
+
+
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+
+
+{% endblock %}
+{% block body %}
+
+        <h2>Invoice for {{ username }}</h2>
+    {% for car_details in records %}
+    <div class="row">
+
+            <div class="col-lg-8 col-sm-12 mb30">
+                <div class="cars-details-features">
+                    
+                    <div class="row car-details-row">
+                       
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Car Brand</p>
+                                <h6>{{car_details.variant.model.brand.name}}</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Car Model</p>
+                                <h6>{{car_details.variant.model.name}}</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Car Varient</p>
+                                <h6>{{car_details.variant.name}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row car-details-row">
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Year</p>
+                                <h4>{{car_details.car_year}}</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Ownership</p>
+                                <h6>{{car_details.ownership}}</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Car Color</p>
+                                <h6>{{car_details.color}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row car-details-row">
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Fuel Type</p>
+                                <h6>{{car_details.fuel_type}}</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Transmission</p>
+                                <h6>{{car_details.transmission}}</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Total No. Of Keys</p>
+                                <h6>{{car_details.total_keys}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row car-details-row">
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Engine Capacity</p>
+                                <h6>{{car_details.engine_capacity}}</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Insurance Type</p>
+                                <h6>{{car_details.insurance_type}}</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Insurance Valid Till</p>
+                                <h6>{{car_details.insurance_validity}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row car-details-row">
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Fitness Valid</p>
+                                <h6>{{car_details.fitness_validity}}</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Pollution Valid</p>
+                                <h6>{{car_details.pollution_validity}}</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Registration Place</p>
+                                <h6>{{car_details.registration_place}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row car-details-row">
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Registration Number</p>
+                                <h6>{{car_details.registration_no}}</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Demand Pricing</p>
+                                <h6>{{car_details.demand_price}}</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="points-details">
+                                <p>Location</p>
+                                <h6>{{car_details.vehicle_location}}</h6>
+                            </div>
+                        </tbody>
+                        </table>
+                        </div>
+                        
+                    </div>
+                </div>
+            <h2> Car Images</h2>
+        {% if d and d.car_details %}
+            {% for image in d.car_details %}
+                    <img src="{{ image.image.url }}" alt="{{ car.name }}" style="width: 300px; height: auto;">
+            {% endfor %}
+            
+        {% elif car_images %}    
+            {% for image in car_images %}
+                <img src="{{ image.image.url }}" alt="{{ car.name }}" style="width: 300px; height: auto;">
+            {% empty %}
+                <p>No images available for this car.</p>
+            {% endfor %}
+        
+        {% else %}
+            <p>No images available for this car.</p>
+
+           
+        {% endif %}
+                
+            </div>
+            {% endfor %}
+                <div>
+        
+
+
+    </div>
+{% endblock %}

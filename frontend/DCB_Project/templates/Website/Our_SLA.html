@@ -1,0 +1,92 @@
+{% extends 'Website/layout.html' %}
+{% load static %}
+{% load user_tags %}
+
+{% block body %}
+<div class="wrapper ovh">
+
+    {% include 'Website/top_header.html' %}
+    {% include 'Website/top_navbar.html' %}
+
+    <section class="our-terms pb90 inner_page_section_spacing">
+		<div class="container">
+			<div class="row" style="justify-content: center;">
+				<div class="col-md-12 col-xl-10">
+					<div class="terms_condition_grid pt60">
+						<div class="grids mb60">
+							<h1 class="title">Service Level Agreements (SLA)</h1>
+    				    	<ol style="list-style: auto">
+    				    	    <li><b>Introduction:</b>This Service Level Agreement (SLA) outlines the terms and conditions governing the services provided by DreamCarBazaar.</li>
+    				    	    <li><b>Scope of Services:</b> DreamCarBazaar agrees to provide online automotive marketplace services, facilitating the buying and selling of vehicles.</li>
+    				    	    <li><b>Availability:</b>
+        				    	    <ul>
+        				    	        <li>DreamCarBazaar commits to maintaining a minimum uptime for its platform.</li>
+        				    	        <li>Downtime exceeding 0.1% will be communicated in advance, and compensations will be provided as per the terms defined in this SLA.</li>
+        				    	    </ul>
+    				    	    </li>
+    				    	    <li><b>Performance:</b>
+    				    	        <ul>
+    				    	            <li>DreamCarBazaar aims to ensure optimal platform performance, with minimal page loading time.</li>
+    				    	            <li>Any performance issues causing significant delays will be addressed promptly.</li>
+    				    	        </ul>
+    				    	    </li>
+    				    	    <li><b>Customer Support:</b>
+    				    	        <ul>
+    				    	            <li>DreamCarBazaar will provide customer support through email and chat during business hours (9 AM to 5 PM, Monday to Friday).</li>
+    				    	            <li>Response times for critical issues will be within 2 hours, and non-critical issues within 3 to 4  business days.</li>
+    				    	        </ul>
+    				    	    </li>
+    				    	    <li><b>Data Security:</b>
+    				    	        <ul>
+    				    	            <li>DreamCarBazaar undertakes to protect user data and maintain compliance with applicable data protection regulations.</li>
+    				    	            <li>Regular security audits and updates will be conducted to ensure the integrity and confidentiality of user information.</li>
+    				    	        </ul>
+    				    	    </li>
+    				    	    <li><b>Data Backup:</b>
+    				    	        <ul>
+    				    	            <li>DreamCarBazaar will perform regular data backups to prevent data loss.</li>
+    				    	            <li>In case of data loss, the platform will be restored to the latest backup available.</li>
+    				    	        </ul>
+    				    	    </li>
+    				    	    <li><b>Change Management:</b>
+    				    	        <ul>
+    				    	            <li>
+    				    	                DreamCarBazaar will communicate any planned changes to the platform in advance.
+    				    	            </li>
+    				    	            <li>
+    				    	                Changes that may impact service availability will be scheduled during low-traffic periods.
+    				    	            </li>
+    				    	        </ul>
+    				    	    </li>
+    				    	    <li><b>Review and Revision:</b>
+    				    	        <ul>
+    				    	            <li>
+    				    	                This SLA will be reviewed annually and updated as necessary.
+    				    	            </li>
+    				    	            <li>
+    				    	                Any amendments will be communicated to users in advance.
+    				    	            </li>
+    				    	        </ul>
+    				    	    </li>
+    				    	</ol>
+    				    	
+    				    	<br>
+    				    	<p>By agreeing to use DreamCarBazaar's services, users acknowledge and accept the terms outlined in this SLA.<br><i>This SLA is subject to change. Users will be notified of any updates.</i>   </p>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+    {% include 'Website/footer.html' %}
+
+</div>
+<!-- Wrapper End -->
+{% endblock %}
+
+{% block js %}
+
+
+{% endblock %}

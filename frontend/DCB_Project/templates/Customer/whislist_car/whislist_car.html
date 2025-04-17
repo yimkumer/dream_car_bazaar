@@ -1,0 +1,93 @@
+{% extends 'Customer/account/layout.html' %}
+{% load static %}
+
+{% block common_css %}
+
+<link rel="stylesheet" href="{% static 'css/customer-dash.css' %}">
+
+{% endblock %}
+
+{% block body %}
+
+
+
+<div class="">
+    <h2 style="font-size: 22px;">Your Wishlist Car</h2>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="dashboard_favorites_contents">
+            <div class="row">
+                {% for wishlist_car in wishlist_cars %}
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="car-listing list_style">
+                            <div class="thumb">
+                                <div class="tag">FEATURED</div>
+                                <img class="img-fluid" src="{% static 'images/listing/1.jpg' %}" alt="1.jpg">
+                                <div class="thmb_cntnt2">
+                                    <ul class="mb0">
+                                        <li class="list-inline-item"><a class="text-white" href="#"><span class="flaticon-photo-camera mr3"></span> 22</a></li>
+                                        <li class="list-inline-item"><a class="text-white" href="#"><span class="flaticon-play-button mr3"></span> 3</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="details">
+                                <div class="wrapper">
+                                    <h5 class="price">Rs {{wishlist_car.car_id.demand_price}}</h5>
+                                    <h6 class="title"><a href="{% url 'customer:car_details' wishlist_car.car_id.id %}">{{wishlist_car.car_id.variant.model.brand.name}} {{wishlist_car.car_id.variant.model.name}} -{{wishlist_car.car_id.variant.name}}</a></h6>
+                                    <div class="listign_review">
+                                        <ul class="mb0">
+                                            <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li class="list-inline-item"><a href="#">4.7</a></li>
+                                            <li class="list-inline-item">(684 reviews)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="mb0 db_share_icons">
+                                        <a href="#"><span class="flaticon-heart"></span></a>
+                                    </div>
+                                </div>
+                                <div class="listing_footer">
+                                    <ul class="mb0">
+                                        <li class="list-inline-item"><a href="#"><span class="flaticon-road-perspective me-2"></span>{{wishlist_car.car_id.total_km_driven}}</a></li>
+                                        <li class="list-inline-item"><a href="#"><span class="flaticon-gas-station me-2"></span>{{wishlist_car.car_id.fuel_type}}</a></li>
+                                        <li class="list-inline-item"><a href="#"><span class="flaticon-gear me-2"></span>{{wishlist_car.car_id.transmission}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="col-lg-12">
+                    <div class="mbp_pagination mt10">
+                        <ul class="page_navigation">
+                            <li class="page-item">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true"> <span class="fa fa-arrow-left"></span></a>
+                            </li>
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#"><span class="fa fa-arrow-right"></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

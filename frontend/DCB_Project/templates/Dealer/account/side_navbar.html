@@ -1,0 +1,78 @@
+{% load static %}
+<!-- ========== Left Sidebar Start ========== -->
+<div class="vertical-menu">
+
+    <div data-simplebar class="h-100">
+
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <!-- Left Menu Start -->
+            <ul class="metismenu list-unstyled" id="side-menu">
+
+                <li class="dash-icon">
+                    <a href="{% url 'dealer:dashboard' %}">
+                        <i class="bx bx-home-circle"></i>
+                        <span key="t-dashboards">Dashboards</span>
+                    </a>
+                </li>
+                <li class="dash-icon">
+                    <a href="{% url 'dealer:follow_up'%}">
+                        <i class="fa fa-calendar-check"></i>
+                        <span key="t-dashboards">Follow Up</span>
+                    </a>
+                </li>
+                <li class="dash-icon">
+                    <a href="{% url 'dealer:add_car' %}">
+                        <i class="bx bx-list-plus"></i>
+                        <span key="t-dashboards">Add Car</span>
+                    </a>
+                </li>
+                <li class="dash-icon">
+                    <a href="{% url 'dealer:car_list' %}">
+                        <i class="fa fa-car"></i>
+                        <span key="t-dashboards">All Car</span>
+                    </a>
+                </li>
+                <li class="dash-icon">
+                    <a href="#">
+                        <i class="bx bx-home-circle"></i>
+                        <span key="t-dashboards">Premium Leads</span>
+                    </a>
+                </li>
+                <li class="dash-icon">
+                    <a href="{% url 'dealer:warranty' %}">
+                        <i class="bx bx-home-circle"></i>
+                        <span key="t-dashboards">Warranty</span>
+                    </a>
+                </li>
+                <li class="dash-icon">
+                    <a href="{% url 'dealer:insurance' %}">
+                        <i class="bx bx-home-circle"></i>
+                        <span key="t-dashboards">Insurance</span>
+                    </a>
+                </li>
+                <!--<li class="dash-icon">-->
+                <!--    <a href="#">-->
+                <!--        <i class="fa fa-users"></i>-->
+                <!--        <span key="t-dashboards">DCB Social</span>-->
+                <!--    </a>-->
+                <!--</li>-->
+                <li class="dash-icon">
+                    <a href="{% url 'dealer:customer_car' %}">
+                        <i class="fa fa-car-side"></i>
+                        <span key="t-dashboards">Customer Cars</span>
+                    </a>
+                </li>
+                <li class="dash-icon">
+                    <a href="{% url 'dealer:dealer-profile' %}">
+                        <i class="fa fa-user-cog"></i>
+                        <span key="t-dashboards">My Profile</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+</div>
+<!-- Left Sidebar End -->

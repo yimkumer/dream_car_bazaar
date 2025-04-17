@@ -1,0 +1,484 @@
+{% extends 'Website/layout.html' %}
+{% load static %}
+{% load user_tags %}
+{% block body %}
+<div class="wrapper ovh">
+
+    {% include 'Website/top_header.html' %}
+    {% include 'Website/top_navbar.html' %}
+
+
+    <!-- Modal -->
+    {% include 'Website/login_modal.html' %}
+    {% include 'Website/dealer_form.html' %}
+
+
+        <!-- ..............Insurance Form -->
+        <section class="our-log bgc-f9" style="margin: 60px;border-radius: 40px;box-shadow: 0 0 5px #d0d0d0; border: 2px solid #0a2357;">
+            <img src="{% static 'images/dcb-images/insurance-bg.webp' %}" alt=""
+                style="object-fit: cover;position: absolute;right: 0;top: 0;width: 100%;bottom: 0;height: 100%;left: 0;border-radius: 40px;">
+            <div class="container" style="position: relative; z-index: 1;">
+                <div class="row">
+                    <div class="col-lg-7 col-sm-12">
+                        <div style="display: flex;">
+                            <div style="margin-top: 40px;">
+                                <h2 style="font-size: 67px;">
+                                    Car Insurance
+                                </h2>
+                                <h4 style="font-size: 28px;font-weight: 500;padding: 0 20px 0 0px;margin-top: 25px;">Drive Less, Pay Less. Up to 25% Off on Premium.</h4>
+                            </div>
+                            <img src="{% static 'images/dcb-images/car-insurance-bann.avif' %}" alt="">
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-sm-12">
+                        <div class="sign_up_form mt60-sm"
+                            style="padding: 30px;box-shadow: 0 0 10px #9b9b9b;border-radius: 20px;margin: 20px; background: #fff;">
+                            <form action="#">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <input type="text" name="car_number" class="form-control"
+                                                placeholder="Enter Car Number....">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <input type="text" name="name" class="form-control" placeholder="Name....">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <!-- <label class="form-label">Email</label> -->
+                                            <input type="email" name="email" class="form-control" placeholder="Email..."
+                                                required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <!-- <label class="form-label">Phone Number</label> -->
+                                            <input type="text" name="phonenumber" placeholder="Phone Number..."
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-signup btn-thm mb20 mt20">Get Quote</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Section -->
+
+        <!-- DreamCarBazaar Services Section -->
+        <section class="whychose_us" style="background: #f2f2f2;">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="main-title text-center">
+                            <h2>What We Cover In Our Insurance</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dcb-service-card dcb-insurance-card">
+                            <div class="img-con">
+                                <img height="135" width="180" src="{% static 'images/dcb-images/acident.webp' %}"
+                                    alt="Services 3">
+                            </div>
+                            <div class="text-part" style="text-align: center;">
+                                <div>
+                                    <h5 class="mb20 mt20 dcb-card-title">Accidents</h5>
+                                    <p class="color-gray m8t m8b font14">Buy your next car with confidence with a
+                                        pre-purchase inspection from our experts
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dcb-service-card dcb-insurance-card">
+                            <div class="img-con">
+                                <img height="135" width="180" src="{% static 'images/dcb-images/theft.webp' %}" alt="Services 3">
+                            </div>
+                            <div class="text-part" style="text-align: center;">
+                                <div>
+                                    <h5 class="mb20 mt20 dcb-card-title">Theft</h5>
+                                    <p class="color-gray m8t m8b font14">Buy your next car with confidence with a
+                                        pre-purchase inspection from our experts
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dcb-service-card dcb-insurance-card">
+                            <div class="img-con">
+                                <img height="135" width="180" src="{% static 'images/dcb-images/fire.webp' %}" alt="Services 3">
+                            </div>
+                            <div class="text-part" style="text-align: center;">
+                                <div>
+                                    <h5 class="mb20 mt20 dcb-card-title">Fire</h5>
+                                    <p class="color-gray m8t m8b font14">Buy your next car with confidence with a
+                                        pre-purchase inspection from our experts
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dcb-service-card dcb-insurance-card">
+                            <div class="img-con">
+                                <img height="135" width="180" src="{% static 'images/dcb-images/natural.webp' %}"
+                                    alt="Services 3">
+                            </div>
+                            <div class="text-part" style="text-align: center;">
+                                <div>
+                                    <h5 class="mb20 mt20 dcb-card-title">Disaster</h5>
+                                    <p class="color-gray m8t m8b font14">Buy your next car with confidence with a
+                                        pre-purchase inspection from our experts
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dcb-service-card dcb-insurance-card">
+                            <div class="img-con">
+                                <img height="135" width="180" src="{% static 'images/dcb-images/personal.webp' %}"
+                                    alt="Services 3">
+                            </div>
+                            <div class="text-part" style="text-align: center;">
+                                <div>
+                                    <h5 class="mb20 mt20 dcb-card-title">Personal Harm</h5>
+                                    <p class="color-gray m8t m8b font14">Buy your next car with confidence with a
+                                        pre-purchase inspection from our experts
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dcb-service-card dcb-insurance-card">
+                            <div class="img-con">
+                                <img height="135" width="180" src="{% static 'images/dcb-images/third-party.webp' %}"
+                                    alt="Services 3">
+                            </div>
+                            <div class="text-part" style="text-align: center;">
+                                <div>
+                                    <h5 class="mb20 mt20 dcb-card-title">Third Party</h5>
+                                    <p class="color-gray m8t m8b font14">Buy your next car with confidence with a
+                                        pre-purchase inspection from our experts
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Section -->
+
+
+         <!-- Insurance Advantage Section -->
+         <section class="whychose_us" style="">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="main-title text-center">
+                            <h2>Reasons to Buy Car Insurance from DreamCarBazaar</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dcb-service-card dcb-insurance-card" style="flex-direction: row; box-shadow: none; margin: 0;">
+                            <div class="img-con">
+                                <img height="70" width="70" src="{% static 'images/dcb-images/Low-cost-Premiums.svg' %}"
+                                    alt="Services 3">
+                            </div>
+                            <div class="text-part" style="text-align: center;">
+                                <div>
+                                    <h5 class="mb20 mt20 dcb-card-title">Low-cost Premiums</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dcb-service-card dcb-insurance-card" style="flex-direction: row; box-shadow: none; margin: 0;">
+                            <div class="img-con">
+                                <img height="70" width="70" src="{% static 'images/dcb-images/cashless-garage-option.png' %}"
+                                    alt="Services 3">
+                            </div>
+                            <div class="text-part" style="text-align: center;">
+                                <div>
+                                    <h5 class="mb20 mt20 dcb-card-title">Cashless Garages</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dcb-service-card dcb-insurance-card" style="flex-direction: row; box-shadow: none; margin: 0;">
+                            <div class="img-con">
+                                <img height="70" width="70" src="{% static 'images/dcb-images/customer-support.svg' %}"
+                                    alt="Services 3">
+                            </div>
+                            <div class="text-part" style="text-align: center;">
+                                <div>
+                                    <h5 class="mb20 mt20 dcb-card-title">24x7 Roadside Assistance</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dcb-service-card dcb-insurance-card" style="flex-direction: row; box-shadow: none; margin: 0;">
+                            <div class="img-con">
+                                <img height="70" width="70" src="{% static 'images/dcb-images/Add-onCovers.svg' %}"
+                                    alt="Services 3">
+                            </div>
+                            <div class="text-part" style="text-align: center;">
+                                <div>
+                                    <h5 class="mb20 mt20 dcb-card-title">Add-on Covers</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dcb-service-card dcb-insurance-card" style="flex-direction: row; box-shadow: none; margin: 0;">
+                            <div class="img-con">
+                                <img height="70" width="70" src="{% static 'images/dcb-images/Hassle-free-online-process.svg' %}"
+                                    alt="Services 3">
+                            </div>
+                            <div class="text-part" style="text-align: center;">
+                                <div>
+                                    <h5 class="mb20 mt20 dcb-card-title">Hassle-free online process</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dcb-service-card dcb-insurance-card" style="flex-direction: row; box-shadow: none; margin: 0;">
+                            <div class="img-con">
+                                <img height="70" width="70" src="{% static 'images/dcb-images/Claim-Settlement-Copy.svg' %}"
+                                    alt="Services 3">
+                            </div>
+                            <div class="text-part" style="text-align: center;">
+                                <div>
+                                    <h5 class="mb20 mt20 dcb-card-title">Claim Settlement</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dcb-service-card dcb-insurance-card" style="flex-direction: row; box-shadow: none; margin: 0;">
+                            <div class="img-con">
+                                <img height="70" width="70" src="{% static 'images/dcb-images/digital-documentation.svg' %}"
+                                    alt="Services 3">
+                            </div>
+                            <div class="text-part" style="text-align: center;">
+                                <div>
+                                    <h5 class="mb20 mt20 dcb-card-title">Transparency</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dcb-service-card dcb-insurance-card" style="flex-direction: row; box-shadow: none; margin: 0;">
+                            <div class="img-con">
+                                <img height="70" width="70" src="{% static 'images/dcb-images/digital-documentation-1.svg' %}"
+                                    alt="Services 3">
+                            </div>
+                            <div class="text-part" style="text-align: center;">
+                                <div>
+                                    <h5 class="mb20 mt20 dcb-card-title">Personal Accident Cover</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+        <!-- End Section -->
+
+
+        <!-- DreamCarBazaar Services Section -->
+        <section class="whychose_us" style="background: #f2f2f2;">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="main-title text-center">
+                            <h2>Best Car Insurance Company</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="team_slider">
+                            <div class="listing_item_6grid_slider dots_none">
+                                <div class="item">
+                                    <div class="dcb-service-card dcb-insurance-card" style="height: 180px; border-radius: 0;">
+                                        <div class="img-con">
+                                            <img height="80" width="120" src="{% static 'images/dcb-images/hdfc.png' %}"
+                                                alt="HDFC ERGO Car Insurance">
+                                        </div>
+                                        <div class="text-part" style="text-align: center;">
+                                            <div>
+                                                <p class="mb20 mt20 dcb-card-title" style="font-size: 13px;font-weight: 600;color: #356aab;">HDFC ERGO Car Insurance</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="dcb-service-card dcb-insurance-card" style="height: 180px; border-radius: 0;">
+                                        <div class="img-con">
+                                            <img height="80" width="120" src="{% static 'images/dcb-images/insurers_reliance.png' %}"
+                                                alt="Services 3">
+                                        </div>
+                                        <div class="text-part" style="text-align: center;">
+                                            <div>
+                                                <p class="mb20 mt20 dcb-card-title" style="font-size: 13px;font-weight: 600;color: #356aab;">Reliance Car Insurance</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="item">
+                                    <div class="dcb-service-card dcb-insurance-card" style="height: 180px; border-radius: 0;">
+                                        <div class="img-con">
+                                            <img height="80" width="120" src="{% static 'images/dcb-images/insurers_oriental.png' %}"
+                                                alt="Services 3">
+                                        </div>
+                                        <div class="text-part" style="text-align: center;">
+                                            <div>
+                                                <p class="mb20 mt20 dcb-card-title" style="font-size: 13px;font-weight: 600;color: #356aab;">Oriental Car Insurance</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="item">
+                                    <div class="dcb-service-card dcb-insurance-card" style="height: 180px; border-radius: 0;">
+                                        <div class="img-con">
+                                            <img height="80" width="120" src="{% static 'images/dcb-images/Digit-logo.jpg' %}"
+                                                alt="Services 3">
+                                        </div>
+                                        <div class="text-part" style="text-align: center;">
+                                            <div>
+                                                <p class="mb20 mt20 dcb-card-title" style="font-size: 13px;font-weight: 600;color: #356aab;">Digita Car Insurance</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="item">
+                                    <div class="dcb-service-card dcb-insurance-card" style="height: 180px; border-radius: 0;">
+                                        <div class="img-con">
+                                            <img height="80" width="120" src="{% static 'images/dcb-images/kotak.png' %}"
+                                                alt="Services 3">
+                                        </div>
+                                        <div class="text-part" style="text-align: center;">
+                                            <div>
+                                                <p class="mb20 mt20 dcb-card-title" style="font-size: 13px;font-weight: 600;color: #356aab;">Kotak Car Insurance</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="item">
+                                    <div class="dcb-service-card dcb-insurance-card" style="height: 180px; border-radius: 0;">
+                                        <div class="img-con">
+                                            <img height="80" width="120" src="{% static 'images/dcb-images/liberty.png' %}"
+                                                alt="Services 3">
+                                        </div>
+                                        <div class="text-part" style="text-align: center;">
+                                            <div>
+                                                <p class="mb20 mt20 dcb-card-title" style="font-size: 13px;font-weight: 600;color: #356aab;">Liberty Car Insurance</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="item">
+                                    <div class="dcb-service-card dcb-insurance-card" style="height: 180px; border-radius: 0;">
+                                        <div class="img-con">
+                                            <img height="80" width="120" src="{% static 'images/dcb-images/magma.png' %}"
+                                                alt="Services 3">
+                                        </div>
+                                        <div class="text-part" style="text-align: center;">
+                                            <div>
+                                                <p class="mb20 mt20 dcb-card-title" style="font-size: 13px;font-weight: 600;color: #356aab;">Magma Car Insurance</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="item">
+                                    <div class="dcb-service-card dcb-insurance-card" style="height: 180px; border-radius: 0;">
+                                        <div class="img-con">
+                                            <img height="80" width="120" src="{% static 'images/dcb-images/shriram-general.png' %}"
+                                                alt="Services 3">
+                                        </div>
+                                        <div class="text-part" style="text-align: center;">
+                                            <div>
+                                                <p class="mb20 mt20 dcb-card-title" style="font-size: 13px;font-weight: 600;color: #356aab;">ShriRam Car Insurance</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="item">
+                                    <div class="dcb-service-card dcb-insurance-card" style="height: 180px; border-radius: 0;">
+                                        <div class="img-con">
+                                            <img height="80" width="120" src="{% static 'images/dcb-images/icici.png' %}"
+                                                alt="Services 3">
+                                        </div>
+                                        <div class="text-part" style="text-align: center;">
+                                            <div>
+                                                <p class="mb20 mt20 dcb-card-title" style="font-size: 13px;font-weight: 600;color: #356aab;">ICICI Lombard Car Insurance</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="item">
+                                    <div class="dcb-service-card dcb-insurance-card" style="height: 180px; border-radius: 0;">
+                                        <div class="img-con">
+                                            <img height="80" width="120" src="{% static 'images/dcb-images/insurers_united_india.d4baa5b99d0a.png' %}"
+                                                alt="Services 3">
+                                        </div>
+                                        <div class="text-part" style="text-align: center;">
+                                            <div>
+                                                <p class="mb20 mt20 dcb-card-title" style="font-size: 13px;font-weight: 600;color: #356aab;">United India Car Insurance</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Section -->
+
+
+        {% include 'Website/footer.html' %}
+
+</div>
+<!-- Wrapper End -->
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

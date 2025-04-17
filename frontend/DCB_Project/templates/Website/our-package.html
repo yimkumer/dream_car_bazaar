@@ -1,0 +1,199 @@
+{% extends 'Website/layout.html' %}
+{% load static %}
+{% load user_tags %}
+
+{% block body %}
+<div class="wrapper ovh">
+
+    {% include 'Website/top_header.html' %}
+    {% include 'Website/top_navbar.html' %}
+
+
+    <!-- Modal -->
+    {% include 'Website/login_modal.html' %}
+    {% include 'Website/dealer_form.html' %}
+
+    <!-- Our Plans -->
+    <section class="inventory-section pt-100 pb-70">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="main-title text-center">
+                        <h2>Our Plans</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="single-inventory">
+                        <div class="inventory-top">
+                            <h3>Silver Package</h3>
+                            <h4>Rs<span>88.99</span>/per month</h4>
+                            <div class="image">
+                                <img src="{% static 'images/images/1.png' %}" alt="Image">
+                            </div>
+                            <div class="hover-image">
+                                <img src="{% static 'images/images/2.png' %}" alt="Image">
+                            </div>
+                        </div>
+                        <div class="inventroy-content">
+                            <ul>
+                                <li>
+                                    <i class="fa fa-check"></i> Departure of a specialist
+                                </li>
+                                <li>
+                                    <i class="fa fa-check"></i> Inspection report
+                                </li>
+                                <li>
+                                    <i class="fa fa-check"></i> Body Inspection
+                                </li>
+                            </ul>
+                            <a href="#" class="custom-btn2">Get Plan</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="single-inventory active-color">
+                        <div class="inventory-top">
+                            <h3>Platinum Package</h3>
+                            <h4>Rs<span>288.99</span>/per month</h4>
+                            <div class="hover-image">
+                                <img src="{% static 'images/images/1.png' %}" alt="Image">
+                            </div>
+                            <div class="image">
+                                <img src="{% static 'images/images/2.png' %}" alt="Image">
+                            </div>
+                        </div>
+                        <div class="inventroy-content">
+                            <ul>
+                                <li>
+                                    <i class="fa fa-check"></i> Departure of a specialist
+                                </li>
+                                <li>
+                                    <i class="fa fa-check"></i> Inspection report
+                                </li>
+                                <li>
+                                    <i class="fa fa-check"></i> Body Inspection
+                                </li>
+                                <li>
+                                    <i class="fa fa-check"></i> Computer Diagnostic
+                                </li>
+                                <li>
+                                    <i class="fa fa-check"></i> Inspection of saloon
+                                </li>
+                                <li>
+                                    <i class="fa fa-check"></i> Electricians
+                                </li>
+                            </ul>
+                            <a href="#" class="custom-btn2">Get Plan</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="offset-md-3 offset-lg-0 col-md-6 col-lg-4">
+                    <div class="single-inventory">
+                        <div class="inventory-top">
+                            <h3>Silver Package</h3>
+                            <h4>Rs<span>88.99</span>/per month</h4>
+                            <div class="image">
+                                <img src="{% static 'images/images/1.png' %}" alt="Image">
+                            </div>
+                            <div class="hover-image">
+                                <img src="{% static 'images/images/2.png' %}" alt="Image">
+                            </div>
+                        </div>
+                        <div class="inventroy-content">
+                            <ul>
+                                <li>
+                                    <i class="fa fa-check"></i> Departure of a specialist
+                                </li>
+                                <li>
+                                    <i class="fa fa-check"></i> Inspection report
+                                </li>
+                                <li>
+                                    <i class="fa fa-check"></i> Body Inspection
+                                </li>
+                            </ul>
+                            <a href="#" class="custom-btn2">Get Plan</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Section -->
+
+
+    <!-- How It Works -->
+    <section class="whychose_us">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="main-title text-center">
+                        <h2>Why Choose Us?</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-sm-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s">
+                            <div class="iconbox_home6_style">
+                                <div class="icon one"><span class="flaticon-user-1"></span></div>
+                                <div class="details">
+                                    <h4 class="title">One-Stop Solution</h4>
+                                    <p>Here you will get all the solutions whether you want to buy a car, sell it, or
+                                        get a car loan and insurance.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s">
+                            <div class="iconbox_home6_style">
+                                <div class="icon two"><span class="flaticon-high-five"></span></div>
+                                <div class="details">
+                                    <h4 class="title">Best Value</h4>
+                                    <p>Whether you are the buyer or the seller you will get the best value for the
+                                        vehicle. Get the best value for your old car.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.5s">
+                            <div class="iconbox_home6_style">
+                                <div class="icon three"><span class="flaticon-megaphone"></span></div>
+                                <div class="details">
+                                    <h4 class="title">Sell Online</h4>
+                                    <p>Sell your vehicle online through our website from the comfort of your home. Easy
+                                        and transparent process.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.7s">
+                            <div class="iconbox_home6_style">
+                                <div class="icon four"><span class="flaticon-headphones"></span></div>
+                                <div class="details">
+                                    <h4 class="title">Vehicle Service</h4>
+                                    <p>Get a premium buying experience with us for your vehicle. We provide you with
+                                        insurance and timely vehicle services.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="service_thumb">
+                        <img src="{% static 'images/service/1.jpg' %}" alt="1.jpg">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    {% include 'Website/footer.html' %}
+
+</div>
+<!-- Wrapper End -->
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

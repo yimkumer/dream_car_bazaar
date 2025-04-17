@@ -1,0 +1,146 @@
+<!DOCTYPE html> 
+<html dir="ltr" lang="en">
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Title -->
+    <title>DreamcarBazaar - Get Your Dream Car</title>
+
+    <meta name="keywords" content="buy old car, sell old car, buy or sell old car in dehradun">
+    <meta name="description" content="DreamCarBazaar - Automotive & Car Dealer HTML Template">
+    <meta name="robots" content="noindex, nofollow">
+    <!-- css file -->
+    <link rel="stylesheet" href="{% static  'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Responsive stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <!-- Favicon -->
+    <link href="{% static 'images/favicon.ico' %}" sizes="128x128" rel="shortcut icon" type="image/x-icon" />
+    <link href="{% static 'images/favicon.ico' %}" sizes="128x128" rel="shortcut icon" />
+
+    <!-- New Style Css -->
+    <link rel="stylesheet" href="{% static 'css/new-style.css' %}">
+
+    {% block common_css %}
+    {% endblock %}
+
+</head>
+
+<body>
+   
+    {% block body %}
+
+    {% endblock %}
+    
+
+ <script src="{% static 'js/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'js/jquery-migrate-3.0.0.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-select.min.js' %}"></script>
+    <script src="{% static 'js/jquery.mmenu.all.js' %}"></script>
+    <script src="{% static 'js/ace-responsive-menu.js' %}"></script>
+    <script src="{% static 'js/isotop.js' %}"></script>
+    <script src="{% static 'js/snackbar.min.js' %}"></script>
+    <script src="{% static 'js/simplebar.js' %}"></script>
+    <script src="{% static 'js/parallax.js' %}"></script>
+    <script src="{% static 'js/scrollto.js' %}"></script>
+    <script src="{% static 'js/jquery-scrolltofixed-min.js' %}"></script>
+    <script src="{% static 'js/jquery.counterup.js' %}"></script>
+    <script src="{% static 'js/wow.min.js' %}"></script>
+    <script src="{% static 'js/progressbar.js' %}"></script>
+    <script src="{% static 'js/slider.js' %}"></script>
+    <script src="{% static 'js/timepicker.js' %}"></script>
+    <script src="{% static 'js/wow.min.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+        //   let displayMode = 'browser tab';
+          if (window.matchMedia('(display-mode: standalone)').matches) {
+            // displayMode = 'standalone';
+            alert("Hello WPA....New")
+          }
+        });
+    </script>
+    
+    <script type="text/javascript"> 
+        var mobile = (/iphone|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));  
+        if (mobile) { 
+            $("#getApp-top").css("display", "block");
+        } 
+        else 
+        { 
+            $("#getApp-top").css("display", "none");
+           
+        }
+    </script>
+    
+    
+<!--    <script type="text/javascript">-->
+<!--        $(window).load(function () {-->
+<!--            var mobile = (/iphone|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));-->
+<!--            var mySecondDiv=$('<div class="container"> <div class= "row" > <div class="col-2"><div class="fixed-footer-mobile-div"><a href="/"><div><i class="fa fa-home" aria-hidden="true"></i></div><p>Home</p></a></div></div><div class="col-2"><a href="https://www.dreamcarbazaar.com/our_packages/"><div class="fixed-footer-mobile-div"><div><i class="fa fa-wallet" aria-hidden="true"></i></div><p>Packages</p></a></div></div><div class="col-4"><div class="fixed-footer-mobile-div">-->
+<!--<a -->
+<!--                        {% if request.user.is_authenticated %} -->
+<!--                            {% if 'Dealer' in request.user|user_groups %} -->
+<!--                                href="{% url 'dealer:dealer-profile' %}" -->
+<!--                            {% elif 'Customer' in request.user|user_groups %} -->
+<!--                                href="{% url 'profile' %}" -->
+<!--                            {% endif %}-->
+<!--                        {% else %} -->
+<!--                            href="#" data-bs-toggle="modal" data-bs-target="#logInModal" -->
+<!--                        {% endif %}-->
+<!--                    >-->
+<!--                        <div class="fixed-account-div"><div><i class="fa fa-user" aria-hidden="true"></i></div><p>Account</p></a></div></div></div><div class="col-2"><a {% if request.user.is_authenticated %} href="/add_car/" {% else %} href="#" data-bs-toggle="modal" data-bs-target="#logInModal" {% endif %}><div class="fixed-footer-mobile-div"><div><i class="fa fa-car" aria-hidden="true"></i></div><p>AddCar</p></a></div></div><div class="col-2"><a {% if request.user.is_authenticated %} href="/whislist_car/" {% else %} href="#" data-bs-toggle="modal" data-bs-target="#logInModal" {% endif %}><div class="fixed-footer-mobile-div"><div><i class="fa fa-heart" aria-hidden="true"></i></div><p>Wishlist</p></a></div></div></div ></div >');-->
+<!--            if (mobile) {-->
+<!--                $('#fixed-footer').html(mySecondDiv);-->
+               
+<!--            }-->
+<!--        });-->
+
+<!--    </script>-->
+    
+    
+    <script>
+        function hidetop() {
+          document.getElementById("getApp-top").style.display = "none";
+        }
+    </script>
+    
+    <!-- Bootstrap Notify -->
+    <script src="{% static 'js/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
+
+    {% if messages %}
+    {% for message in messages %}
+    <script>
+        //Notify
+    //  console.log('messages')
+    //  console.log('mes = ', "{{message}}")
+    $.notify({
+        icon: '{% if message.tags == 'success' %}fas fa-check-circle{% else %}fas fa-times-circle{% endif %}',
+        title: '',
+        message: '{{message}}',
+    },{
+        type: '{% if message.tags == 'warning' %}danger{% else %}{{message.tags}}{% endif %}',
+        placement: {
+            from: "top",
+            align: "center"
+        },
+        time: 1000,
+    });
+    </script>
+    
+    
+    {% endfor %}
+    {% endif %}
+
+    {% block js %}
+
+    {% endblock %}
+</body>
+
+</html>

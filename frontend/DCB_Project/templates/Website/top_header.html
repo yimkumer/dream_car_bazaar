@@ -1,0 +1,78 @@
+{% load static %}
+{% load user_tags %}
+
+<!-- header top -->
+<div class="header_top home3_style dn-992">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-xl-7">
+                    <div class="header_top_contact_opening_widget text-center text-md-start">
+                        <ul class="mb0">
+                        <li class="list-inline-item"><a href="tel:+919758266819"><span class="flaticon-phone-call"></span>+919758266819</a></li>
+                        <li class="list-inline-item"><a href="mailto: support@dreamcarbazaar.com"><span class="fa fa-envelope"></span>support@dreamcarbazaar.com</a></li>
+                        <li class="list-inline-item"><a href="https://maps.app.goo.gl/7bgb18z6FpDeQqoY7"><span class="flaticon-map"></span>Rajpur Road, Dehradun, 248001</a></li>
+                        <!--<li class="list-inline-item"><a href="#"><span class="flaticon-clock"></span>Mon - Fri 10AM:00 - 10:00PM</a></li>-->
+                    </ul>
+                    </div>
+                </div>
+            <div class="col-lg-4 col-xl-5">
+                <div class="header_top_social_widgets text-center text-md-end">
+<!--                        <ul class="m0">-->
+<!--                            <li class="list-inline-item"><a href="#"><span class="fab fa-facebook-f"></span></a></li>-->
+<!--                            <li class="list-inline-item"><a href="#"><span class="fab fa-twitter"></span></a></li>-->
+<!--                            <li class="list-inline-item"><a href="#"><span class="fab fa-instagram"></span></a></li>-->
+<!--                            <li class="list-inline-item"><a href="#"><span class="fab fa-linkedin"></span></a></li>-->
+<!--                            <li class="list-inline-item"><a href="#" data-bs-toggle="modal" data-bs-target="#logInModal">Login</a></li>-->
+<!--                            <li class="list-inline-item"><a href="#" data-bs-toggle="modal" data-bs-target="#logInModal">Register</a></li>-->
+<!--                        </ul>-->
+
+                    <ul class="m0">
+                        <!--<li class="list-inline-item"><a href="https://www.facebook.com/profile.php?id=61555647420720&mibextid=ZbWKwL"><span class="fab fa-facebook-f"></span></a></li>-->
+                        <!--<li class="list-inline-item"><a href="https://twitter.com/Dreamcarbazaar2"><span class="fab fa-twitter"></span></a></li>-->
+                        <!--<li class="list-inline-item"><a href="https://www.instagram.com/dreamporium_pvt_ltd/"><span class="fab fa-instagram"></span></a></li>-->
+                        <!--<li class="list-inline-item"><a href="https://www.linkedin.com/company/dream-car-bazaar/"><span class="fab fa-linkedin"></span></a></li>-->
+                        {% if request.user.is_authenticated %}
+                        <li class="user_setting list-inline-item">
+                            <div class="dropdown menu-active">
+                                <a class="btn dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    <img class="rounded-circle mr10 avatar-profile" src="{% static 'images/team/ms8.jpg' %}" style="width: 30px;" alt="1.jpg">
+                                    <span class="dn-1366"> {{request.user.first_name}} <span
+                                            class="fas fa-angle-down ml5"></span></span>
+                                </a>
+                                <div class="dropdown-menu" style="">
+                                    <div class="user_set_header">
+                                        <img class="float-start" src="{% static 'images/team/ms8.jpg' %}" alt="1.jpg" style="width: 50px;">
+                                        <p> {{request.user.first_name}} <br><span class="address">{{request.user.email}}</span></p>
+                                    </div>
+                                    <div class="user_setting_content">
+                                        {% if 'Dealer' in request.user|user_groups %}
+                                            <a class="dropdown-item" href="{% url 'dealer:dealer-profile' %}">My Profile</a>
+                                        {% elif 'Customer' in request.user|user_groups %}
+                                            <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
+                                        {% endif %}
+                                        {% if 'Dealer' in request.user|user_groups %}
+                                            <a class="dropdown-item" href="{% url 'dealer:dashboard' %}">Dealer Dashboard</a>
+                                        {% elif 'Customer' in request.user|user_groups %}
+                                            <a class="dropdown-item" href="{% url 'add_car' %}">Add Car</a>
+                                        {% endif %}
+                                        <a class="dropdown-item" href="#">Wishlist</a>
+                                        <a class="dropdown-item" href="#">Help</a>
+                                        <a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% else %}
+                        <li class="list-inline-item"><a href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#logInModal">Login</a></li>
+                        <li class="list-inline-item"><a href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#logInModal">Register</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Section -->

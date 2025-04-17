@@ -1,0 +1,79 @@
+{% extends 'Customer/account/layout.html' %}
+{% load static %}
+
+{% block common_css %}
+
+<link rel="stylesheet" href="{% static 'css/customer-dash.css' %}">
+
+{% endblock %}
+
+{% block body %}
+
+    {% include 'Customer/add_car/add_car_form.html' %}
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+    $(document).ready(function() {
+    console.log('sdfsdn')
+
+
+
+    $('#car_brand').change(async function() {
+        var brandID = $(this).val();
+        console.log('brandID = ', brandID)
+        await $.get('/get_car_model/', { car_brand_id: brandID }, async function(data) {
+            var carModelSelect = $('#car_model');
+            console.log('carModelSelect= ',carModelSelect)
+            var model_text = '<option value="">Select Model</option>'
+            await $.each(data, function(index, model) {
+                console.log('data = ',data)
+                var a = '<option value='+model.id+'>'+model.name+'</option>'
+                model_text += a
+<!--                carModelSelect.append('<option data-tokens="" value='+model.id+'>'+model.name+'</option>');-->
+            });
+             carModelSelect.html(model_text);
+
+        });
+    });
+
+    $('#car_model').change(function() {
+        var carModelId = $(this).val();
+        $.get('/get_car_variant/', { car_model_id: carModelId }, function(data) {
+            var carVariantSelect = $('#car_variants');
+            carVariantSelect.empty();
+            carVariantSelect.append($('<option>', {
+                    value: "",
+                    text: "Select Variants"
+                }));
+            $.each(data, function(index, variant) {
+                carVariantSelect.append($('<option>', {
+                    value: variant.id,
+                    text: variant.name
+                }));
+            });
+        });
+    });
+});
+
+
+
+// ----------------If Yes ----------------------
+
+        $(document).ready(function () {
+            $("#vehicle_certificate").change(function () {
+                let selectedItem = $(this).children("option:selected").val();
+                if (selectedItem == "Yes") {
+                    $("#vehicle_certificate_validity").attr("disabled", false);
+                }
+                else{
+                    $("#vehicle_certificate_validity").attr("disabled", true);
+                }
+            });
+        });
+
+
+</script>
+{% endblock %}

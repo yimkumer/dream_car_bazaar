@@ -1,0 +1,104 @@
+{% extends 'Website/layout.html' %}
+{% load static %}
+{% load user_tags %}
+
+{% block body %}
+
+<div class="wrapper">
+
+    {% include 'Website/top_header.html' %}
+    {% include 'Website/top_navbar.html' %}
+
+
+    <!-- Modal -->
+    {% include 'Website/login_modal.html' %}
+    {% include 'Website/dealer_form.html' %}
+
+    <!-- Inner Page Breadcrumb -->
+    <section class="inner_page_breadcrumb style2 inner_page_section_spacing">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="breadcrumb_content style2">
+                        <h2 class="breadcrumb_title">Used Vehicles For Sale</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Section -->
+    {% include 'Website/product_details/product_filter.html' %}
+    <!-- Listing Grid View -->
+        <section class="our-listing bgc-f9 pb30-991 pt80">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-xl-3 dn-md">
+                        {% include 'Website/product_details/sidebar_feature_listing.html' %}
+                        {% include 'Website/product_details/sidebar_recent_viewed.html' %}
+                        {% include 'Website/product_details/sidebar_vehicle_available.html' %}
+                    </div>
+                    <div class="col-lg-8 col-xl-9">
+                        {% include 'Website/product_details/popular_car_listing.html' %}
+<!--                        {% include 'Website/product_details/sidebar_feature_listing.html' %}-->
+                        {% include 'Website/product_details/car_listing.html' %}
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% include 'Website/footer.html' %}
+
+
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+    $(document).ready(function() {
+    console.log('sdfsdn')
+
+
+
+    $('#car_brand').change(async function() {
+        var brandID = $(this).val();
+        console.log('brandID = ', brandID)
+        await $.get('/get_car_model/', { car_brand_id: brandID }, async function(data) {
+            var carModelSelect = $('#car_model');
+            console.log('carModelSelect= ',carModelSelect)
+            var model_text = '<option value="">Select Model</option>'
+            await $.each(data, function(index, model) {
+                console.log('data = ',data)
+                var a = '<option value='+model.id+'>'+model.name+'</option>'
+                model_text += a
+<!--                carModelSelect.append('<option data-tokens="" value='+model.id+'>'+model.name+'</option>');-->
+            });
+             carModelSelect.html(model_text);
+
+        });
+    });
+
+    $('#car_model').change(function() {
+        var carModelId = $(this).val();
+        $.get('/get_car_variant/', { car_model_id: carModelId }, function(data) {
+            var carVariantSelect = $('#car_variants');
+            carVariantSelect.empty();
+            carVariantSelect.append($('<option>', {
+                    value: "",
+                    text: "Select Variants"
+                }));
+            $.each(data, function(index, variant) {
+                carVariantSelect.append($('<option>', {
+                    value: variant.id,
+                    text: variant.name
+                }));
+            });
+        });
+    });
+});
+
+</script>
+
+
+{% endblock %}

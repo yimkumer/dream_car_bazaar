@@ -1,0 +1,127 @@
+{% extends 'Dealer/account/layout.html' %}
+{% load static %}
+
+{% block common_css %}
+<style>
+    .edit-icon, .save-icon {
+        cursor: pointer;
+        color: blue;
+    }
+    .delete-icon {
+        cursor: pointer;
+        color: red;
+    }
+    .hidden {
+        display: none;
+    }
+/* Highlight style */
+.highlight {
+        background-color: yellow;
+    }          
+</style>
+
+{% endblock %}
+
+{% block body %}
+
+
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" href="#cold-leads">Cold Lead</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#warm-leads">Warm Lead</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#hot-leads">Hot Lead</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="cold-leads">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Visited At</th>
+                        <th>Engagement(in Seconds)</th>
+                        <th>Status</th>
+                        <th>Interest</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lead in cold_leads %}
+                    <tr>
+                        <td>{{ lead.user.get_full_name}}</td>
+                        <td>{{ lead.user.phone }}</td>
+                        <td>{{ lead.user.email }}</td>
+                        <td>{{lead.visit_time}}</td>
+                        <td>{{lead.page_stay_duration}}</td>
+                        <td>{{lead.status}}</td>
+                        <td>{{lead.viewed_car}}</td>
+                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="warm-leads">
+            <table class="table">
+                <thead>
+                    <tr>
+                       <th>User</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Visited At</th>
+                        <th>Engagement(in Seconds)</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lead in warm_leads %}
+                    <tr>
+                        <td>{{ lead.user.get_full_name}}</td>
+                        <td>{{ lead.user.phone }}</td>
+                        <td>{{ lead.user.email }}</td>
+                        <td>{{lead.visit_time}}</td>
+                        <td>{{lead.page_stay_duration}}</td>
+                        <td>{{lead.status}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="hot-leads">
+            <table class="table">
+                <thead>
+                    <tr>
+                       <th>User</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Visited At</th>
+                        <th>Engagement(in Seconds)</th>
+                        <th>Status</th>
+                        <th>Interest</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lead in hot_leads %}
+                    <tr>
+                        <td>{{ lead.user.get_full_name}}</td>
+                        <td>{{ lead.user.phone }}</td>
+                        <td>{{ lead.user.email }}</td>
+                        <td>{{lead.visit_time}}</td>
+                        <td>{{lead.page_stay_duration}}</td>
+                        <td>{{lead.status}}</td>
+                        <td>{{lead.viewed_car}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

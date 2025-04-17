@@ -1,0 +1,953 @@
+{% extends 'Dealer/account/layout.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block common_css %}
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <!-- Include Month Select Plugin CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+<style>
+    .edit-icon, .save-icon {
+        cursor: pointer;
+        color: blue;
+    }
+    .delete-icon {
+        cursor: pointer;
+        color: red;
+    }
+    .hidden {
+        display: none;
+    }
+/* Highlight style */
+    .highlight {
+        background-color: yellow;
+    }    
+
+
+
+</style>
+
+{% csrf_token %}
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+    
+        <!-- start page title -->
+        <div class="row mb-4">
+            <div class="col-lg-6 col-sm-12">
+                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                    <h4 class="mb-sm-0 font-size-18">All Warranty
+
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-pills nav-justified" role="tablist">
+                            <li class="nav-item waves-effect waves-light" role="presentation">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#all-cars" role="tab" aria-selected="true">
+                                    <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                    <span class="d-none d-sm-block">All Warranties <span class="badge bg-success">{{ warranty_count }}</span> </span>
+                                </a>
+                            </li>
+                            <li class="nav-item waves-effect waves-light" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" href="#live" role="tab" aria-selected="true">
+                                    <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                    <span class="d-none d-sm-block">Current Warranty <span class="badge bg-success">{{live_count}} </span> </span>
+                                </a>
+                            </li>
+                            <li class="nav-item waves-effect waves-light " role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" href="#renewal" role="tab" aria-selected="false" tabindex="-1">
+                                    <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                    <span class="d-none d-sm-block">Renewal Warranty  <span class="badge bg-success">{{ renewal_count }}</span> </span>
+                                </a>
+                            </li>
+                            <li class="nav-item waves-effect waves-light " role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" href="#expired" role="tab" aria-selected="false" tabindex="-1">
+                                    <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                    <span class="d-none d-sm-block">Expired Warranty  <span class="badge bg-success">{{ expired_count }}</span> </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-sm-4">
+                <div class="search-box me-2 mb-2 d-inline-block">
+                    <div class="position-relative">
+                        <input type="text" class="form-control" id="searchInput" onkeyup="searchTable()" placeholder="Search...">
+                        <i class="bx bx-search-alt search-icon"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="text-sm-end">
+                    <a type="button" href="#"
+                        class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
+                        data-bs-toggle="modal" data-bs-target="#warrantyModal"><i
+                            class="fa fa-plus"></i> Add New Warranty</a>
+                </div>
+            </div>
+            <!-- end col-->
+        </div>
+
+        <!-- ===================== Modal =========================== -->
+        <div class="modal fade bs-example-modal-lg" id="warrantyModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger" id="warrantyModalLabel">Enter Warranty Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card">
+                            <div class="card-body">
+                                <form method="post" id="warrantyForm">
+                                    {% csrf_token %}
+                                    <!-- Hidden field for warranty ID to determine if editing -->
+                                    <input type="hidden" id="warrantyId" name="warranty_id" value="{{warranty.id}}">
+                                    <input type="hidden" id="carbrandHidden" name="car_brand" />
+                                    <input type="hidden" id="carmodelHidden" name="car_model" />
+                                
+                                    <div class="row mb-4">
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label> First Name </label>
+                                            <input type="text" class="form-control"
+                                                placeholder="First Name" name="user_fname" id="user_fname" required>
+                                                <div class="text-danger" id="firstNameError" style="display: none;">
+                                                    Name must start with a capital letter and contain only alphabetic characters.
+                                                </div>
+                                        </div>
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Middle Name</label>
+                                            <input type="text" class="form-control"
+                                                placeholder="Middle Name" name="user_mname" id="user_mname">
+                                                <div class="text-danger" id="midNameError" style="display: none;">
+                                                    Name must start with a capital letter and contain only alphabetic characters.
+                                                </div>
+                                        </div>
+                                        
+                                        <p></p>
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Last Name</label>
+                                            <input type="text" class="form-control"
+                                                placeholder="Last Name" name="user_lname" id="user_lname" required>
+                                                <div class="text-danger" id="lastNameError" style="display: none;">
+                                                    Name must start with a capital letter and contain only alphabetic characters.
+                                                </div>
+                                        </div>
+                                        <!-- ===================== -->
+                                        
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Contact</label>
+                                            <input type="text" class="form-control"
+                                                placeholder="Phone Number" name="user_phone_no" id="user_phone_no" required>
+                                        </div>
+                                        <div class="text-danger" id="phoneError" style="display: none;">
+                                            Phone number must be a 10-digit number starting with 6, 7, 8, or 9.
+                                        </div>
+
+                                    </div>
+
+
+
+
+                                    <div class="row mb-4">
+                                        <!-- =============== -->
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Vehicle Registration No</label>
+                                            <input type="text" class="form-control" id="vehicle_registration_no"
+                                                placeholder="Vehicle Registration Number" name="vehicle_registration_no" required>
+                                        </div>
+                                        <!-- ======================= -->
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Warranty Period </label>
+                                            <select class="form-control"  id="warranty_period" name="warranty_period" required>
+                                                <option value=""> Choose Warranty Period(in months)</option>
+                                                <option value="6">6</option>
+                                                <option value="12">12</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row mb-4">
+                                         <!-- =============== -->
+                                         <div class="col-lg-6 col-sm-12">
+                                            <label>Purchase Date</label>
+                                            <div class="position-relative" id="datepicker4">
+                                                <input type="date" class="form-control"
+                                                    placeholder="Enter Month" name="purchase_date" required>
+                                            </div>
+                                            <br></br>
+                                            <div class="col-lg-6 col-sm-12">
+                                                <label> Warranty Type</label>
+                                            <select id="warrantyType" name="warrantyType" class="form-control" required>
+                                                <option value=""> Select Warranty Type</option>
+                                                <option value="Comprehensive">Comprehensive</option>
+                                                <option value="Engine & Transmission">Engine & Transmission </option>
+                                            </select>
+                                            </div>
+                                          </div>
+                                        <!-- =============== -->
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label for="rsa">Roadside Assistant</label>
+                                            <select class="form-control" id="rsa" name="rsa" onchange="toggleDateInput()" required>
+                                                <option value=""> Select </option>
+                                                <option value="No"> No </option>
+                                                <option value="Yes">Yes</option>
+                                                
+                                            </select>
+
+                                            
+                                            <div id="dateFieldContainer" class="position-relative"></div>                                                
+                                            
+
+                                            <script>
+                                              function toggleDateInput() {
+                                                const rsa = document.getElementById('rsa').value;
+                                                const dateFieldContainer = document.getElementById('dateFieldContainer');
+                                          
+                                                // Clear any existing date input
+                                                dateFieldContainer.innerHTML = '';
+                                          
+                                                // If Yes is selected, create and add a date input
+                                                if (rsa === 'Yes') {
+                                                  const dateInput = document.createElement('input');
+                                                  dateInput.type = 'date';
+                                                  dateInput.name = 'dateField';
+                                                  dateInput.id = 'dateField';
+                                                  dateFieldContainer.appendChild(dateInput);
+                                                }
+                                              }
+                                            </script>
+                                          
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <!-- =========== -->
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Vehicle brand: </label>
+                                            <select name="car_brand" id="car_brand" class="form-control" required>
+                                                <option value="" disabled selected>Select Brand</option>
+                                                {% for brand in car_brand %}
+                                                <option value="{{brand.id}}"> {{brand.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <!-- =============== -->
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Vehicle Model: </label>
+                                            <select name="car_model" id="car_model" class="form-control" required>
+                                                <option value="" disabled selected>Select Model</option>
+                                                <option value="City"> City</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="row mb-4">
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Vehicle Make</label>
+                                            <input type="text" class="form-control" name="next_renewal_date" id="month-year-picker" required>
+                                        </div> 
+                                    </div>
+
+                                    <div class="row justify-content-center"> <!-- Changed justify-content-end to justify-content-center -->
+                                        <div class="col-sm-9 text-center"> <!-- Added text-center to center the button within the column -->
+                                            <div>
+                                                <button type="submit" class="btn btn-primary w-md">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <!-- Basic Edit Form -->
+
+
+        <!-- ======================================= End Modal ============================================ -->
+
+  
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-body p-0">
+
+                        <!-- Tab panes -->
+                        <div class="tab-content text-muted">
+                            <div class="tab-pane fade show active" id="all-cars" role="tabpanel">
+                                <div class="card">
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive">
+                                            <table id="dataTable"
+                                                class="table align-middle table-nowrap table-check table-bordered">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th class="align-middle">S No.</th>
+                                                        <th class="align-middle">Order Id</th>
+                                                        <th class="align-middle">Customer Name</th>
+                                                        <th class="align-middle">Customer Number</th>
+                                                        <th class="align-middle">Vehicle Registration Number</th>
+                                                        <th class="align-middle">Purchase Date</th>
+                                                        <th class="align-middle">Warranty Period</th>
+                                                        <th class="align-middle">Warranty Type</th>
+                                                        <th class="align-middle"> Status </th>
+                                                        <th class="align-middle">Roadside Assistant</th>
+                                                        <th class="align-middle">Vehicle Brand</th>
+                                                        <th class="align-middle">Vehicle Model</th>
+                                                        <th class="align-middle">Vehicle Make</th>
+                                                        <th class="align-middle">Action</th>
+                                                        <th class="align-middle">Edit</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for warranty in warranty_list %}
+                                                    <tr data-id="row-{{ warranty.id }}">
+                                                        <td>{{ forloop.counter}}</td>
+                                                        <td>{{ warranty.order_id }}</td>
+                                                        <td>{{ warranty.user_name }}</td>
+                                                        <td>{{ warranty.user_phone_no }}</td>
+                                                        <td>{{ warranty.vehicle_registration_no }}</td>
+                                        
+                                                        <td>{{ warranty.purchase_date }}</td>
+                                                        <td>{{ warranty.warranty_period }}</td>
+                                                        <td>{{warranty.warranty_type}}</td>
+                                                        <!-- <td>
+                                                            <span class="status {{ warranty.status }}">{{ warranty.status|title }}</span>
+                                                        </td> -->
+                                                        <td>
+                                                            {% if warranty.status == "live" %}
+                                                                <span class="badge badge-pill badge-soft-success font-size-12">Live</span>
+                                                            {% elif warranty.status == "expired" %}
+                                                                <span class="badge badge-pill badge-soft-danger font-size-12">Expired</span>
+                                                            {% elif warranty.status == "renew" %}
+                                                                <span class="badge badge-pill badge-soft-warning font-size-12">Renew</span>
+                                                            {% else %}
+                                                                <span class="badge badge-pill badge-soft-secondary font-size-12">{{Unknown}}</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        
+                        
+                                                        <td>{{warranty.roadside_assistant_date}}</td>
+                                                        <td>{{warranty.car_model.brand.name}}</td>
+                                                        <td>{{warranty.car_model.name}}</td>
+                                                        <td>{{warranty.next_renewal_date}}</td>
+                                                        <td>
+                                                            <form action="{% url 'dealer:delete-warranty' warranty.id %}" method="POST" onsubmit="return confirm('Are you sure you want to delete this warranty?');">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                                            </form>
+                                                        </td>
+                                                        <td> 
+                                                                <!--<button type="submit" onclick="disableFields()" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#warrantyModal{{ warranty.id }}" >-->
+                                                                <!--    <i class="fa fa-edit"></i><span class="d-none d-sm-inline-block ">Edit</span>-->
+                                                                <!--</button>-->
+                                                                 <!-- Split user_name into parts -->
+                                                                    {% with name_parts=warranty.user_name|split %}
+                                                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ warranty.id }}" type="submit"
+                                                                        onclick="setModalData('{{ name_parts.0 }}', '{{ name_parts.1|default:'' }}', '{{ name_parts.2|default:'' }}', '{{ warranty.id }}')">
+                                                                         <i class="fa fa-edit"></i><span class="d-none d-sm-inline-block ">Edit</span>
+                                                                    </button>
+                                                                    {% endwith %}
+                                                        {% include 'Dealer/warranty/warranty-modal.html' with warranty=warranty %}
+
+                                                        </td>
+                                                
+                                                      
+                                                   
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+
+                                            
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" role="tabpanel " id="live">
+                                <div class="card ">
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive">
+                                            <table class="table align-middle table-nowrap table-check table-bordered warrantyTable">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th class="align-middle">S No.</th>
+                                                        <th class="align-middle">Order Id</th>
+                                                        <th class="align-middle">Customer Name</th>
+                                                        <th class="align-middle">Customer Number</th>
+                                                        
+                                                        <th class="align-middle">Vehicle Registration Number</th>
+                                                        <th class="align-middle">Purchase Date</th>
+                                                        <th class="align-middle">Warranty Period</th>
+                                                        <th class="align-middle">Reminder Date</th>
+                                                        <th class="align-middle">Expiry Date</th>
+                                                        <th class="align-middle">Warranty Type</th>
+                                                        <th class="align-middle">Status</th>
+                                                        <th class="align-middle">Roadside Assistant</th>
+                                                        <th class="align-middle">Vehicle Brand</th>
+                                                        <th class="align-middle">Vehicle Model</th>
+                                                        <th class="align-middle">Vehicle Make</th>
+                                                        <th class="align-middle">Action</th>
+                                                        <!-- <th class="align-middle">Edit</th> -->
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% if current_warranty %}
+                                                        {% for warranty, expiry_date, reminder_date in current_warranty %}
+                                                            <tr data-id="{{ warranty.id }}">
+                                                            {%if warranty.get_status == "live" %}
+                                                                <td>{{ forloop.counter}}</td>
+                                                                <td>{{ warranty.order_id }}</td>
+                                                                <td>{{ warranty.user_name }}</td>
+                                                                <td>{{ warranty.user_phone_no }}</td>
+                                                                <td>{{ warranty.vehicle_registration_no }}</td>
+                                                
+                                                                <td>{{ warranty.purchase_date }}</td>
+                                                                <td>{{ warranty.warranty_period }}</td>
+                                                                <td>{{ reminder_date }}</td>
+                                                                <td>{{ expiry_date }}</td>
+                                                                <td>{{warranty.warranty_type}}</td>
+                                                                <td>
+                                                                    <span class="badge badge-pill badge-soft-success font-size-12">Live</span>
+                                                                </td>
+                                                                <td>{{warranty.roadside_assistant_date}}</td>
+                                                                <td>{{warranty.car_model.brand.name}}</td>
+                                                                <td>{{warranty.car_model.name}}</td>
+                                                                <td>{{warranty.next_renewal_date}}</td>  
+                                                                <td>
+                                                                  
+                                                                <!-- Button to open the modal and renew the warranty -->
+                                                                               <!-- Split user_name into parts -->
+                                                                    {% with name_parts=warranty.user_name|split %}
+                                                                    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#renewModal{{ warranty.id }}" type="submit">
+                                                                        Renewal
+                                                                    </button>
+                                                                    
+                                                                {% include 'Dealer/warranty/renew.html' with warranty=warranty fname=name_parts.0 mname=name_parts.1 lname=name_parts.2 %}</td>
+                                                                {% endwith %}
+                                                                    
+                                                               
+                                                            {% endif %}
+                                                            </tr>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <tr>
+                                                            <td colspan="4">No warranties available</td>
+                                                        </tr>
+                                                    {% endif %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- reminder table -->
+                            <div class="tab-pane fade" role="tabpanel " id="renewal">
+                                <div class="card ">
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive">
+                                            <table class="table align-middle table-nowrap table-check table-bordered warrantyTable">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th class="align-middle">S No.</th>
+                                                        <th class="align-middle">Order Id</th>
+                                                        <th class="align-middle">Customer Name</th>
+                                                        <th class="align-middle">Customer Number</th>
+                                                        
+                                                        <th class="align-middle">Vehicle Registration Number</th>
+                                                        <th class="align-middle">Purchase Date</th>
+                                                        <th class="align-middle">Warranty Period</th>
+                                                        <th class="align-middle">Reminder Date</th>
+                                                        <th class="align-middle">Expiry Date</th>
+                                                        <th class="align-middle">Warranty Type</th>
+                                                        <th class="align-middle">Status</th>
+                                                        <th class="align-middle">Roadside Assistant</th>
+                                                        <th class="align-middle">Vehicle Brand</th>
+                                                        <th class="align-middle">Vehicle Model</th>
+                                                        <th class="align-middle">Vehicle Make</th>
+                                                        <th class="align-middle">Action</th>
+                                                        <!-- <th class="align-middle">Edit</th> -->
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% if warranties_with_expiry %}
+                                                        {% for warranty, expiry_date, reminder_date in warranties_with_expiry %}
+                                                            <tr data-id="{{ warranty.id }}">
+                                                                <td>{{ forloop.counter}}</td>
+                                                                <td>{{ warranty.order_id }}</td>
+                                                                <td>{{ warranty.user_name }}</td>
+                                                                <td>{{ warranty.user_phone_no }}</td>
+                                                                <td>{{ warranty.vehicle_registration_no }}</td>
+                                                
+                                                                <td>{{ warranty.purchase_date }}</td>
+                                                                <td>{{ warranty.warranty_period }}</td>
+                                                                <td>{{ reminder_date }}</td>
+                                                                <td>{{ expiry_date }}</td>
+                                                                <td>{{warranty.warranty_type}}</td>
+                                                                <td>
+                                                                    <span class="badge badge-pill badge-soft-warning font-size-12">Renew</span>
+                                                                </td>
+                                                                <td>{{warranty.roadside_assistant_date}}</td>
+                                                                <td>{{warranty.car_model.brand.name}}</td>
+                                                                <td>{{warranty.car_model.name}}</td>
+                                                                <td>{{warranty.next_renewal_date}}</td>  
+                                                                <td>
+                                                                  
+                                                                <!-- Button to open the modal and renew the warranty -->
+                                                                               <!-- Split user_name into parts -->
+                                                                    {% with name_parts=warranty.user_name|split %}
+                                                                    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#renewModal{{ warranty.id }}" type="submit">
+                                                                        Renewal
+                                                                    </button>
+                                                                    
+                                                                {% include 'Dealer/warranty/renew.html' with warranty=warranty fname=name_parts.0 mname=name_parts.1 lname=name_parts.2 %}</td>
+                                                                {% endwith %}
+                                                                    
+                                                               
+
+                                                            </tr>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <tr>
+                                                            <td colspan="4">No warranties available</td>
+                                                        </tr>
+                                                    {% endif %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <!-- expired table -->
+                        <div class="tab-pane fade" role="tabpanel " id="expired">
+                            <div class="card ">
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle table-nowrap table-check table-bordered warrantyTable">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th class="align-middle">S No.</th>
+                                                    <th class="align-middle">Order Id</th>
+                                                    <th class="align-middle">Customer Name</th>
+                                                    <th class="align-middle">Customer Number</th>
+                                                    
+                                                    <th class="align-middle">Vehicle Registration Number</th>
+                                                    <th class="align-middle">Purchase Date</th>
+                                                    <th class="align-middle">Warranty Period</th>
+                                                    <th class="align-middle">Reminder Date</th>
+                                                    <th class="align-middle">Expiry Date</th>
+                                                    <th class="align-middle">Warranty Type</th>
+                                                    <th class="align-middle">Status</th>
+                                                    <th class="align-middle">Roadside Assistant</th>
+                                                    <th class="align-middle">Vehicle Brand</th>
+                                                    <th class="align-middle">Vehicle Model</th>
+                                                    <th class="align-middle">Vehicle Make</th>
+                                                    <th class="align-middle">Action</th>
+                                                      
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% if expired_warranties %}
+                                                    {% for warranty, expiry_date, reminder_date in expired_warranties %}
+                                                        <tr data-id="{{ warranty.id }}">
+                                                            <td>{{ forloop.counter}}</td>
+                                                            <td>{{ warranty.order_id }}</td>
+                                                            <td class="editable">{{ warranty.user_name }}</td>
+                                                            <td class="editable">{{ warranty.user_phone_no }}</td>
+                                                            <td class="editable">{{ warranty.vehicle_registration_no }}</td>
+                                            
+                                                            <td class="editable">{{ warranty.purchase_date }}</td>
+                                                            <td class="editable">{{ warranty.warranty_period }}</td>
+                                                            <td class="editable">{{ reminder_date }}</td>
+                                                            <td class="editable">{{ expiry_date }}</td>
+                                                            <td class="editable">{{warranty.warranty_type}}</td>
+                                                            <td>
+                                                                <span class="badge badge-pill badge-soft-danger font-size-12">Expired</span>
+                                                            </td>
+                                                            <td class="editable">{{warranty.roadside_assistant_date}}</td>
+                                                            <td class="editable">{{warranty.car_model.brand.name}}</td>
+                                                            <td class="editable">{{warranty.car_model.name}}</td>
+                                                            <td class="editable">{{warranty.next_renewal_date}}</td>  
+                                                            
+                                                            <td>
+                                                                <!-- Button to open the modal and renew the warranty -->
+                                                                        <!-- Split user_name into parts -->
+                                                                    {% with name_parts=warranty.user_name|split %}
+                                                                    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#renewModal{{ warranty.id }}" type="submit">
+                                                                        Renewal
+                                                                    </button>
+                                                                    
+                                                                {% include 'Dealer/warranty/renew.html' with warranty=warranty fname=name_parts.0 mname=name_parts.1 lname=name_parts.2 %}</td>
+                                                                {% endwith %}
+                                                        </tr>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <tr>
+                                                        <td colspan="4">No Warranties Expired  </td>
+                                                    </tr>
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- container-fluid -->
+</div>
+
+{% endblock %}
+
+{% block js %}
+ <!-- Include Flatpickr JS -->
+ <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+ <!-- Include Month Select Plugin JS -->
+ <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+ <script>
+ document.addEventListener('DOMContentLoaded', function() {
+     flatpickr("#month-year-picker", {
+         dateFormat: "Y-m",
+         mode: "single",
+         showMonths: 1,
+         enableTime: false,
+         allowInput: true,
+         defaultdate: new Date(),
+         maxDate: new Date(), 
+         plugins: [
+             new monthSelectPlugin({
+                 shorthand: true, // Use shorthand month names (optional)
+                 dateFormat: "Y-m",
+                 altFormat: "F Y",
+                 altInput: true // Display the formatted date in an alternative input
+             })
+         ],
+         onChange: function(selectedDates, dateStr, instance) {
+             // Optional: Handle change event if needed
+         }
+     });
+ });
+ </script>
+
+
+<!-- <script>
+    
+    
+
+        // Optional: Make an AJAX request to save the updated data to the backend
+        // Example (using fetch):
+        /*
+        fetch(`/edit/${rowId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: updatedData[0] }),
+        }).then(response => response.json()).then(data => {
+            if (!data.success) {
+                alert("Failed to save the record");
+            }
+        });
+        */
+
+        // Toggle the save and edit icons back
+        saveIcon.classList.add('hidden');
+        row.querySelector('.edit-icon').classList.remove('hidden');
+
+    } 
+    </script> -->
+<script>
+    document.getElementById('user_fname').addEventListener('input', function() {
+        const userName = this.value;
+        const userNameError = document.getElementById('firstNameError');
+        const namePattern = /^[A-Z][a-zA-Z]*$/;
+        
+        if (!namePattern.test(userName)) {
+            userNameError.style.display = 'block';
+        } else {
+            userNameError.style.display = 'none';
+        }
+    });
+    document.getElementById('user_mname').addEventListener('input', function() {
+        const userName = this.value;
+        const userNameError = document.getElementById('midNameError');
+        const namePattern = /^[A-Z][a-zA-Z]*$/;
+        
+        if (!namePattern.test(userName)) {
+            userNameError.style.display = 'block';
+        } else {
+            userNameError.style.display = 'none';
+        }
+    });
+    document.getElementById('user_lname').addEventListener('input', function() {
+        const userName = this.value;
+        const userNameError = document.getElementById('lastNameError');
+        const namePattern = /^[A-Z][a-zA-Z]*$/;
+        
+        if (!namePattern.test(userName)) {
+            userNameError.style.display = 'block';
+        } else {
+            userNameError.style.display = 'none';
+        }
+    });    
+
+    document.getElementById('user_phone_no').addEventListener('input', function() {
+        const phoneNumber = this.value;
+        const phoneError = document.getElementById('phoneError');
+        const phonePattern = /^[6789]\d{9}$/;
+        
+        if (!phonePattern.test(phoneNumber)) {
+            phoneError.style.display = 'block';
+        } else {
+            phoneError.style.display = 'none';
+        }
+    });
+</script>    
+
+<script>
+    function deleteWarranty(warrantyId) {
+        const csrfToken = "{{ csrf_token }}";  // Ensure this is correctly set
+
+        // Confirm the delete action
+        if (confirm("Are you sure you want to delete this warranty?")) {
+            fetch(`/warranty/delete/${warrantyId}/`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Remove the row from the table
+                    document.getElementById(`row-${warrantyId}`).remove();
+                    alert("Warranty deleted successfully.");
+                } else {
+                    console.error('Error:', data.error);  // Log the error for debugging
+                    alert("Error deleting warranty: " + data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }
+</script>
+
+<script>
+    function enableFields() {
+        document.getElementById('user_phone_no').disabled = false;
+        document.getElementById('car_brand').disabled = false;
+        document.getElementById('car_model').disabled = false;
+        document.getElementById('month-year-picker').disabled = false;
+        document.getElementById('vehicle_registration_no').disabled = false;
+    }
+</script>
+<script>
+    function resetModalForm(){
+        enableFields();
+        
+        document.getElementById('warrantyForm').reset();
+            
+    }
+</script>
+<script>
+function openEditModal(id, warrantyType , userName, phoneNumber,car_brand,car_model,vehicle_registration_no) {
+    // Populate the modal form fields with the passed data
+    document.getElementById('warrantyId').value = id;
+    document.getElementById('user_fname').value = userName;
+    document.getElementById('user_phone_no').value = phoneNumber;
+    document.getElementById('vehicle_registration_no').value = vehicle_registration_no;
+    document.getElementById('car_brand').value = car_brand;
+    document.getElementById('car_model').value = car_model;
+    // Change modal title to 'Edit Warranty'
+    document.getElementById('warrantyModalLabel').innerText = 'Edit Warranty';
+}
+
+// Reset the modal when closed to be ready for adding new warranty
+$("#warrantyModal").on('hidden.bs.modal', function () {
+    document.getElementById('warrantyForm').reset();  // Reset form fields
+    document.getElementById('warrantyId').value = ''; // Clear hidden input for ID
+    document.getElementById('warrantyModalLabel').innerText = 'Enter Warranty Details'; // Reset modal title
+});
+// var myModal = new bootstrap.Modal(document.getElementById('warrantyModal'));
+// myModal.show();
+
+</script>
+<script>
+function disableFields() {
+    document.getElementById('user_fname').disabled = true;
+    document.getElementById('user_phone_no').disabled = true;
+    document.getElementById('car_brand').disabled = true;
+    document.getElementById('car_model').disabled = true;
+    document.getElementById('month-year-picker').disabled = true;
+    document.getElementById('vehicle_registration_no').disabled = true;
+    // full = userName;
+    
+}
+</script>
+
+<script>
+    function openRenewModal(id, userName, phoneNumber,car_brand,car_model,vehicle_registration_no){ 
+        // disableFields();
+        // console.log('Opening modal with data:', warranty);
+        // Populate the form fields with warranty data
+        document.getElementById('warrantyId').value = id;
+        document.getElementById('user_fname').value = userName;
+        document.getElementById('user_phone_no').value = phoneNumber;
+        document.getElementById('vehicle_registration_no').value = vehicle_registration_no;
+        // document.getElementById('car_brand').value = car_brand;
+        // document.getElementById('car_model').value = car_model;
+        disableFields();
+        // Change modal title
+        document.getElementById('warrantyModalLabel').innerText = 'Renew Warranty';        
+        // Update the modal title based on the action
+        $("#warrantyModal{{id}}").on('hidden.bs.modal', function () {
+            enableFields();
+            document.getElementById('warrantyForm').reset();  // Reset form fields
+            document.getElementById('warrantyId').value = ''; // Clear hidden input for ID
+            document.getElementById('warrantyModalLabel').innerText = 'Enter Warranty Details'; // Reset modal title
+        });
+
+    }
+</script>
+
+
+<script>
+    // Function to search in the currently active tab's table
+    function searchTable() {
+        const input = document.getElementById("searchInput").value.toUpperCase();
+        const activeTabContent = document.querySelector(".tab-pane.show.active"); // Find the active tab's content
+        const table = activeTabContent.querySelector("table"); // Get the table in the active tab
+        const tr = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < tr.length; i++) {
+            const tds = tr[i].getElementsByTagName("td");
+            let matchFound = false;
+
+            for (let j = 0; j < tds.length; j++) {
+                const td = tds[j];
+                const txtValue = td.textContent || td.innerText;
+
+                if (txtValue.toUpperCase().indexOf(input) > -1) {
+                    matchFound = true;
+                    const regex = new RegExp(`(${input})`, "gi");
+                    td.innerHTML = txtValue.replace(regex, "<span class='highlight'>$1</span>"); // Highlight matches
+                } else {
+                    td.innerHTML = txtValue; // Reset the cell content if no match
+                }
+            }
+
+            tr[i].style.display = matchFound ? "" : "none"; // Show or hide rows based on the search
+        }
+    }
+</script>
+
+<script>
+    $(document).ready(function() {
+
+    $('#car_brand').change(async function() {
+        var brandID = $(this).val();
+        console.log('brandID = ', brandID)
+        await $.get('/get_car_model/', { car_brand_id: brandID }, async function(data) {
+            var carModelSelect = $('#car_model');
+            console.log('carModelSelect= ',carModelSelect)
+            var model_text = '<option value="">Select Model</option>'
+            await $.each(data, function(index, model) {
+                console.log('data = ',data)
+                var a = '<option value='+model.id+'>'+model.name+'</option>'
+                model_text += a
+<!--                carModelSelect.append('<option data-tokens="" value='+model.id+'>'+model.name+'</option>');-->
+            });
+             carModelSelect.html(model_text);
+
+        });
+    });
+
+    $('#car_model').change(function() {
+        var carModelId = $(this).val();
+        $.get('/get_car_variant/', { car_model_id: carModelId }, function(data) {
+            var carVariantSelect = $('#car_variants');
+            carVariantSelect.empty();
+            carVariantSelect.append($('<option>', {
+                    value: "",
+                    text: "Select Variants"
+                }));
+            $.each(data, function(index, variant) {
+                carVariantSelect.append($('<option>', {
+                    value: variant.id,
+                    text: variant.name
+                }));
+            });
+        });
+    });
+});
+</script>
+
+
+<script>
+    function setModalData(firstName, middleName, lastName, warrantyId) {
+        // Get the modal's input fields using warrantyId to make them unique
+        const firstNameField = document.getElementById(`user_fname_${warrantyId}`);
+        const middleNameField = document.getElementById(`user_mname_${warrantyId}`);
+        const lastNameField = document.getElementById(`user_lname_${warrantyId}`);
+
+        // Set the values in the modal
+        firstNameField.value = firstName;
+        middleNameField.value = middleName;
+        lastNameField.value = lastName;
+    }
+
+
+</script>
+
+<script>
+    <script>
+        function setrenewModal(firstName, middleName, lastName, warrantyId) {
+        // Get the modal's input fields using warrantyId to make them unique
+        const firstNameField = document.getElementById(`user_fname_${warrantyId}`);
+        const middleNameField = document.getElementById(`user_mname_${warrantyId}`);
+        const lastNameField = document.getElementById(`user_lname_${warrantyId}`);
+
+        // Set the values in the modal
+        firstNameField.value = firstName;
+        middleNameField.value = middleName;
+        lastNameField.value = lastName;
+    }
+</script>
+</script>
+
+
+{% endblock %}

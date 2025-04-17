@@ -1,0 +1,296 @@
+{% extends 'Dealer/account/layout.html' %}
+{% load static %}
+
+{% block common_css %}
+
+{% endblock %}
+
+{% block body %}
+{% include 'Dealer/profile/edit_profile_modal.html' %}
+<div class="row justify-content-center">
+    <div class="col-lg-4 col-sm-6">
+        <div class="flex-shrink-0 mb-5 mt-2 me-3 d-flex justify-content-center position-relative">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#editDP" class=" mr-1 "><img src="https://dreamcarbazaar.com/media/{{request.user.user_image}}" alt=" " class="avatar-xl rounded-circle img-thumbnail profile-image-edit ">
+                <i class="fa fa-edit profile-image-edit-icon "></i></a>
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-sm-12 ">
+        <div class="card profile-card ">
+            <div class="card-body profile-card-body ">
+                <div class="d-flex align-items-start ">
+                    <div class="flex-grow-1 align-self-center ">
+                        <div class="text-dark ">
+                            <h5 style="font-weight: 600">Name and Company</h5>
+                            <p class="profile-data-para mb-1 "><i class="fa fa-user mr-1 "></i>{{request.user.first_name}}</p>
+                            <p class="profile-data-para mb-1 "><i class="fa fa-building mr-1 "></i>{{request.user.firm_name}}</p>
+                        </div>
+                    </div>
+                    <div class="dropdown ">
+                        <button href="#" data-bs-toggle="modal" data-bs-target="#editName" class="btn btn-light "><i class="fa fa-edit "></i> <span class="d-none d-sm-inline-block ">Edit</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-sm-12 ">
+        <div class="card profile-card ">
+            <div class="card-body profile-card-body ">
+                <div class="d-flex align-items-start ">
+                    <div class="flex-grow-1 align-self-center ">
+                        <div class="text-dark ">
+                            <h5 style="font-weight: 600">Contact Details</h5>
+                            <p class="profile-data-para mb-1 "><i class="fa fa-phone mr-1 "></i>+91 {{request.user.phone}}</p>
+                            <p class="profile-data-para mb-1 "><i class="fa fa-envelope mr-1 "></i>{{request.user.email}}</p>
+                        </div>
+                    </div>
+                    <div class="dropdown ">
+                        <button href="#" data-bs-toggle="modal" data-bs-target="#editEmail" class="btn btn-light "><i class="fa fa-edit "></i> <span class="d-none d-sm-inline-block ">Edit</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-sm-12 ">
+        <div class="card profile-card ">
+            <div class="card-body profile-card-body ">
+                <div class="d-flex align-items-start ">
+                    <div class="flex-grow-1 align-self-center ">
+                        <div class="text-dark ">
+                            <h5 style="font-weight: 600">Address</h5>
+                            <p class="profile-data-para mb-1 "><i class="fa fa-map-marker mr-1 "></i>{{request.user.address}}</p>
+                        </div>
+                    </div>
+                    <div class="dropdown ">
+                        <button href="#" data-bs-toggle="modal" data-bs-target="#editAddress" class="btn btn-light "><i class="fa fa-edit "></i> <span class="d-none d-sm-inline-block ">Edit</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-sm-12 ">
+        <div class="card profile-card ">
+            <div class="card-body profile-card-body ">
+                <div class="d-flex align-items-start ">
+                    <div class="flex-grow-1 align-self-center ">
+                        <div class="text-dark ">
+                            <h5 style="font-weight: 600">Password</h5>
+                            <p class="profile-data-para mb-1 "><i class="fa fa-lock mr-1 "></i>********</p>
+                        </div>
+                    </div>
+                    <div class="dropdown ">
+                        <button href="#" data-bs-toggle="modal" data-bs-target="#editPass" class="btn btn-light "><i class="fa fa-edit "></i> <span class="d-none d-sm-inline-block ">Change Password</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-sm-12 ">
+        <div class="card profile-card ">
+            <div class="card-body profile-card-body ">
+                <div class="d-flex align-items-start ">
+                    <div class="flex-grow-1 align-self-center ">
+                        <div class="text-dark ">
+                            <h5 style="font-weight: 600">KYC Documents</h5>
+                            <p class="profile-data-para mb-2 "><i class="fa fa-file mr-1"></i>Pan Card - {{request.user.pan_card}}<a href="https://dreamcarbazaar.com/media/{{request.user.pan_card|urlencode}}" target="_blank"><i class=" fa fa-eye" style="margin-left : 10px"></i></a> <a href="https://dreamcarbazaar.com/media/{{request.user.pan_card}}" download="{{request.user.pan_card}}" target="_blank"><i class=" fa fa-download" style="margin-left : 10px"></i></a></p>
+                            <p class="profile-data-para mb-2 "><i class="fa fa-file mr-1"></i>Aadhar Card - {{request.user.aadhar_card}} <a href="https://dreamcarbazaar.com/media/{{request.user.aadhar_card|urlencode}}" target="_blank"><i class=" fa fa-eye" style="margin-left : 10px"></i></a> <a href="https://dreamcarbazaar.com/media/{{request.user.aadhar_card}}" download="{{request.user.aadhar_card}}" target="_blank"><i class=" fa fa-download" style="margin-left : 10px"></i></a></p>
+                            <p class="profile-data-para mb-2 "><i class="fa fa-file mr-1"></i>GST - {{ request.user.gst }} <a href="https://dreamcarbazaar.com/media/{{request.user.gst|urlencode}}" target="_blank"><i class=" fa fa-eye" style="margin-left : 10px"></i></a> <a href="https://dreamcarbazaar.com/media/{{request.user.gst}}" download="{{request.user.gst}}" target="_blank"><i class=" fa fa-download" style="margin-left : 10px"></i></a></p>
+                        
+                        </div>
+                    </div>
+                    <div class="dropdown ">
+                        <button href="#" data-bs-toggle="modal" data-bs-target="#editCard" class="btn btn-light "><i class="fa fa-edit "></i> <span class="d-none d-sm-inline-block ">Update</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-sm-12 ">
+        <div class="card profile-card ">
+            <div class="card-body profile-card-body ">
+                <div class="d-flex align-items-start ">
+                    <div class="flex-grow-1 align-self-center ">
+                        <div class="text-dark ">
+                            <h5 style="font-weight: 600">Invoice</h5>
+                            <p class="profile-data-para mb-2"><i class="fa fa-file mr-1"></i>Invoice-{{request.user}}</p>
+                        </div>
+                    </div>
+                    <div class="dropdown ">
+                        <a href="https://dreamcarbazaar.com/media/invoice/DCB-Final-Invoice.pdf" class=" mr-1 "><i class="fa fa-eye "></i> <span class="d-none d-sm-inline-block">View</span></a>
+                        <a href="https://dreamcarbazaar.com/media/invoice/DCB-Final-Invoice.pdf" class=" mr-1  text-danger"><i class="fa fa-download"></i> <span class="d-none d-sm-inline-block">Download</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-6 col-md-6">
+        <div class="card plan-box">
+            <div class="card-body p-4">
+                <div class="d-flex">
+                    <div class="flex-grow-1">
+                        <h5>Plan Name</h5>
+                        <p class="text-success  mb-1">Type of Plan</p>
+                        <p class="text-muted mb-0">No. of Listing</p>
+                    </div>
+                    <div class="flex-shrink-0 ms-3">
+                        <a href="#" class="text-danger"><i class="fa fa-download"></i>Invoice</a>
+                    </div>
+                </div>
+                <div class="py-4">
+                    <h2>Rs 50,000</h2>
+                </div>
+                <div class="text-center plan-btn">
+                    <a href="javascript: void(0);" class="btn btn-primary btn-sm waves-effect waves-light">Upgrade Plan</a>
+                </div>
+
+                <div class="plan-features mt-5">
+                    <p><i class="bx bx-checkbox-square text-primary me-2"></i> Order Id</p>
+                    <p><i class="bx bx-checkbox-square text-primary me-2"></i> Category ( Car Category )</p>
+                    <p><i class="bx bx-checkbox-square text-primary me-2"></i> Dealer Location</p>
+                    <p><i class="bx bx-checkbox-square text-primary me-2"></i> Date of Plan Purchased</p>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-sm-6 p-0">
+                        <div class="no-of-cars">
+                            <p>Total Listing - 200</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 p-0">
+                        <div class="uploaded-cars">
+                            <p>Uploaded - 100</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 p-0">
+                        <div class="remaining-listing">
+                            <p>Remaining - 100</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+const oldpassword = document.getElementById('dealer-old-password');
+const newPasswordField = document.getElementById('dealer-new-password');
+const reNewPasswordField = document.getElementById('dealer-re-new-password');
+const errorMessage = document.getElementById('error-message');
+const submitButton = document.getElementById('submitButton');
+errorMessage.textContent = " ";
+// Function to validate password requirements
+function validatePassword(password) {
+    const hasNumber = /\d/.test(password); // Check for at least one number
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password); // Check for at least one special character
+    return hasNumber && hasSpecialChar;
+}
+
+// Function to check if passwords match and meet the criteria
+function checkPasswords() {
+    const newPassword = newPasswordField.value;
+    const reNewPassword = reNewPasswordField.value;
+
+    if (!validatePassword(newPassword)) {
+        errorMessage.textContent = "Password must contain at least one number and one special character!";
+        errorMessage.style.display = 'block'; // Show error message if requirements are not met
+        submitButton.disabled = true; // Disable the submit button
+    } else if (newPassword !== reNewPassword) {
+        errorMessage.textContent = "Passwords do not match!";
+        errorMessage.style.display = 'block'; // Show error message if passwords do not match
+        submitButton.disabled = true; // Disable the submit button
+    } else {
+        errorMessage.style.display = 'none'; // Hide error message if everything is correct
+        submitButton.disabled = false; // Enable the submit button
+    }
+}
+
+// Add input event listeners to both password fields
+newPasswordField.addEventListener('input', checkPasswords);
+reNewPasswordField.addEventListener('input', checkPasswords);
+
+document.getElementById('passwordForm').addEventListener('submit', function(event) {
+    // Final check before form submission
+    if (submitButton.disabled) {
+        event.preventDefault(); // Prevent form submission if submit button is disabled
+        alert("Please ensure all requirements are met before submitting.");
+    } else if (!validatePassword(newPasswordField.value) || newPasswordField.value !== reNewPasswordField.value) {
+        event.preventDefault(); // Extra precaution to prevent form submission
+        alert("Passwords do not match or do not meet the criteria.");
+    }
+});
+
+// Toggle password visibility functionality remains the same
+document.addEventListener('DOMContentLoaded', function () {
+    // Select all password toggle buttons
+    const togglePasswordButtons = document.querySelectorAll('.toggle-password');
+
+    // Loop through each button and add an event listener
+    togglePasswordButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            // Find the password field associated with the button
+            const passwordField = this.previousElementSibling;
+
+            // Ensure we're targeting the input correctly
+            if (passwordField && passwordField.type === 'password') {
+                // Change the input type to 'text' to reveal the password
+                passwordField.type = 'text';
+            } else if (passwordField && passwordField.type === 'text') {
+                // Change the input type back to 'password' to hide the password
+                passwordField.type = 'password';
+            }
+
+            // Toggle the eye icon between 'fa-eye' and 'fa-eye-slash'
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+    });
+});
+
+</script>
+
+<script>
+
+const form = document.querySelector('#myForm');
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  submitForm();
+});
+function submitForm() {
+  const form = document.querySelector('#myForm');
+  const formData = new FormData(form);
+  
+  // Add additional form data as needed
+  formData.append('additionalData', 'additionalValue');
+  
+  // Call function to submit form data
+  submitFormData(formData);
+}
+function submitFormData(formData) {
+  fetch('/api/upload', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Handle response data
+  })
+  .catch(error => {
+    // Handle errors
+  });
+}
+</script>
+
+{% endblock %}

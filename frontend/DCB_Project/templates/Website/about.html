@@ -1,0 +1,326 @@
+{% extends 'Website/layout.html' %}
+{% load static %}
+{% load user_tags %}
+
+{% block body %}
+    <div class="wrapper ovh">
+
+    {% include 'Website/top_header.html' %}
+    {% include 'Website/top_navbar.html' %}
+
+
+    <!-- Modal -->
+    {% include 'Website/login_modal.html' %}
+    {% include 'Website/dealer_form.html' %}
+
+    <!-- Inner Page Breadcrumb -->
+        <section class="inner_page_breadcrumb">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="breadcrumb_content">
+                            <h2 class="breadcrumb_title">About Us</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Text Content -->
+        <section class="about-section pb80">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="about_thumb mb30-md">
+                            <img class="thumb1" src="{% static 'images/images/2.jpg' %}" alt="1.jpg">
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="about_content">
+                            <h2 class="title">About DreamCarBazaar</h2>
+                            <p class="mb30">Siddharth Singh, the founder of DreamCarBazaar has an experience of more than
+                                7+ years in the car reselling business. He had an idea about why not provide affordable
+                                second-hand cars to those who want to buy a 4-wheeler but are unable to because of the
+                                prices. We have a wide range of second-hand cars that are inspected before delivering it
+                                to our customers. You can select your car online, book an appointment and test drive
+                                before buying the car. Moreover, get free service and an assured warranty on your
+                                preowned cars with DreamCarBazaar.</p>
+                            <a class="btn btn-thm about-btn" href="#">Contact Us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Chose Us -->
+        <section class="why-chose pb80 pt0-md">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="main-title text-center">
+                            <h2>Why Choose Us?</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="why_chose_us">
+                            <div class="icon float-start"><span class="flaticon-price-tag"></span></div>
+                            <div class="details">
+                                <h5 class="title">Best Price</h5>
+                                <p>Our stress-free finance department that can find financial solutions to save you
+                                    money.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="why_chose_us">
+                            <div class="icon float-start style2"><span class="flaticon-car"></span></div>
+                            <div class="details">
+                                <h5 class="title">Trusted By Thousands</h5>
+                                <p>Our stress-free finance department that can find financial solutions to save you
+                                    money.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="why_chose_us">
+                            <div class="icon float-start style3"><span class="flaticon-trust"></span></div>
+                            <div class="details">
+                                <h5 class="title">Wide Range of Brands</h5>
+                                <p>Our stress-free finance department that can find financial solutions to save you
+                                    money.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Team -->
+        <section class="our-team pb90 pt0">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="dcb-vision-mission">
+                            <h2>Our Mission</h2>
+                            <p>Your Path to a Smoother Car Buying & Selling. Helping customers to buy and sell cars
+                                easily at the most genuine price. We are fulfilling the dreams of many who can’t afford
+                                a brand-new car. Making buying and selling cars easy and affordable for everyone.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="dcb-vision-mission">
+                            <h2>Our Vision</h2>
+                            <p>We drive dreams and reshape roads. We transform the way you buy & sell cars. Our vision
+                                is to alter how people trade vehicles, making it an effortless experience for both
+                                parties. We aspire to a future where the foundation fills in as the final location for
+                                vehicle buyers, where trust, straightforwardness, & comfort are at the very front of
+                                every exchange.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ...............................End Section......................... -->
+
+
+        <!-- ...............................FaQ Page.................................. -->
+        <section class="our-faq bgc-f9 pt60 pb60">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-xl-12">
+                        <div class="faq_content mb40">
+                            <div class="faq_according">
+                                <div class="accordion" id="accordionExample">
+                                    <div class="card">
+                                        <div class="card-header" id="headingOne">
+                                            <h4 class="mb-0">
+                                                <button class="btn btn-link collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                                    aria-expanded="false" aria-controls="collapseOne">How can I sell my car quickly?</button>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
+                                            data-parent="#accordionExample" style="">
+                                            <div class="card-body">
+                                                <p class="mb30">You can simply sell your car quickly by posting an ad on DreamCarBazaar. Post your ad with all the basic information like vehicle model, kilometres driven, date of purchase etc. and your ad will be live and millions of people can view it.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header" id="headingTwo">
+                                            <h4 class="mb-0">
+                                                <button class="btn btn-link collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                    aria-expanded="false" aria-controls="collapseTwo">Do I have to pay any amount to post my ad on the website?</button>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                            data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <p class="mb30">The first ad as a customer is free for everyone. Whereas, if you want to post 2 vehicles at a time then you have to pay for your second ad and enter as a dealer.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header" id="headingThree">
+                                            <h4 class="mb-0">
+                                                <button class="btn btn-link collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                                                    aria-expanded="false" aria-controls="collapseThree">Can I meet the seller of the vehicle directly?</button>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                                            data-parent="#accordionExample" style="">
+                                            <div class="card-body">
+                                                <p class="mb30">Yes, DreamCarBazaar is a platform where the car buyer and seller both meet and make a deal. The buyer and seller can meet directly.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header" id="headingFour">
+                                            <h4 class="mb-0">
+                                                <button class="btn btn-link collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseFour"
+                                                    aria-expanded="false" aria-controls="collapseFour">Do I need to register myself on DreamCarBazaar?</button>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseFour" class="collapse" aria-labelledby="headingFour"
+                                            data-parent="#accordionExample" style="">
+                                            <div class="card-body">
+                                                <p class="mb30">You need to create an account on our website as a new customer to post an ad or to buy a vehicle.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header" id="headingFive">
+                                            <h4 class="mb-0">
+                                                <button class="btn btn-link collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseFive"
+                                                    aria-expanded="false" aria-controls="collapseFive">Do I need to register myself on DreamCarBazaar?</button>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseFive" class="collapse" aria-labelledby="headingFive"
+                                            data-parent="#accordionExample" style="">
+                                            <div class="card-body">
+                                                <p class="mb30">You need to create an account on our website as a new customer to post an ad or to buy a vehicle.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- .............................End Section................ -->
+
+
+        <!-- Popular Brands -->
+        <section class="our-team pb60 pt60">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 offset-lg-3">
+                        <div class="main-title text-center">
+                            <h2>Popular Brands</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="team_slider">
+                        <div class="listing_item_6grid_slider dots_none">
+                            <div class="item">
+                                <div class="team_member popular-brand">
+                                    <div class="thumb"> <img class="img-fluid popular-brands" width="100" src="{% static 'images/images/ford.webp' %}" alt="1.jpg"></div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="team_member popular-brand">
+                                    <div class="thumb"> <img class="img-fluid popular-brands" width="100" src="{% static 'images/images/audi.webp' %}" alt="2.jpg"></div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="team_member popular-brand">
+                                    <div class="thumb"> <img class="img-fluid popular-brands" width="100" src="{% static 'images/images/honda.webp' %}" alt="3.jpg"></div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="team_member popular-brand">
+                                    <div class="thumb"> <img class="img-fluid popular-brands" width="100" src="{% static 'images/images/hyundai.webp' %}" alt="4.jpg"></div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="team_member popular-brand">
+                                    <div class="thumb"> <img class="img-fluid popular-brands" width="100" src="{% static 'images/images/jeep.webp' %}" alt="1.jpg"></div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="team_member popular-brand">
+                                    <div class="thumb"> <img class="img-fluid popular-brands" width="100" src="{% static 'images/images/kia.webp' %}" alt="2.jpg"></div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="team_member popular-brand">
+                                    <div class="thumb"> <img class="img-fluid popular-brands" width="100" src="{% static 'images/images/mahindra.webp' %}" alt="3.jpg"></div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="team_member popular-brand">
+                                    <div class="thumb"> <img class="img-fluid popular-brands" width="100" src="{% static 'images/images/maruti.webp' %}" alt="4.jpg"></div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="team_member popular-brand">
+                                    <div class="thumb"> <img class="img-fluid popular-brands" width="100" src="{% static 'images/images/mercedes-benz.webp' %}" alt="1.jpg"></div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="team_member popular-brand">
+                                    <div class="thumb"> <img class="img-fluid popular-brands" width="100" src="{% static 'images/images/mg.webp' %}" alt="2.jpg"></div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="team_member popular-brand">
+                                    <div class="thumb"> <img class="img-fluid popular-brands" width="100" src="{% static 'images/images/nissan.webp' %}" alt="3.jpg"></div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="team_member popular-brand">
+                                    <div class="thumb"> <img class="img-fluid popular-brands" width="100" src="{% static 'images/images/renault.webp' %}" alt="4.jpg"></div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="team_member popular-brand">
+                                    <div class="thumb"> <img class="img-fluid popular-brands" width="100" src="{% static 'images/images/skoda.webp' %}" alt="1.jpg"></div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="team_member popular-brand">
+                                    <div class="thumb"> <img class="img-fluid popular-brands" width="100" src="{% static 'images/images/tata.webp' %}" alt="2.jpg"></div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="team_member popular-brand">
+                                    <div class="thumb"> <img class="img-fluid popular-brands" width="100" src="{% static 'images/images/toyota.webp' %}" alt="3.jpg"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Section -->
+
+    <!-- Our Footer -->
+    {% include 'Website/footer.html' %}
+    
+    
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

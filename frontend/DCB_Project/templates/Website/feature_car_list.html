@@ -1,0 +1,648 @@
+{% load static %}
+<section class="featured-product">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="main-title text-center">
+                        <h2>Featured Listings</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="popular_listing_sliders row">
+                        <!-- Nav tabs -->
+                        <div class="nav nav-tabs col-lg-12 justify-content-center" role="tablist">
+                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">All Status</button>
+                            <button class="nav-link" id="nav-shopping-tab" data-bs-toggle="tab" data-bs-target="#nav-shopping" role="tab" aria-controls="nav-shopping" aria-selected="false">New Cars</button>
+                            <button class="nav-link" id="nav-hotels-tab" data-bs-toggle="tab" data-bs-target="#nav-hotels" role="tab" aria-controls="nav-hotels" aria-selected="false">Used Cars</button>
+                        </div>
+                        <!-- Tab panes -->
+                        <div class="tab-content col-lg-12" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="row">
+                                    {% for car_detail in all_car_details %}
+                                        <div class="col-sm-6 col-xl-3">
+                                            <div class="car-listing">
+                                                <div class="thumb">
+                                                    <div class="tag">FEATURED</div>
+                                                    <!--<p>Image URL: https://dreamcarbazaar.com/media/{{ car_detail.car_image }}</p>-->
+
+                                                    <!--<img class="watermark-image" src="{% if car_detail.car_image %} https://dreamcarbazaar.com/media/{{car_detail.car_image}} {% else %} {% static 'images/listing/2.jpg' %} {% endif %}" >-->
+                                                    {% if car_detail.car_image %}
+                                                        <img class="img-fluid" src="https://dreamcarbazaar.com/media/{{ car_detail.car_image }}" alt="Car Image">
+                                                    {% else %}
+                                                        <img class="img-fluid" src="{% static 'images/listing/2.jpg' %}" alt="Default Car Image">
+                                                    {% endif %}
+
+                                                    <div class="thmb_cntnt2">
+                                                        <ul class="mb0">
+                                                            <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                        class="flaticon-photo-camera mr3"></span> 22</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="details">
+                                                    <div class="wrapper">
+                                                        <div style="display: flex;justify-content: space-between;">
+                                                            <h5 class="price">Rs {{car_detail.demand_price}}</h5>
+                                                            <div class="db_share_icons">
+                                                                <a href="#"><i class="fa-solid fa-heart"></i></a>
+                                                                <a href="#"><i class="fa-regular fa-heart"></i></a>
+                                                            </div>
+                                                        </div>
+                                                        <h4 class="title car-title"><a href="{% url 'customer:car_details' car_detail.id %}">{{car_detail.variant.model.brand.name}} {{car_detail.variant.model.name}} -
+                                                                {{car_detail.variant.name}}</a></h4>
+                                                        <h6 class="dealer-title"><a href="{% url 'profile_details' car_detail.id %}">{{car_detail.created_by.first_name}}</a></h6>
+                                                    </div>
+                                                    <div class="listing_footer">
+                                                        <ul class="mb0">
+                                                            <li class="list-inline-item"><a href="#"><i class="fa fa-user"></i> {{car_detail.ownership}}</a>
+                                                            </li>
+                                                            <li class="list-inline-item"><a href="#"><i class="fa fa-gas-pump"></i> {{car_detail.fuel_type}}</a>
+                                                            </li>
+                                                            <li class="list-inline-item"><a href="#"><i class="flaticon-gear me-2"></i> {{car_detail.transmission}}</a>
+                                                            </li>
+                                                            <li class="list-inline-item"><a href="#"><i class="fa fa-ambulance"></i> {{car_detail.insurance_type}}</a>
+                                                            </li>
+                                                            <li class="list-inline-item"><a href="#"><i class="fa fa-clock"></i> {{car_detail.car_year}}</a>
+                                                            </li>
+                                                            <li class="list-inline-item"><a href="#"><i class="flaticon-road-perspective me-2"></i> {{car_detail.total_km_driven}}</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    {% endfor %}
+                                    
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="nav-shopping" role="tabpanel" aria-labelledby="nav-shopping-tab">
+                                <div class="row">
+                                    <div class="col-sm-6 col-xl-3">
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag">FEATURED</div>
+                                                <img class="watermark-image" src="{% static 'images/listing/1.jpg' %}" alt="1.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs129</h5>
+                                                    <h6 class="title"><a href="#">Volvo XC90 -
+                                                            2020</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag">FEATURED</div>
+                                                <img class="watermark-image" src="{% static 'images/listing/5.jpg' %}" alt="5.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs129</h5>
+                                                    <h6 class="title"><a href="#">Audi A8 L 55
+                                                            - 2021</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-xl-3">
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag">FEATURED</div>
+                                                <img class="watermark-image" src="{% static 'images/listing/2.jpg' %}" alt="2.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs56</h5>
+                                                    <h6 class="title"><a href="#">Mercedes-Benz S 560 -
+                                                            2021</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag">FEATURED</div>
+                                                <img class="watermark-image" src="{% static 'images/listing/6.jpg' %}" alt="6.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs56</h5>
+                                                    <h6 class="title"><a href="#">Land Rover
+                                                            Range Rover HSE Westminster</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-xl-3">
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag">FEATURED</div>
+                                                <img class="watermark-image" src="{% static 'images/listing/3.jpg' %}" alt="3.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs230</h5>
+                                                    <h6 class="title"><a href="#">BMW M8 Gran
+                                                            Coupe Base - 2021</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag">FEATURED</div>
+                                                <img class="watermark-image" src="{% static 'images/listing/7.jpg' %}" alt="7.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs230</h5>
+                                                    <h6 class="title"><a href="#">Bentley
+                                                            Bentayga V8 - 2020</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-xl-3">
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag blue">SPECIAL</div>
+                                                <img src="{% static 'images/listing/4.jpg' %}" alt="4.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs478</h5>
+                                                    <h6 class="title"><a href="#">Nıssan
+                                                            Qasqai - Sky Pack</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag">FEATURED</div>
+                                                <img class="watermark-image" src="{% static 'images/listing/8.jpg' %}" alt="8.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs478</h5>
+                                                    <h6 class="title"><a href="#">Ferrari 488
+                                                            Spider Base - 2019</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="nav-hotels" role="tabpanel" aria-labelledby="nav-hotels-tab">
+                                <div class="row">
+                                    <div class="col-sm-6 col-xl-3">
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag">FEATURED</div>
+                                                <img class="watermark-image" src="{% static 'images/listing/1.jpg' %}" alt="1.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs129</h5>
+                                                    <h6 class="title"><a href="#">Volvo XC90 -
+                                                            2020</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag">FEATURED</div>
+                                                <img class="watermark-image" src="{% static 'images/listing/5.jpg' %}" alt="5.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs129</h5>
+                                                    <h6 class="title"><a href="#">Audi A8 L 55
+                                                            - 2021</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-xl-3">
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag">FEATURED</div>
+                                                <img class="watermark-image" src="{% static 'images/listing/2.jpg' %}" alt="2.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs56</h5>
+                                                    <h6 class="title"><a href="#">Mercedes-Benz S 560 -
+                                                            2021</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag">FEATURED</div>
+                                                <img class="watermark-image" src="{% static 'images/listing/6.jpg' %}" alt="6.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs56</h5>
+                                                    <h6 class="title"><a href="#">Land Rover
+                                                            Range Rover HSE Westminster</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-xl-3">
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag">FEATURED</div>
+                                                <img class="watermark-image" src="{% static 'images/listing/3.jpg' %}" alt="3.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs230</h5>
+                                                    <h6 class="title"><a href="#">BMW M8 Gran
+                                                            Coupe Base - 2021</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag">FEATURED</div>
+                                                <img class="watermark-image" src="{% static 'images/listing/7.jpg' %}" alt="7.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs230</h5>
+                                                    <h6 class="title"><a href="#">Bentley
+                                                            Bentayga V8 - 2020</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-xl-3">
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag blue">SPECIAL</div>
+                                                <img src="{% static 'images/listing/4.jpg' %}" alt="4.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs478</h5>
+                                                    <h6 class="title"><a href="#">Nıssan
+                                                            Qasqai - Sky Pack</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="car-listing">
+                                            <div class="thumb">
+                                                <div class="tag">FEATURED</div>
+                                                <img class="watermark-image" src="{% static 'images/listing/8.jpg' %}" alt="8.jpg">
+                                                <div class="thmb_cntnt2">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a class="text-white" href="#"><span
+                                                                    class="flaticon-photo-camera mr3"></span> 22</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="wrapper">
+                                                    <h5 class="price">Rs478</h5>
+                                                    <h6 class="title"><a href="#">Ferrari 488
+                                                            Spider Base - 2019</a></h6>
+                                                </div>
+                                                <div class="listing_footer">
+                                                    <ul class="mb0">
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-road-perspective me-2"></span>77362</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gas-station me-2"></span>Diesel</a>
+                                                        </li>
+                                                        <li class="list-inline-item"><a href="#"><span
+                                                                    class="flaticon-gear me-2"></span>Automatic</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt20">
+                <div class="col-lg-12">
+                    <div class="text-center">
+                        <a href="#" class="more_listing">Show All Cars <span class="icon"><span
+                                    class="fas fa-plus"></span></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>

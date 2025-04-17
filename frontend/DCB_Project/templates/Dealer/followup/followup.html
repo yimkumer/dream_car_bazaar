@@ -1,0 +1,453 @@
+{% extends 'Dealer/account/layout.html' %}
+{% load static %}
+
+{% block common_css %}
+<style>
+    .edit-icon, .save-icon {
+        cursor: pointer;
+        color: blue;
+    }
+    .delete-icon {
+        cursor: pointer;
+        color: red;
+    }
+    .hidden {
+        display: none;
+    }
+/* Highlight style */
+.highlight {
+        background-color: yellow;
+    }          
+</style>
+<style>
+    /* In your CSS file or <style> block */
+.future-record {
+    background-color: #f8d7da;  /* Light red background for past dates */
+    color: #721c24;  /* Dark red text for past dates */
+}
+
+.past-record {
+    background-color: #d4edda;  /* Light green background for future dates */
+    color: #155724;  /* Dark green text for future dates */
+}
+
+/* Optional styling to make the entire row stand out */
+.record {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+</style>
+
+{% endblock %}
+
+{% block body %}
+
+
+
+<div class="container-fluid">
+     <div class="row mb-4">
+            <div class="col-lg-6 col-sm-12">
+                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                    <h4 class="mb-sm-0 font-size-18">All Leads
+
+                    </h4>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-pills nav-justified" role="tablist">
+                            <li class="nav-item waves-effect waves-light" role="presentation">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#cold-leads" role="tab" aria-selected="true">
+                                    <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                    <span class="d-none d-sm-block">Cold Leads</span>
+                                </a>
+                            </li>
+                            <li class="nav-item waves-effect waves-light " role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" href="#warm-leads" role="tab" aria-selected="false" tabindex="-1">
+                                    <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                    <span class="d-none d-sm-block">Warm Leads </span>
+                                </a>
+                            </li>
+                            <li class="nav-item waves-effect waves-light " role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" href="#hot-leads" role="tab" aria-selected="false" tabindex="-1">
+                                    <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                    <span class="d-none d-sm-block">Hot Leads</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-sm-4">
+                <div class="search-box me-2 mb-2 d-inline-block">
+                    <div class="position-relative">
+                        <input type="text" class="form-control" id="searchInput" onkeyup="searchTable()" placeholder="Search...">
+                        <i class="bx bx-search-alt search-icon"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- Dropdown Filter -->
+            <div class="col-sm-4">
+                <form method="GET" action="{% url 'dealer:follow_up' %}">
+                    <label for="carFilter">Search Cars:</label>
+                   <select id="carFilter" name="car_name" onchange="filterTable()">
+                        <option value="all" {% if selected_car == 'all' or not selected_car %}selected{% endif %}>Search Cars</option>
+                        {% for car in cars %}
+                            <option value="{{ car.full_name }}"
+                                {% if selected_car == car.full_name %}selected{% endif %}>
+                                {{ car.full_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
+
+
+                </form>
+            </div>
+        <div class="col-sm-4">
+            <div class="text-sm-end">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary btn-rounded waves-effect waves-light mb-2 dropdown-toggle"
+                            data-bs-toggle="dropdown" aria-expanded="false" id="selectdownload" >
+                        <i class="fa fa-download me-1"></i>  Download
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" >
+                        <!-- PDF Option -->
+                        <li>
+                            <a class="dropdown-item" href="#" id="downloadSelectedPdf">Download as PDF</a>
+                        </li>
+                        <!-- Excel Option -->
+                        <li>
+                            <a class="dropdown-item" href="{% url 'dealer:download_lead_excel' %}" id="downloadSelectedExcel">Download as Excel</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>  
+        </div>
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-body p-0">
+                        <!-- Tab panes -->
+                        <div class="tab-content text-muted">
+                            <div class="tab-pane fade show active" id="cold-leads" role="tabpanel">
+                                <!--<div class="card">-->
+                                <!--    <div class="card-body p-0">-->
+                                <!--        <div class="table-responsive">-->
+                                <!--            <table id="dataTable"-->
+                                <!--                class="table align-middle table-nowrap table-check table-bordered">-->
+                                <!--                <thead class="table-light">-->
+                                <!--                    <tr>-->
+                                <!--                        <th>User</th>-->
+                                <!--                        <th>User Type</th>-->
+                                <!--                        <th>Phone</th>-->
+                                <!--                        <th>Email</th>-->
+                                <!--                        <th>Visited At</th>-->
+                                <!--                        <th>Engagement(in Seconds)</th>-->
+                                <!--                        <th>Status</th>-->
+                                <!--                        <th>Interest</th>-->
+                                <!--                        <th>Visit Count</th>-->
+                                <!--                    </tr>-->
+                                <!--                </thead>-->
+                                <!--                <tbody>-->
+                                <!--                    {% for lead in cold_leads %}-->
+                                <!--                    <tr>-->
+                                <!--                        <td>{{ lead.user.get_full_name}}</td>-->
+                                <!--                        <td>{{lead.user_type}}</td>-->
+                                <!--                        <td>{{ lead.user.phone }}</td>-->
+                                <!--                        <td>{{ lead.user.email }}</td>-->
+                                <!--                        <td>{{lead.visit_time}}</td>-->
+                                <!--                        <td>{{lead.page_stay_duration}}</td>-->
+                                <!--                        <td>{{lead.status}}</td>-->
+                                <!--                        <td>{{lead.viewed_car.variant.model.brand.name}} {{lead.viewed_car.variant.model.name}} {{lead.viewed_car.variant.name}}</td>-->
+                                <!--                        <td>{{lead.visit_count}}</td>-->
+                                                        
+                                <!--                    </tr>-->
+                                <!--                    {% endfor %}-->
+                                <!--                </tbody>-->
+                                            
+                                <!--            </table>-->
+                                <!--        </div>-->
+                                <!--    </div>-->
+                                <!--</div>-->
+                                
+                                
+                                <div class="row">
+                                {% for lead in cold_leads %}
+                                    <div class="col-xl-3 col-md-6">
+                                        <div class="card m-2">
+                                            <div class="card-body" style="box-shadow: 0 0 5px #ececec;border-radius: 5px;">
+                                                <div class="d-flex align-start mb-3">
+                                                    <div class="flex-grow-1 d-flex justify-content-center"><span class="badge badge-soft-success" style="padding: 7px">{{lead.viewed_car.variant.model.brand.name}} {{lead.viewed_car.variant.model.name}} {{lead.viewed_car.variant.name}}</span></div> 
+                                                </div>
+                                                <div class="text-center mb-3">
+                                                    <h6 class="font-size-15 mt-3 mb-1">{{ lead.user.get_full_name}}</h6>
+                                                    <p class="mb-0 text-muted">{{lead.user_type}}</p>
+                                                </div>
+                                                <div class="d-flex mb-3 justify-content-center gap-2 text-muted">
+                                                    <div> <i class="fa fa-envelope align-middle text-primary m-2"></i>{{ lead.user.email }}</div>
+                                                    <!--<p class="mb-0 text-center"><i class="bx bx-money align-middle text-primary"></i> {{ lead.user.phone }}</p>-->
+                                                </div>
+                                                <div class="hstack gap-2 justify-content-center"><span class="badge badge-soft-secondary">Only Visitor</span></div>
+                                                    <div class="row">
+                                                        <div class="col-lg-4 col-sm-4">
+                                                            <div class="mt-4 pt-1"> <a href="tel: {{ lead.user.phone }}" class="btn btn-soft-primary d-block"><i class="fa fa-phone"></i></a></div>
+                                                        </div>
+                                                        <div class="col-lg-4 col-sm-4">
+                                                            <div class="mt-4 pt-1"> <a href="tel: {{ lead.user.phone }}" class="btn btn-soft-primary d-block"><i class="fab fa-whatsapp-square"></i></a></div>
+                                                        </div>
+                                                        <div class="col-lg-4 col-sm-4">
+                                                            <div class="mt-4 pt-1"> <a href="tel: {{ lead.user.phone }}" class="btn btn-soft-primary d-block"><i class="bx bxs-message-dots"></i></a></div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    </div>
+                                
+                                
+                            </div>
+                            <!-- warm lead -->
+                            <!--<div class="tab-pane fade" role="tabpanel " id="warm-leads">-->
+                            <!--    <div class="card ">-->
+                            <!--        <div class="card-body p-0">-->
+                            <!--            <div class="table-responsive">-->
+                            <!--                <table class="table align-middle table-nowrap table-check table-bordered warrantyTable">-->
+                            <!--                    <thead class="table-light">-->
+                            <!--                        <tr>-->
+                            <!--                            <th>User</th>-->
+                            <!--                            <th>User Type</th>-->
+                            <!--                            <th>Phone</th>-->
+                            <!--                            <th>Email</th>-->
+                            <!--                            <th>Visited At</th>-->
+                            <!--                            <th>Engagement(in Seconds)</th>-->
+                            <!--                            <th>Status</th>-->
+                            <!--                            <th>Interest</th>-->
+                            <!--                            <th>Visit Count</th>-->
+                            <!--                        </tr>-->
+                            <!--                    </thead>-->
+                            <!--                    <tbody>-->
+                            <!--                        {% for lead in warm_leads %}-->
+                            <!--                        <tr>-->
+                            <!--                            <td>{{ lead.user.get_full_name}}</td>-->
+                            <!--                            <td>{{lead.user_type}}</td>-->
+                            <!--                            <td>{{ lead.user.phone }}</td>-->
+                            <!--                            <td>{{ lead.user.email }}</td>-->
+                            <!--                            <td>{{lead.visit_time}}</td>-->
+                            <!--                            <td>{{lead.page_stay_duration}}</td>-->
+                            <!--                            <td>{{lead.status}}</td>-->
+                            <!--                            <td>{{lead.viewed_car.variant.model.brand.name}} {{lead.viewed_car.variant.model.name}} {{lead.viewed_car.variant.name}}</td>-->
+                            <!--                            <td>{{lead.visit_count}}</td>-->
+                            <!--                        </tr>-->
+                            <!--                        {% endfor %}-->
+                            <!--                    </tbody>-->
+                            <!--                </table>-->
+                            <!--            </div>-->
+                            <!--        </div>-->
+                            <!--    </div>-->
+                            <!--</div>-->
+                            <div class="tab-content text-muted">
+                            <div class="tab-pane fade" role="tabpanel " id="warm-leads">
+                             <div class="card ">
+                               <div class="card-body p-0">
+
+                                <div class="row">
+                                    {% for lead in warm_leads %}
+                                        <div class="col-xl-3 col-md-6">
+                                            <div class="card m-2">
+                                                <div class="card-body" style="box-shadow: 0 0 5px #ececec;border-radius: 5px;">
+                                                    <div class="d-flex align-start mb-3">
+                                                        <div class="flex-grow-1 d-flex justify-content-center"><span class="badge badge-soft-success" style="padding: 7px">{{lead.viewed_car.variant.model.brand.name}} {{lead.viewed_car.variant.model.name}} {{lead.viewed_car.variant.name}}</span></div> 
+                                                    </div>
+                                                    <div class="text-center mb-3">
+                                                        <h6 class="font-size-15 mt-3 mb-1">{{ lead.user.get_full_name}}</h6>
+                                                        <p class="mb-0 text-muted">{{lead.user_type}}</p>
+                                                    </div>
+                                                    <div class="d-flex mb-3 justify-content-center gap-2 text-muted">
+                                                        <div> <i class="fa fa-envelope align-middle text-primary m-2"></i>{{ lead.user.email }}</div>
+                                                        <!--<p class="mb-0 text-center"><i class="bx bx-money align-middle text-primary"></i> {{ lead.user.phone }}</p>-->
+                                                    </div>
+                                                    <div class="hstack gap-2 justify-content-center"><span class="badge badge-soft-secondary">Only Visitor</span> <span> Filled Contact-Seller Form</span></div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4 col-sm-4">
+                                                                <div class="mt-4 pt-1"> <a href="tel: {{ lead.user.phone }}" class="btn btn-soft-primary d-block"><i class="fa fa-phone"></i></a></div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-sm-4">
+                                                                <div class="mt-4 pt-1"> <a href="tel: {{ lead.user.phone }}" class="btn btn-soft-primary d-block"><i class="fab fa-whatsapp-square"></i></a></div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-sm-4">
+                                                                <div class="mt-4 pt-1"> <a href="tel: {{ lead.user.phone }}" class="btn btn-soft-primary d-block"><i class="bx bxs-message-dots"></i></a></div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!--hotlead-->
+                            <div class="tab-content text-muted">
+                            <div class="tab-pane fade" role="tabpanel " id="warm-leads">
+                             <div class="card ">
+                               <div class="card-body p-0">
+
+                                <div class="row">
+                                    {% for lead in hot_leads %}
+                                        <div class="col-xl-3 col-md-6">
+                                            <div class="card m-2">
+                                                <div class="card-body" style="box-shadow: 0 0 5px #ececec;border-radius: 5px;">
+                                                    <div class="d-flex align-start mb-3">
+                                                        <div class="flex-grow-1 d-flex justify-content-center"><span class="badge badge-soft-success" style="padding: 7px">{{lead.viewed_car.variant.model.brand.name}} {{lead.viewed_car.variant.model.name}} {{lead.viewed_car.variant.name}}</span></div> 
+                                                    </div>
+                                                    <div class="text-center mb-3">
+                                                        <h6 class="font-size-15 mt-3 mb-1">{{ lead.user.get_full_name}}</h6>
+                                                        <p class="mb-0 text-muted">{{lead.user_type}}</p>
+                                                    </div>
+                                                    <div class="d-flex mb-3 justify-content-center gap-2 text-muted">
+                                                        <div> <i class="fa fa-envelope align-middle text-primary m-2"></i>{{ lead.user.email }}</div>
+                                                        <!--<p class="mb-0 text-center"><i class="bx bx-money align-middle text-primary"></i> {{ lead.user.phone }}</p>-->
+                                                    </div>
+                                                    <div class="hstack gap-2 justify-content-center"><span class="badge badge-soft-secondary">Only Visitor</span> <span> Scheduled Test Drive on {{lead.visit_time}}</span></div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4 col-sm-4">
+                                                                <div class="mt-4 pt-1"> <a href="tel: {{ lead.user.phone }}" class="btn btn-soft-primary d-block"><i class="fa fa-phone"></i></a></div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-sm-4">
+                                                                <div class="mt-4 pt-1"> <a href="tel: {{ lead.user.phone }}" class="btn btn-soft-primary d-block"><i class="fab fa-whatsapp-square"></i></a></div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-sm-4">
+                                                                <div class="mt-4 pt-1"> <a href="tel: {{ lead.user.phone }}" class="btn btn-soft-primary d-block"><i class="bx bxs-message-dots"></i></a></div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            <!-- hot-leads table -->
+                            <!--<div class="tab-pane fade" role="tabpanel " id="hot-leads">-->
+                            <!--    <div class="card ">-->
+                            <!--        <div class="card-body p-0">-->
+                            <!--            <div class="table-responsive">-->
+                            <!--                <table class="table align-middle table-nowrap table-check table-bordered warrantyTable">-->
+                            <!--                    <thead class="table-light">-->
+                            <!--                        <tr>-->
+                            <!--                            <th>User</th>-->
+                            <!--                            <th>User Type</th>-->
+                            <!--                            <th>Phone</th>-->
+                            <!--                            <th>Email</th>-->
+                            <!--                            <th>Visited At</th>-->
+                            <!--                            <th>Engagement(in Seconds)</th>-->
+                            <!--                            <th>Status</th>-->
+                            <!--                            <th>Interest</th>-->
+                            <!--                            <th>Visit Count</th>-->
+                            <!--                        </tr>-->
+                            <!--                    </thead>-->
+                            <!--                    <tbody>-->
+                            <!--                        {% for lead in hot_leads %}-->
+                            <!--                        <tr class="record {% if lead.visit_time < now %}past-record{% else %}future-record{% endif %}">-->
+                            <!--                            <td>{{ lead.user.get_full_name}}</td>-->
+                            <!--                            <td>{{lead.user_type}}</td>-->
+                            <!--                            <td>{{ lead.user.phone }}</td>-->
+                            <!--                            <td>{{ lead.user.email }}</td>-->
+                            <!--                            <td>{{lead.visit_time}}</td>-->
+                            <!--                            <td>{{lead.page_stay_duration}}</td>-->
+                            <!--                            <td>{{lead.status}}</td>-->
+                            <!--                            <td>{{lead.viewed_car.variant.model.brand.name}} {{lead.viewed_car.variant.model.name}} {{lead.viewed_car.variant.name}}</td>-->
+                            <!--                            <td>{{lead.visit_count}}</td>-->
+                            <!--                        </tr>-->
+                            <!--                        {% endfor %}-->
+                            <!--                    </tbody>-->
+                            <!--                </table>-->
+                            <!--            </div>-->
+                            <!--        </div>-->
+                            <!--    </div>-->
+                            <!--</div>-->
+                        </div>
+                </div>
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- container-fluid -->
+</div>
+</div>
+{% endblock %}
+
+{% block js%}
+<script>
+    // Function to search in the currently active tab's table
+    function searchTable() {
+        const input = document.getElementById("searchInput").value.toUpperCase();
+        const activeTabContent = document.querySelector(".tab-pane.show.active"); // Find the active tab's content
+        const table = activeTabContent.querySelector("table"); // Get the table in the active tab
+        const tr = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < tr.length; i++) {
+            const tds = tr[i].getElementsByTagName("td");
+            let matchFound = false;
+
+            for (let j = 0; j < tds.length; j++) {
+                const td = tds[j];
+                const txtValue = td.textContent || td.innerText;
+
+                if (txtValue.toUpperCase().indexOf(input) > -1) {
+                    matchFound = true;
+                    const regex = new RegExp(`(${input})`, "gi");
+                    td.innerHTML = txtValue.replace(regex, "<span class='highlight'>$1</span>"); // Highlight matches
+                } else {
+                    td.innerHTML = txtValue; // Reset the cell content if no match
+                }
+            }
+
+            tr[i].style.display = matchFound ? "" : "none"; // Show or hide rows based on the search
+        }
+    }
+</script>
+<script>
+    function filterTable() {
+        const dropdown = document.getElementById("carFilter");
+        const selectedCar = dropdown.value;
+        
+        // Trigger form submission or page reload with the selected car
+        window.location.href = window.location.pathname + "?car_name=" + selectedCar;
+        
+        // Reset the dropdown to default after the search
+        dropdown.value = "all";
+    }
+
+    // On page load, check if a car was selected in the previous search
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const carName = urlParams.get('car_name');
+        if (!carName || carName === 'all') {
+            document.getElementById('carFilter').value = 'all';  // Reset the dropdown to default
+        }
+    };
+</script>
+
+
+{% endblock %}

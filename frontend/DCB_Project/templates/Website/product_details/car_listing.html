@@ -1,0 +1,119 @@
+{% load static %}
+<!-- total car and filter -->
+<div class="row">
+    <div class="listing_filter_row db-767">
+        <div class="col-lg-5">
+            <div class="page_control_shorting left_area tac-sm mb30-767 mt15">
+                <p>We found <span class="heading-color fw600">{{all_car_details.count}}</span> Cars available for you
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="page_control_shorting right_area text-end tac-xsd">
+                <ul>
+                    <li class="list-inline-item short_by_text listone">Sort by:</li>
+                    <li class="list-inline-item listwo">
+                        <select class="selectpicker show-tick">
+                            <option>Date: newest First</option>
+                            <option>Most Recent</option>
+                            <option>Recent</option>
+                            <option>Best Selling</option>
+                            <option>Old Review</option>
+                        </select>
+                    </li>
+                    <!-- <li class="list-inline-item list-gird">
+                        <a href="#"><img src="assets/images/icon/list-grid.svg" alt="list-grid.svg"></a>
+                    </li>
+                    <li class="list-inline-item list-list">
+                        <a href="#"><img src="assets/images/icon/list-list.svg" alt="list-list.svg"></a>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  end  -->
+<!--  car listing  -->
+<div class="row">
+    {% for car_detail in all_car_details %}
+        <div class="col-sm-6 col-xl-4">
+            <div class="car-listing">
+                <div class="thumb">
+                    <div class="tag">FEATURED</div>
+                    <img class="watermark-image" src="{% if car_detail.car_image %} https://dreamcarbazaar.com/media/{{car_detail.car_image}} {% else %} {% static 'images/listing/2.jpg' %} {% endif %}" alt="1.jpg">
+                    <!--<img src="{% static 'images/listing/1.jpg' %}" alt="1.jpg">-->
+                    <div class="thmb_cntnt2">
+                        <ul class="mb0">
+                            <li class="list-inline-item"><a class="text-white" href="#"><span
+                                        class="flaticon-photo-camera mr3"></span> 22</a></li>
+                            <li class="list-inline-item"><a class="text-white" href="#"><span
+                                        class="flaticon-play-button mr3"></span> 3</a></li>
+                        </ul>
+                    </div>
+                    <div class="thmb_cntnt3">
+                        <ul class="mb0">
+                            <li class="list-inline-item"><a href="#"><span
+                                        class="flaticon-shuffle-arrows"></span></a></li>
+                            <li class="list-inline-item"><a href="#"><span
+                                        class="flaticon-heart"></span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="details">
+                    <div class="wrapper">
+                        <h5 class="price">Rs {{car_detail.demand_price}}</h5>
+                        <h6 class="title"><a href="{% url 'customer:car_details' car_detail.id %}">{{car_detail.variant.model.brand.name}} {{car_detail.variant.model.name}} -{{car_detail.variant.name}}</a>
+                        </h6>
+                        <div class="listign_review">
+                            <ul class="mb0">
+                                <li class="list-inline-item"><a href="#"><i
+                                            class="fa fa-star"></i></a></li>
+                                <li class="list-inline-item"><a href="#"><i
+                                            class="fa fa-star"></i></a></li>
+                                <li class="list-inline-item"><a href="#"><i
+                                            class="fa fa-star"></i></a></li>
+                                <li class="list-inline-item"><a href="#"><i
+                                            class="fa fa-star"></i></a></li>
+                                <li class="list-inline-item"><a href="#"><i
+                                            class="fa fa-star"></i></a></li>
+                                <li class="list-inline-item"><a href="#">4.7</a></li>
+                                <li class="list-inline-item">(684 reviews)</li>
+                                <li class="list-inline-item"><a href="{% url 'wishlist_car' car_detail.id %}">Add to Withlist</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="listing_footer">
+                        <ul class="mb0">
+                            <li class="list-inline-item"><a href="#"><span
+                                        class="flaticon-road-perspective me-2"></span>{{car_detail.total_km_driven}}</a></li>
+                            <li class="list-inline-item"><a href="#"><span
+                                        class="flaticon-gas-station me-2"></span>{{car_detail.fuel_type}}</a></li>
+                            <li class="list-inline-item"><a href="#"><span
+                                        class="flaticon-gear me-2"></span>{{car_detail.transmission}}</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="mbp_pagination mt10">
+            <ul class="page_navigation">
+                <li class="page-item">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true"> <span
+                            class="fa fa-arrow-left"></span></a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#"><span class="fa fa-arrow-right"></span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,1087 @@
+{% extends 'Dealer/account/layout.html' %}
+{% load static %}
+
+{% block common_css %}
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <!-- Include Month Select Plugin CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+<style>
+
+    .edit-icon, .save-icon {
+        cursor: pointer;
+        color: blue;
+    }
+    .delete-icon {
+        cursor: pointer;
+        color: red;
+    }
+    .hidden {
+        display: none;
+    }
+/* Highlight style */
+.highlight {
+        background-color: yellow;
+    }      
+</style>
+{% csrf_token %}
+
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row mb-4">
+                <div class="col-lg-6 col-sm-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0 font-size-18">All Insurances
+
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="nav nav-pills nav-justified" role="tablist">
+                                <li class="nav-item waves-effect waves-light" role="presentation">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#all-cars" role="tab" aria-selected="true">
+                                        <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                        <span class="d-none d-sm-block">All Insurances <span class="badge bg-success">{{ insurance_count }}</span></span>
+                                    </a>
+                                </li>
+                                <li class="nav-item waves-effect waves-light " role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#live" role="tab" aria-selected="false" tabindex="-1">
+                                        <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                        <span class="d-none d-sm-block">Current Insurance <span class="badge bg-success">{{live_count}}</span></span>
+                                    </a>
+                                </li>
+                                <li class="nav-item waves-effect waves-light " role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#renewal" role="tab" aria-selected="false" tabindex="-1">
+                                        <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                        <span class="d-none d-sm-block">Renewal Insurance <span class="badge bg-success">{{ renewal_count }}</span></span>
+                                    </a>
+                                </li>
+                                <li class="nav-item waves-effect waves-light " role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#expired" role="tab" aria-selected="false" tabindex="-1">
+                                        <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                        <span class="d-none d-sm-block">Expired Insurance <span class="badge bg-success">{{ expired_count }}</span></span>
+                                    </a>
+                                </li>                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>             
+            <div class="row mb-2">
+                <div class="col-sm-4">
+                    <div class="search-box me-2 mb-2 d-inline-block">
+                        <div class="position-relative">
+                            <input type="text" class="form-control" id="searchInput" onkeyup="searchTable()" placeholder="Search...">
+                            <i class="bx bx-search-alt search-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="text-sm-end">
+                        <a type="button" href="#" 
+                            class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
+                            data-bs-toggle="modal" data-bs-target="#insuranceModal"><i
+                                class="fa fa-plus"></i> Add Insurance </a>
+                    </div>
+                </div>
+                <!-- end col-->
+            </div>
+
+
+           <!-- ===================== Modal =========================== -->
+<div class="modal fade bs-example-modal-lg" id="insuranceModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="insuranceModalLabel">Enter Insurance Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <form method='post' id="insuranceForm">
+                            {% csrf_token %}
+                            <!-- Hidden field for warranty ID to determine if editing -->
+                            <input type="hidden" id="insuranceId" name="insurance_id" value="{{ insurance.id }}">                           
+                            <div class="row mb-4">
+                                <!-- ===================== -->
+                                <div class="col-lg-6 col-sm-12">
+                                    <label>Contact</label>
+                                    <input type="text" class="form-control" name="user_phone_no" id="user_phone_no"
+                                        placeholder="Customer Number" required>
+                                        <div class="text-danger" id="phoneError" style="display: none;">
+                                            Phone number must be a 10-digit number starting with 6, 7, 8, or 9.
+                                        </div>
+                                </div>
+                                
+                                <!-- ===================== -->
+                                <div class="col-lg-6 col-sm-12">
+                                    <label> Insured Name</label>
+                                    <input type="text" class="form-control" id="user_name" name="user_name"
+                                        placeholder="Insured Name" required>
+                                        <div class="text-danger" id="NameError" style="display: none;">
+                                            Name must start with a capital letter and contain only alphabetic characters.
+                                        </div>
+                                </div>
+                                
+                            </div>
+
+                            <div class="row mb-4">
+                                <!-- =============== -->
+                                
+                                <div class="col-lg-12 col-sm-12">
+                                    <label> Insurer Name </label>
+                                    <select name="company" id="company" class="form-control">
+                                        <option value="" disabled selected>Select a company</option>
+                                        {% for company in companies %}
+                                            <option value="{{ company }}">{{ company }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <br></br>
+                                
+                                
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label> Policy No</label>
+                                    <input type="text" class="form-control" name="policy_no" id="policy_no"
+                                        placeholder="Policy Number">
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <!-- ========Month============= -->
+                                <div class="col-lg-12 col-sm-12">
+                                    <label>Date Range</label>
+                                    <div class="input-daterange input-group" id="datepicker6"
+                                        data-date-format="dd M, yyyy" data-date-autoclose="true"
+                                        data-provide="datepicker"
+                                        data-date-container='#datepicker6'>
+                                        <input type="date" class="form-control" id="risk_start_date" name="risk_start_date" required>
+                                        <input type="date" class="form-control" id="risk_end_date" name="risk_end_date" readonly>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <!-- ===================== -->
+                                <div class="col-lg-6 col-sm-12">
+                                    <label>Type </label>
+                                    <select name="type" id="">
+                                        <option value="ZD"> Zero Debt (ZD)</option>
+                                        <option value="Comprehensive"> Comprehensive</option>
+                                        <option value="TP"> Third Party (TP)</option>
+                                        
+                                    </select>
+                                </div>
+                                <!-- =============== -->
+                                <div class="col-lg-6 col-sm-12">
+                                    <label>Product</label>
+                                    <select name="product" id="">
+                                        <option value="Four Wheeler"> Four Wheeer</option>
+                                        <option value="Two Wheeler"> Two Wheeler</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="row mb-4">
+                                <!-- ===================== -->
+                                <div class="col-lg-6 col-sm-12">
+                                    <input type="radio" name="policy_type" value="New Policy">
+                                    <label for="New Policy">New Policy</label>
+                                </div>
+                                <!-- =============== -->
+                                <div class="col-lg-6 col-sm-12">
+                                    <input type="radio" name="policy_type" value="Renewal">
+                                    <label for="Renewal">Renewal</label>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label>IDV</label>
+                                    <input type="text" class="form-control" placeholder="IDV" id="idv" name="idv">
+                                </div>
+
+                                <div class="col-lg-6 col-sm-12">
+                                    <label>Total Premium</label>
+                                    <input type="text" class="form-control" id="total_premium" name="total_premium" placeholder="Total Premium">
+                                </div>
+                               
+                            
+                            </div>
+
+
+                            <div class="row mb-4">
+                                <!-- <div class="col-lg-6 col-sm-12">
+                                    <input type="text" class="form-control" name="total_premium" placeholder="Total Premium">
+                                </div> -->
+                                <!-- ===============-->
+                                <div class="col-lg-6 col-sm-12">
+                                    <label> Fuel Type</label>
+                                    <select name="fuel_type" id="fuel_type" class="form-control">
+                                        <option value="">Select fuel type</option>
+                                        <option value="Diesel"> Diesel</option>
+                                        <option value="Petrol"> Petrol</option>
+                                        <option value="Petrol Hybrid"> Petrol Hybrid</option>
+                                        <option value="CNG/LPG"> CNG/LPG</option>
+                                        <option value="Electric"> Electric</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label>NCB Status</label>
+                                    <select name="ncb_status" id="ncb_status" class="form-control">
+                                        <option value="">Select NCB Status</option>
+                                        <option value="0">0</option>
+                                        <option value="20%">20%</option>
+                                        <option value="25%">25%</option>
+                                        <option value="30%">30%</option>
+                                        <option value="35%">35%</option>
+                                        <option value="40%">40%</option>
+                                        <option value="45%">45%</option>
+                                        <option value="50%">50%</option>
+                                    </select>
+                                </div>
+                            </div>
+                                
+                            <div class="row mb-4">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <label>Vehicle brand </label>
+                                        <select name="car_brand" id="car_brand" class="form-control" required>
+                                            <option value="">Select Brand</option>
+                                            {% for brand in car_brand %}
+                                            <option value="{{brand.id}}"> {{brand.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="col-lg-6 col-sm-12">
+                                        <label>Vehicle Model </label>
+                                        <select name="car_model" id="car_model" class="form-control" required>
+                                            <option value="">Select Model</option>
+                                            <option value="City"> City</option>
+                                        </select>
+                                    </div>
+                            
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label>Vehicle Make</label>
+                                    <input type="text" class="form-control" name="next_renewal_date" id="month-year-picker" required>
+                                </div> 
+                                <div class="col-lg-6 col-sm-12">
+                                    <label>State </label>
+                                    <select name="rto_state" id="state" class="form-control" >
+                                        
+                                        <option value=""> Select State</option>
+                                        
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="city">City</label>
+                                    <select id="city" name="city" disabled>
+                                        <option value="" >Select your city</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center"> <!-- Changed justify-content-end to justify-content-center -->
+                                <div class="col-sm-9 text-center"> <!-- Added text-center to center the button within the column -->
+                                    <div>
+                                        <button type="submit" class="btn btn-primary w-md">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            <!-- <div class="row justify-content-end">
+                                <div class="col-sm-9">
+                                    <div>
+                                        <button type="submit"
+                                            class="btn btn-primary w-md">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                             -->
+                        </form>
+                    </div>
+                    <!-- end card body -->
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- ======================================= End Modal ============================================ -->
+
+
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="card">
+                        <div class="card-body p-0">
+
+                            <!-- Tab panes -->
+                            <div class="tab-content text-muted">
+                                <div class="tab-pane fade show active" id="all-cars" role="tabpanel">
+                                    <div class="card">
+                                        <div class="card-body p-0">
+                                            <div class="table-responsive">
+                                                <table
+                                                    class="table align-middle table-nowrap table-check table-bordered">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th class="align-middle">S No.</th>
+                                                            <th class="align-middle">Customer Number</th>
+                                                            <th class="align-middle">Insured Name</th>
+                                                            <th class="align-middle">Insurer Name</th>
+                                                            <th class="align-middle">Policy Number</th>
+                                                            <th class="align-middle">Risk Start Date</th>
+                                                            <th class="align-middle">Risk End Date</th>
+                                                            
+                                                            <th class="align-middle">Policy Type</th>
+                                                            <th class = "align-middle">Status</th>
+                                                            <th class="align-middle">Product</th>
+                                                            <th class="align-middle">Insurance Type</th>
+                                                            
+                                                            <th class="align-middle">IDV </th>
+                                                            <th class="align-middle">Total Premium</th>
+                                                            <th class="align-middle">Fuel Type</th>
+                                                            <th class="align-middle"> NCB </th>
+                                                            <th class="align-middle">Vehicle Brand</th>
+                                                            <th class="align-middle">Vehicle Model</th>
+                                                            <th class="align-middle">Vehicle Make</th>
+                                                            
+                                                            <th class="align-middle">RTO State</th>
+                                                            <th class="align-middle">City</th>
+                                                            <th class="align-middle">Action</th>
+                                                            <th class="align-middle">Edit</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for insurance in insurance_list %}
+                                                        <tr data-id="{{insurance.id}}">
+                                                            <td>{{ forloop.counter}}</td>
+                                                            <td>{{ insurance.user_phone_no}}</td>
+                                                            <td>{{ insurance.insured_name}}</td>
+                                                            
+                                                            <td>{{ insurance.insurer_name}}</td>
+                                                            <td>{{ insurance.policy_no}}</td>
+                                                            <td>{{ insurance.risk_start_date}}</td>
+                                                            <td>{{ insurance.risk_end_date}}</td>
+                                                           
+                                                            <td>{{ insurance.policy_type}}</td>
+                                                            <td>
+                                                                {% if insurance.status == 'live' %}
+                                                                    <span class="badge badge-pill badge-soft-success font-size-12">Live</span>
+                                                                {% elif insurance.status == 'expired' %}
+                                                                    <span class="badge badge-pill badge-soft-danger font-size-12">Expired</span>
+                                                                {% elif insurance.status == 'renew' %}
+                                                                    <span class="badge badge-pill badge-soft-warning font-size-12">Renew</span>
+                                                                {% else %}
+                                                                    <span class="badge badge-pill badge-soft-secondary font-size-12">Unknown</span>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>{{ insurance.product}}</td>
+                                                            <td>{{ insurance.type}}</td>
+                                                            <td>{{ insurance.idv}}</td>
+        
+                                                            <td>{{ insurance.total_premium}}</td>
+                                                            <td>{{ insurance.fuel_type}}</td>
+                                                            <td>{{ insurance.ncb_status}}</td>
+                                                            <td>{{ insurance.car_model.brand.name}}</td>
+                                                            <td>{{ insurance.car_model.name}}</td>
+                                                            <td>{{ insurance.next_renewal_date}}</td>
+                                                            <td>{{ insurance.rto_state}}</td>
+                                                            <td>{{ insurance.city}}</td>
+                                                            <td>
+                                                                <form action="{% url 'dealer:delete-insurance' insurance.id %}" method="POST" onsubmit="return confirm('Are you sure you want to delete this insurance?');">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                                </form>
+                                                            </td>
+                                                            <td>
+                                                            <button class="edit-btn" onclick="resetModalForm()"
+                                                            data-bs-toggle="modal" data-bs-target="#insuranceModal{{insurance.id}}"><i class="fa fa-edit"></i>
+                                                            <span class="d-none d-sm-inline-block ">Edit</span></button>
+                                                             {% include 'Dealer/insurance/add_insurance_modal.html' with insurance=insurance %}
+                                                            </td>
+                                                                <!-- <td><span class="text-danger" onclick="deleteRow(this)"><i class="mdi mdi-delete font-size-18"></i></span></td>
+                                                            <td><span class="edit-icon" onclick="editRow(this)">✏️</span>
+                                                                <span class="save-icon hidden" onclick="saveRow(this,'{{ insurance.id }}')">💾</span>
+                                                            </td>                                                      -->
+                                 
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="live" role="tabpanel">
+                                        <div class="card">
+                                            <div class="card-body p-0">
+                                                <div class="table-responsive">
+                                                    <table
+                                                        class="table align-middle table-nowrap table-check table-bordered">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th class="align-middle">S No.</th>
+                                                                <th class="align-middle">Customer Number</th>
+                                                                <th class="align-middle">Insured Name</th>
+                                                                <th class="align-middle">Insurer Name</th>
+                                                                <th class="align-middle">Policy Number</th>
+                                                                <th class="align-middle">Risk Start Date</th>
+                                                                <th class="align-middle">Risk End Date</th>
+                                                                <th class="align-middle"> Reminder</th>
+                                                                <th class="align-middle">Policy Type</th>
+                                                                <th class="align-middle">Status</th>
+                                                                <th class="align-middle">Product</th>
+                                                                <th class="align-middle">Insurance Type</th>
+                                                                <th class="align-middle">IDV </th>
+                                                                <th class="align-middle">Total Premium</th>
+                                                                <th class="align-middle">Fuel Type</th>
+                                                                <th class="align-middle"> NCB </th>
+                                                                <th class="align-middle">Vehicle Brand</th>
+                                                                <th class="align-middle">Vehicle Model</th>
+                                                                <th class="align-middle">Vehicle Make</th>
+                                                                
+                                                                <th class="align-middle">RTO State</th>
+                                                                <th class="align-middle">City</th>
+                                                                <th class="align-middle">Action</th>
+                                                                
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% if current %}
+                                                            {% for insurance,expiry,reminder in current %}
+                                                            <tr data-id="{{insurance.id}}">
+                                                                <td>{{ forloop.counter}}</td>
+                                                                <td>{{ insurance.user_phone_no}}</td>
+                                                                <td>{{ insurance.insured_name}}</td>
+                                                                
+                                                                <td>{{ insurance.insurer_name}}</td>
+                                                                <td>{{ insurance.policy_no}}</td>
+                                                                <td>{{ insurance.risk_start_date}}</td>
+                                                                <td>{{ insurance.risk_end_date}}</td>
+                                                                
+                                                                <td>{{reminder}}</td>
+                                                                <td>{{ insurance.policy_type}}</td>
+                                                                <td>
+                                                                    <span class="badge badge-pill badge-soft-success font-size-12">Live</span>
+                                                                </td>
+                                                                <td>{{ insurance.product}}</td>
+                                                                <td>{{ insurance.type}}</td>
+                                                                <td>{{ insurance.idv}}</td>
+                        
+                                                                <td>{{ insurance.total_premium}}</td>
+                                                                <td>{{ insurance.fuel_type}}</td>
+                                                                <td>{{ insurance.ncb_status}}</td>
+                                                                <td>{{ insurance.car_model.brand.name}}</td>
+                                                                <td>{{ insurance.car_model.name}}</td>
+                                                                <td>{{ insurance.next_renewal_date}}</td>
+                                                                <td>{{ insurance.rto_state}}</td>
+                                                                <td>{{ insurance.city}}</td>
+                                                                <td>
+                                                                
+                                                                    <button class="btn btn-success btn-sm" onclick="resetModalForm()"
+                                                                data-bs-toggle="modal" data-bs-target="#renewModal{{insurance.id}}"><i class="fa fa-edit"></i>
+                                                                <span class="d-none d-sm-inline-block ">Renewal</span></button>
+                                                                 {% include 'Dealer/insurance/add_insurance_modal.html' with insurance=insurance %}
+                                                                </td>
+                                                    
+                                                            </tr>
+                                                            {% endfor %}
+                                                            {% else %}
+                                                                <tr>
+                                                                    <td colspan="4">No insurance available</td>
+                                                                </tr>
+                                                            {% endif %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 <!-- renewal -->
+                                    <div class="tab-pane fade" id="renewal" role="tabpanel">
+                                        <div class="card">
+                                            <div class="card-body p-0">
+                                                <div class="table-responsive">
+                                                    <table
+                                                        class="table align-middle table-nowrap table-check table-bordered">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th class="align-middle">S No.</th>
+                                                                <th class="align-middle">Customer Number</th>
+                                                                <th class="align-middle">Insured Name</th>
+                                                                <th class="align-middle">Insurer Name</th>
+                                                                <th class="align-middle">Policy Number</th>
+                                                                <th class="align-middle">Risk Start Date</th>
+                                                                <th class="align-middle">Risk End Date</th>
+                                                                <th class="align-middle"> Reminder</th>
+                                                                <th class="align-middle">Policy Type</th>
+                                                                <th class="align-middle">Status</th>
+                                                                <th class="align-middle">Product</th>
+                                                                <th class="align-middle">Insurance Type</th>
+                                                                <th class="align-middle">IDV </th>
+                                                                <th class="align-middle">Total Premium</th>
+                                                                <th class="align-middle">Fuel Type</th>
+                                                                <th class="align-middle"> NCB </th>
+                                                                <th class="align-middle">Vehicle Brand</th>
+                                                                <th class="align-middle">Vehicle Model</th>
+                                                                <th class="align-middle">Vehicle Make</th>
+                                                                
+                                                                <th class="align-middle">RTO State</th>
+                                                                <th class="align-middle">City</th>
+                                                                <th class="align-middle">Action</th>
+                                                                
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% if renewal %}
+                                                            {% for insurance,expiry,reminder in renewal %}
+                                                            <tr data-id="{{insurance.id}}">
+                                                                <td>{{ forloop.counter}}</td>
+                                                                <td>{{ insurance.user_phone_no}}</td>
+                                                                <td>{{ insurance.insured_name}}</td>
+                                                                
+                                                                <td>{{ insurance.insurer_name}}</td>
+                                                                <td>{{ insurance.policy_no}}</td>
+                                                                <td>{{ insurance.risk_start_date}}</td>
+                                                                <td>{{ insurance.risk_end_date}}</td>
+                                                                
+                                                                <td>{{reminder}}</td>
+                                                                <td>{{ insurance.policy_type}}</td>
+                                                                <td>
+                                                                    <span class="badge badge-pill badge-soft-warning font-size-12">Renew</span>
+                                                                </td>
+                                                                <td>{{ insurance.product}}</td>
+                                                                <td>{{ insurance.type}}</td>
+                                                                <td>{{ insurance.idv}}</td>
+                        
+                                                                <td>{{ insurance.total_premium}}</td>
+                                                                <td>{{ insurance.fuel_type}}</td>
+                                                                <td>{{ insurance.ncb_status}}</td>
+                                                                <td>{{ insurance.car_model.brand.name}}</td>
+                                                                <td>{{ insurance.car_model.name}}</td>
+                                                                <td>{{ insurance.next_renewal_date}}</td>
+                                                                <td>{{ insurance.rto_state}}</td>
+                                                                <td>{{ insurance.city}}</td>
+                                                                <td>
+                                                                
+                                                                
+                                                                    <button class="btn btn-success btn-sm" onclick="resetModalForm()"
+                                                                data-bs-toggle="modal" data-bs-target="#renewModal{{insurance.id}}"><i class="fa fa-edit"></i>
+                                                                <span class="d-none d-sm-inline-block ">Renewal</span></button>
+                                                                 {% include 'Dealer/insurance/add_insurance_modal.html' with insurance=insurance %}
+                                                                </td>
+                                                                <!-- <td><span class="text-danger" onclick="deleteRow(this)"><i class="mdi mdi-delete font-size-18"></i></span></td>
+                                                                <td><span class="edit-icon" onclick="editRow(this)">✏️</span>
+                                                                    <span class="save-icon hidden" onclick="saveRow(this,'{{ insurance.id }}')">💾</span>
+                                                                </td>   -->
+                                                            </tr>
+                                                            {% endfor %}
+                                                            {% else %}
+                                                                <tr>
+                                                                    <td colspan="4">No insurance available</td>
+                                                                </tr>
+                                                            {% endif %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- expired -->
+                                    <div class="tab-pane fade" id="expired" role="tabpanel">
+                                        <div class="card">
+                                            <div class="card-body p-0">
+                                                <div class="table-responsive">
+                                                    <table
+                                                        class="table align-middle table-nowrap table-check table-bordered">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th class="align-middle">S No.</th>
+                                                                <th class="align-middle">Customer Number</th>
+                                                                <th class="align-middle">Insured Name</th>
+                                                                <th class="align-middle">Insurer Name</th>
+                                                                <th class="align-middle">Policy Number</th>
+                                                                <th class="align-middle">Risk Start Date</th>
+                                                                <th class="align-middle">Risk End Date</th>
+                                                                <th class="align-middle">Reminder Date</th>
+                                                                <th class="align-middle">Policy Type</th>
+                                                                <th class="align-middle">Status</th>
+                                                                <th class="align-middle">Product</th>
+                                                                <th class="align-middle">Insurance Type</th>
+                                                                <th class="align-middle">IDV </th>
+                                                                <th class="align-middle">Total Premium</th>
+                                                                <th class="align-middle">Fuel Type</th>
+                                                                <th class="align-middle"> NCB </th>
+                                                                <th class="align-middle">Vehicle Brand</th>
+                                                                <th class="align-middle">Vehicle Model</th>
+                                                                <th class="align-middle">Vehicle Make</th>
+                                                                
+                                                                <th class="align-middle">RTO State</th>
+                                                                <th class="align-middle">City</th>
+                                                                <th class="align-middle">Action</th>
+                                                                
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% if expired %}
+                                                            {% for insurance,expiry,reminder in expired %}
+                                                            <tr data-id="{{insurance.id}}">
+                                                                    <td >{{ forloop.counter}}</td>
+                                                                    <td>{{ insurance.user_phone_no}}</td>
+                                                                    <td>{{ insurance.insured_name}}</td>
+                                                                    
+                                                                    <td>{{ insurance.insurer_name}}</td>
+                                                                    <td>{{ insurance.policy_no}}</td>
+                                                                    <td>{{ insurance.risk_start_date}}</td>
+                                                                    <td>{{ expiry}}</td>
+                                                                    <td>{{reminder}}</td>
+                                                                    <td>{{ insurance.policy_type}}</td>
+                                                                    <td>
+                                                                        <span class="badge badge-pill badge-soft-danger font-size-12">Expired</span>
+                                                                    </td>
+                                                                    <td>{{ insurance.product}}</td>
+                                                                    <td>{{ insurance.type}}</td>
+                                                                    <td>{{ insurance.idv}}</td>
+                            
+                                                                    <td>{{ insurance.total_premium}}</td>
+                                                                    <td>{{ insurance.fuel_type}}</td>
+                                                                    <td>{{ insurance.ncb_status}}</td>
+                                                                    <td>{{ insurance.car_model.brand.name}}</td>
+                                                                    <td>{{ insurance.car_model.name}}</td>
+                                                                    <td>{{ insurance.next_renewal_date}}</td>
+                                                                    <td>{{ insurance.rto_state}}</td>
+                                                                    <td>{{ insurance.city}}</td>
+                                                                    <td>
+                                                                        <!-- Button to open the modal and renew the insurance -->
+                                                                        <button class="btn btn-success btn-sm"
+                                                                    
+                                                                            data-bs-toggle ="modal" data-bs-target="#renewModal{{insurance.id}}">
+                                                                            Renewal
+                                                                            
+                                                                        </button>
+                                                                        
+                                                                 {% include 'Dealer/insurance/renew.html' with insurance=insurance %}
+                                                                    </td>
+                                                                     
+                                                            </tr>
+                                                            {% endfor %}
+                                                            {% else %}
+                                                                <tr>
+                                                                    <td colspan="4">No insurance available</td>
+                                                                </tr>
+                                                            {% endif %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>    
+                    </div> 
+                </div>
+                <!-- end row -->
+            </div>
+        </div>
+    </div> <!-- container-fluid -->
+<!-- End Page-content -->
+
+
+{% endblock %}
+
+{% block js %}
+
+
+
+<script>
+    function editRow(editIcon) {
+        const row = editIcon.closest('tr');
+        const editableCells = row.querySelectorAll('.editable');
+        
+        // Replace text in cells with input fields for editing
+        editableCells.forEach(cell => {
+            const currentText = cell.textContent;
+            cell.innerHTML = `<input type="text" value="${currentText}">`;
+        });
+        
+        // Toggle the edit and save icons
+        editIcon.classList.add('hidden');
+        row.querySelector('.save-icon').classList.remove('hidden');
+    }
+
+    function saveRow(saveIcon) {
+        const row = saveIcon.closest('tr');
+        const editableCells = row.querySelectorAll('.editable');
+        const rowId = row.getAttribute('data-id');
+
+        // Collect the updated data
+        const updatedData = [];
+        editableCells.forEach(cell => {
+            const input = cell.querySelector('input');
+            const newText = input.value;
+            updatedData.push(newText);
+            cell.textContent = newText;  // Replace input with the new text
+        });
+
+        // Optional: Make an AJAX request to save the updated data to the backend
+        // Example (using fetch):
+        /*
+        fetch(`/edit/${rowId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: updatedData[0] }),
+        }).then(response => response.json()).then(data => {
+            if (!data.success) {
+                alert("Failed to save the record");
+            }
+        });
+        */
+
+        // Toggle the save and edit icons back
+        saveIcon.classList.add('hidden');
+        row.querySelector('.edit-icon').classList.remove('hidden');
+
+    } 
+    </script>
+ <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+ <!-- Include Month Select Plugin JS -->
+ <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>    
+ <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        flatpickr("#month-year-picker", {
+            dateFormat: "Y-m",
+            mode: "single",
+            showMonths: 1,
+            enableTime: false,
+            allowInput: true,
+            defaultdate: new Date(),
+            maxDate: new Date(), 
+            plugins: [
+                new monthSelectPlugin({
+                    shorthand: true, // Use shorthand month names (optional)
+                    dateFormat: "Y-m",
+                    altFormat: "F Y",
+                    altInput: true // Display the formatted date in an alternative input
+                })
+            ],
+            onChange: function(selectedDates, dateStr, instance) {
+                // Optional: Handle change event if needed
+            }
+        });
+    });
+    </script>
+<script>
+    document.getElementById('risk_start_date').addEventListener('change', function() {
+      const startDate = new Date(this.value);
+      
+      if (isNaN(startDate)) return; // Check for valid date
+  
+      const endDate = new Date(startDate);
+      endDate.setFullYear(startDate.getFullYear() + 1);
+      endDate.setDate(endDate.getDate() - 1);
+  
+      // Format the end date to 'YYYY-MM-DD'
+      const formattedEndDate = endDate.toISOString().split('T')[0];
+  
+      // Set the calculated end date to the end date input field
+      document.getElementById('risk_end_date').value = formattedEndDate;
+    });
+</script>
+
+<script>
+
+    document.getElementById('user_name').addEventListener('input', function() {
+    const userName = this.value;
+    const userNameError = document.getElementById('NameError');
+    const namePattern = /^[A-Z][a-zA-Z]*(?: [A-Z][a-zA-Z]*)*$/;
+
+
+    if (!namePattern.test(userName)) {
+        userNameError.style.display = 'block';
+    } else {
+        userNameError.style.display = 'none';
+    }
+    });    
+
+    document.getElementById('user_phone_no').addEventListener('input', function() {
+    const phoneNumber = this.value;
+    const phoneError = document.getElementById('phoneError');
+    const phonePattern = /^[6789]\d{9}$/;
+
+    if (!phonePattern.test(phoneNumber)) {
+        phoneError.style.display = 'block';
+    } else {
+        phoneError.style.display = 'none';
+    }
+    });
+</script>    
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const statesCities = {
+    "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Tirupati", "Kurnool", "Rajahmundry", "Kadapa"],
+    "Arunachal Pradesh": ["Itanagar", "Tawang", "Ziro", "Pasighat", "Bomdila", "Aalo", "Tezu", "Roing"],
+    "Assam": ["Guwahati", "Dibrugarh", "Silchar", "Jorhat", "Tezpur", "Nagaon", "Tinsukia", "Sivasagar"],
+    "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia", "Darbhanga", "Bihar Sharif", "Ara"],
+    "Chhattisgarh": ["Raipur", "Bilaspur", "Durg", "Korba", "Bhilai", "Jagdalpur", "Rajnandgaon", "Raigarh"],
+    "Goa": ["Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda", "Bicholim", "Curchorem", "Valpoi"],
+    "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar", "Junagadh", "Gandhinagar"],
+    "Haryana": ["Chandigarh", "Faridabad", "Gurugram", "Panipat", "Ambala", "Karnal", "Hisar", "Rohtak"],
+    "Himachal Pradesh": ["Shimla", "Manali", "Dharamshala", "Solan", "Mandi", "Kullu", "Chamba", "Bilaspur"],
+    "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Deoghar", "Hazaribagh", "Giridih", "Ramgarh"],
+    "Karnataka": ["Bengaluru", "Mysore", "Mangalore", "Hubli", "Belgaum", "Davangere", "Ballari", "Bijapur"],
+    "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Alappuzha", "Palakkad", "Kollam", "Kannur"],
+    "Madhya Pradesh": ["Bhopal", "Indore", "Gwalior", "Jabalpur", "Ujjain", "Sagar", "Ratlam", "Rewa"],
+    "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik", "Aurangabad", "Solapur", "Amravati", "Kolhapur"],
+    "Manipur": ["Imphal", "Churachandpur", "Thoubal", "Bishnupur", "Ukhrul", "Senapati", "Kakching", "Tamenglong"],
+    "Meghalaya": ["Shillong", "Tura", "Nongstoin", "Jowai", "Baghmara", "Williamnagar", "Mawkyrwat", "Cherrapunji"],
+    "Mizoram": ["Aizawl", "Lunglei", "Champhai", "Serchhip", "Kolasib", "Lawngtlai", "Saiha", "Mamit"],
+    "Nagaland": ["Kohima", "Dimapur", "Mokokchung", "Tuensang", "Wokha", "Zunheboto", "Phek", "Kiphire"],
+    "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Puri", "Sambalpur", "Balasore", "Berhampur", "Baripada"],
+    "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala", "Bathinda", "Mohali", "Hoshiarpur", "Phagwara"],
+    "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Ajmer", "Bikaner", "Kota", "Alwar", "Bharatpur"],
+    "Sikkim": ["Gangtok", "Namchi", "Mangan", "Gyalshing", "Ravangla", "Jorethang", "Singtam", "Chungthang"],
+    "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Tirunelveli", "Vellore", "Erode"],
+    "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Khammam", "Karimnagar", "Ramagundam", "Mahbubnagar", "Adilabad"],
+    "Tripura": ["Agartala", "Udaipur", "Dharmanagar", "Kailasahar", "Belonia", "Ambassa", "Amarpur", "Kamalpur"],
+    "Uttar Pradesh": ["Lucknow", "Kanpur", "Varanasi", "Agra", "Allahabad", "Meerut", "Aligarh", "Ghaziabad"],
+    "Uttarakhand": [
+        "Dehradun", "Haridwar", "Roorkee", "Haldwani", "Nainital", "Rishikesh", "Almora", "Pithoragarh", 
+        "Rudrapur", "Kashipur", "Mussoorie", "Tehri", "Chamoli", "Bageshwar", "Lansdowne", "Kotdwar", 
+        "Ranikhet", "Uttarkashi", "Pauri"
+    ],
+    "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Siliguri", "Asansol", "Darjeeling", "Jalpaiguri", "Kharagpur"],
+    
+    // Union Territories
+    "Andaman and Nicobar Islands": ["Port Blair", "Diglipur", "Car Nicobar", "Havelock Island", "Rangat", "Mayabunder"],
+    "Chandigarh": ["Chandigarh"],
+    "Dadra and Nagar Haveli and Daman and Diu": ["Daman", "Silvassa", "Diu"],
+    "Lakshadweep": ["Kavaratti", "Agatti", "Amini", "Andrott", "Kalpeni", "Minicoy"],
+    "Delhi": ["New Delhi", "Dwarka", "Rohini", "Pitampura", "Janakpuri", "Karol Bagh"],
+    "Puducherry": ["Puducherry", "Karaikal", "Yanam", "Mahe"],
+    "Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag", "Baramulla", "Kathua", "Sopore", "Pulwama"],
+    "Ladakh": ["Leh", "Kargil", "Nubra Valley", "Zanskar", "Dras", "Suru Valley"]
+};
+
+        const stateDropdown = document.getElementById('state');
+        const cityDropdown = document.getElementById('city');
+
+        // Populate state dropdown
+        for (const state in statesCities) {
+            const option = document.createElement('option');
+            option.value = state;
+            option.textContent = state;
+            stateDropdown.appendChild(option);
+        }
+
+        // Handle state selection
+        stateDropdown.addEventListener('change', function() {
+            const selectedState = this.value;
+            const cities = statesCities[selectedState] || [];
+            
+            // Clear and disable the city dropdown if no state is selected
+            cityDropdown.innerHTML = '<option value="" disabled selected>Select your city</option>';
+            cityDropdown.disabled = cities.length === 0;
+
+            // Populate the city dropdown based on selected state
+            cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                cityDropdown.appendChild(option);
+            });
+        });
+    });
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        function formatNumber(num) {
+            num = num.toString();
+            // Split the integer part if there's a decimal part
+            let integerPart = num.split(".")[0];
+
+            // Format the integer part according to the Indian numbering system
+            let lastThreeDigits = integerPart.slice(-3);
+            let otherDigits = integerPart.slice(0, -3);
+            if (otherDigits !== '') {
+                lastThreeDigits = ',' + lastThreeDigits;
+            }
+            // Add commas after every two digits for the Indian numbering system
+            let formattedNumber = otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThreeDigits;
+
+            return formattedNumber;
+        }
+
+        $('#total_premium').on('input', function() {
+            let value = $(this).val().replace(/,/g, ''); // Remove existing commas
+            if (!isNaN(value) && value.length > 0) {
+                $(this).val(formatNumber(value));
+            }
+        });
+    });
+</script>
+
+<script>
+    function resetModalForm(){
+        document.getElementById('car_brand').disabled = false;
+        document.getElementById('car_model').disabled = false;
+        document.getElementById('policy_no').disabled = false;
+        document.getElementById('month-year-picker').disabled = false;
+        document.getElementById('fuel_type').disabled = false;        
+        document.getElementById('insuranceForm').reset();
+    }
+</script>
+
+
+<script>
+    function disableFields() {
+        // document.getElementById('user_fname').disabled = true;
+        // document.getElementById('user_phone_no').disabled = true;
+        // document.getElementById('user_mname').disabled = true;
+        // document.getElementById('user_lname').disabled = true;
+        document.getElementById('car_brand').disabled = true;
+        document.getElementById('car_model').disabled = true;
+        document.getElementById('policy_no').disabled = true;
+        document.getElementById('month-year-picker').disabled = true;
+        document.getElementById('fuel_type').disabled = true;
+    }
+</script>
+    
+
+    
+<script>
+    // Function to search in the currently active tab's table
+    function searchTable() {
+        const input = document.getElementById("searchInput").value.toUpperCase();
+        const activeTabContent = document.querySelector(".tab-pane.show.active"); // Find the active tab's content
+        const table = activeTabContent.querySelector("table"); // Get the table in the active tab
+        const tr = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < tr.length; i++) {
+            const tds = tr[i].getElementsByTagName("td");
+            let matchFound = false;
+
+            for (let j = 0; j < tds.length; j++) {
+                const td = tds[j];
+                const txtValue = td.textContent || td.innerText;
+
+                if (txtValue.toUpperCase().indexOf(input) > -1) {
+                    matchFound = true;
+                    const regex = new RegExp(`(${input})`, "gi");
+                    td.innerHTML = txtValue.replace(regex, "<span class='highlight'>$1</span>"); // Highlight matches
+                } else {
+                    td.innerHTML = txtValue; // Reset the cell content if no match
+                }
+            }
+
+            tr[i].style.display = matchFound ? "" : "none"; // Show or hide rows based on the search
+        }
+    }
+</script>
+
+<script>
+    $(document).ready(function() {
+        function formatNumber(num) {
+            num = num.toString();
+            // Split the integer part if there's a decimal part
+            let integerPart = num.split(".")[0];
+
+            // Format the integer part according to the Indian numbering system
+            let lastThreeDigits = integerPart.slice(-3);
+            let otherDigits = integerPart.slice(0, -3);
+            if (otherDigits !== '') {
+                lastThreeDigits = ',' + lastThreeDigits;
+            }
+            // Add commas after every two digits for the Indian numbering system
+            let formattedNumber = otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThreeDigits;
+
+            return formattedNumber;
+        }
+
+        $('#idv').on('input', function() {
+            let value = $(this).val().replace(/,/g, ''); // Remove existing commas
+            if (!isNaN(value) && value.length > 0) {
+                $(this).val(formatNumber(value));
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+
+    $('#car_brand').change(async function() {
+        var brandID = $(this).val();
+        console.log('brandID = ', brandID)
+        await $.get('/get_car_model/', { car_brand_id: brandID }, async function(data) {
+            var carModelSelect = $('#car_model');
+            console.log('carModelSelect= ',carModelSelect)
+            var model_text = '<option value="">Select Model</option>'
+            await $.each(data, function(index, model) {
+                console.log('data = ',data)
+                var a = '<option value='+model.id+'>'+model.name+'</option>'
+                model_text += a
+<!--                carModelSelect.append('<option data-tokens="" value='+model.id+'>'+model.name+'</option>');-->
+            });
+             carModelSelect.html(model_text);
+
+        });
+    });
+
+    $('#car_model').change(function() {
+        var carModelId = $(this).val();
+        $.get('/get_car_variant/', { car_model_id: carModelId }, function(data) {
+            var carVariantSelect = $('#car_variants');
+            carVariantSelect.empty();
+            carVariantSelect.append($('<option>', {
+                    value: "",
+                    text: "Select Variants"
+                }));
+            $.each(data, function(index, variant) {
+                carVariantSelect.append($('<option>', {
+                    value: variant.id,
+                    text: variant.name
+                }));
+            });
+        });
+    });
+});
+</script>
+
+
+{% endblock %}

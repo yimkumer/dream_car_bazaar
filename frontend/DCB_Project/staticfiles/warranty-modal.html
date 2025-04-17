@@ -1,0 +1,206 @@
+
+
+{% block common_css %}
+    <!-- Flatpickr Styles -->
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css" rel="stylesheet">
+{% endblock %}
+
+
+        <!-- ===================== Modal =========================== -->
+        <div class="modal fade bs-example-modal-lg" id="editModal{{ warranty.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger" id="editModalLabel{{ warranty.id }}">Edit Warranty Details </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card">
+                            <div class="card-body">
+                                <form method="post" id="warrantyForm">
+                                    {% csrf_token %}
+                                    <!-- Hidden field for warranty ID to determine if editing -->
+                                    <input type="hidden" id="warrantyId" name="warranty_id" value="{{warranty.id}}">
+                                    <input type="hidden" id="carbrandHidden" name="car_brand" />
+                                    <input type="hidden" id="carmodelHidden" name="car_model" />
+                                
+                                    <div class="row mb-4">
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label> First Name </label>
+                                            <input type="text" class="form-control"
+                                                placeholder="First Name" name="user_fname" id="user_fname_{{ warranty.id }}"   disabled required>
+                                                <div class="text-danger" id="firstNameError" style="display: none;">
+                                                    Name must start with a capital letter and contain only alphabetic characters.
+                                                </div>
+                                        </div>
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Middle Name</label>
+                                            <input type="text" class="form-control"
+                                                placeholder="Middle Name" name="user_mname" id="user_mname_{{ warranty.id }}"  disabled>
+                                                <div class="text-danger" id="midNameError" style="display: none;">
+                                                    Name must start with a capital letter and contain only alphabetic characters.
+                                                </div>
+                                        </div>
+                                        
+                                        <p></p>
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Last Name</label>
+                                            <input type="text" class="form-control"
+                                                placeholder="Last Name" name="user_lname" id="user_lname_{{ warranty.id }}" disabled required>
+                                                <div class="text-danger" id="lastNameError" style="display: none;">
+                                                    Name must start with a capital letter and contain only alphabetic characters.
+                                                </div>
+                                        </div>
+                                        <!-- ===================== -->
+                                        
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Contact</label>
+                                            <input type="text" class="form-control"
+                                                placeholder="Phone Number" name="user_phone_no" id="user_phone_no" value="{{ warranty.user_phone_no|default:'' }}" disabled  required>
+                                        </div>
+                                        <div class="text-danger" id="phoneError" style="display: none;">
+                                            Phone number must be a 10-digit number starting with 6, 7, 8, or 9.
+                                        </div>
+
+                                    </div>
+
+
+
+
+                                    <div class="row mb-4">
+                                        <!-- =============== -->
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Vehicle Registration No</label>
+                                            <input type="text" class="form-control" id="vehicle_registration_no"
+                                                placeholder="Vehicle Registration Number" name="vehicle_registration_no"  value="{{ warranty.vehicle_registration_no|default:'' }}" disabled required>
+                                        </div>
+                                        <!-- ======================= -->
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Warranty Period </label>
+                                            <!--<input class="form-control" type="text" id="warranty_period" name="warranty_period" value="{{warranty.warranty_period}}">-->
+                                            <select class="form-control"  id="warranty_period" name="warranty_period" value="{{warranty.warranty_period}}" required>
+                                                <option value=""> Choose Warranty Period(in months)</option>
+
+                                                <option value="6" {% if warranty.warranty_period == 6 %}selected{% endif %}>6</option>
+                                                <option value="12" {% if warranty.warranty_period == 12 %}selected{% endif %}>12</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row mb-4">
+                                         <!-- =============== -->
+                                         <div class="col-lg-6 col-sm-12">
+                                            <label>Purchase Date</label>
+                                            <div class="position-relative" id="datepicker4">
+                                                <input type="date" class="form-control"
+                                                    placeholder="Enter Month" name="purchase_date" required>
+                                            </div>
+                                            <br></br>
+                                            <div class="col-lg-6 col-sm-12">
+                                                <label> Warranty Type</label>
+                                                <!--<input type="text" id="warrantyType" name="warrantyType" class="form-control" value="{{warranty.warranty_type}}">-->
+                                                <select id="warrantyType" name="warrantyType" class="form-control" required>
+                                                    <option value=""> Select Warranty Type</option>
+                                                    <option value="Comprehensive"  {% if warranty.warranty_type == "Comprehensive"  %} selected {% endif %}>Comprehensive</option>
+                                                    <option value="Engine & Transmission"  {% if warranty.warranty_type == "Engine & Transmission"  %} selected {% endif %} >Engine & Transmission </option>
+                                                </select>
+                                            </div>
+                                          </div>
+                                        <!-- =============== -->
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label for="rsa">Roadside Assistant</label>
+                                            <select class="form-control" id="rsa" name="rsa" onchange="toggleDateInput()" required>
+                                                <option value=""> Select </option>
+                                                <option value="No" {% if warranty.roadside_assistant_date == None %}selected{% endif %}> No </option>
+                                                <option value="Yes" {% if warranty.roadside_assistant_date %}selected{% endif %}>Yes</option>
+                                                
+                                                
+                                            </select>
+
+                                            
+                                            <div id="dateFieldContainer" class="position-relative"></div>                                                
+                                            
+
+                                            <script>
+                                              function toggleDateInput() {
+                                                const rsa = document.getElementById('rsa').value;
+                                                const dateFieldContainer = document.getElementById('dateFieldContainer');
+                                          
+                                                // Clear any existing date input
+                                                dateFieldContainer.innerHTML = '';
+                                          
+                                                // If Yes is selected, create and add a date input
+                                                if (rsa === 'Yes') {
+                                                  const dateInput = document.createElement('input');
+                                                  dateInput.type = 'date';
+                                                  dateInput.name = 'dateField';
+                                                  dateInput.id = 'dateField';
+                                                  dateFieldContainer.appendChild(dateInput);
+                                                }
+                                              }
+                                            </script>
+                                          
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <!-- =========== -->
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Vehicle brand: </label>
+                                            
+                                            <input type="text" name="car_brand" id="car_brand" class="form-control" value="{{warranty.car_model.brand.name}}" disabled>
+                                            <!--<select name="car_brand" id="car_brand" class="form-control" disabled>-->
+                                            <!--    <option value="" disabled selected>Select Brand</option>-->
+                                            <!--    {% for brand in car_brand %}-->
+
+                                            <!--        {% if warranty.car_model.brand.id == brand.id %}-->
+                                            <!--        <option value="{{brand.id}}" selected>{{brand.name}}</option>-->
+                                            <!--        {% else %}-->
+                                            <!--            <option value="{{brand.id}}">{{brand.name}}</option>-->
+                                            <!--        {% endif %}-->
+                                            <!--    {% endfor %}-->
+                                            <!--</select>-->
+                                        </div>
+                                        <!-- =============== -->
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Vehicle Model: </label>
+                                            <input type="text" name="car_model" id="car_model" class="form-control" value="{{warranty.car_model.name}}" disabled>
+                                            <!--<select name="car_model" id="car_model" class="form-control" required>-->
+                                            <!--    <option value="" disabled selected>Select Model</option>-->
+                                            <!--    <option value="City"> City</option>-->
+                                                <!--<option value="{{warranty.car_model.id}}" selected>{{warranty.car_model.name}}</option>-->
+                                            <!--</select>-->
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="row mb-4">
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label>Vehicle Make</label>
+                                            <input type="text" class="form-control" name="next_renewal_date" id="month-year-picker" value="{{warranty.next_renewal_date}}" >
+                                        </div> 
+                                    </div>
+
+                                    <div class="row justify-content-center"> <!-- Changed justify-content-end to justify-content-center -->
+                                        <div class="col-sm-9 text-center"> <!-- Added text-center to center the button within the column -->
+                                            <div>
+                                                <button type="submit" class="btn btn-primary w-md">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
+        <!-- ======================================= End Modal ============================================ -->

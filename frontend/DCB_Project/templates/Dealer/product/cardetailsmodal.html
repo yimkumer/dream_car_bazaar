@@ -1,0 +1,797 @@
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST" action="{% url 'dealer:update-car-detail' car_detail.id %}">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Car Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Pre-filled form inputs with current data -->
+                     <div class="card">
+                        <div class = "card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="insurance_type" class="form-label">Insurance Type</label>
+                                <!--<input type="text" class="form-control" id="insurance_type" name="insurance_type" value="{{ car_detail.insurance_type }}">-->
+                                <select class="form-control" id="insurance_type" name="insurance_type">
+                                    
+                                    <option value="Zero Debt" {% if car_detail.insurance_type == "Zero Debt"  %} selected {% endif %}>Zero Debt</option>
+                                    <option value="Comprehensive" {% if car_detail.insurance_type == "Comprehensive"  %} selected {% endif %}>Comprehensive</option>
+                                    <option value="Third Party" {% if car_detail.insurance_type == "Third Party"  %} selected {% endif %}>Third Party</option>
+                                    <option value="No Insurance" {% if car_detail.insurance_type == "No Insurance"  %} selected {% endif %}>No Insurance</option>
+                                </select>
+                                </div>
+                               <div class="col-lg-6 col-sm-12">
+                                    <label for="insurance_validity">Insurance Valid Till</label>
+                                    <input name="insurance_validity" id="insurance_validity" class="form-control form_control" type="date" placeholder="valid..." value="{{car_detail.insurance_validity|date:'Y-m-d'}}">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="fitness_validity" class="form-label">Fitness Validity</label>
+                                <input type="date" class="form-control" id="fitness_validity" name="fitness_validity" value="{{ car_detail.fitness_validity|date:'Y-m-d' }}">
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="pollution_validity" class="form-label">Pollution Validity</label>
+                                    <input type="date" class="form-control" id="pollution_validity" name="pollution_validity" value="{{ car_detail.pollution_validity|date:'Y-m-d' }}">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="registration_place" class="form-label">Registration Place</label>
+                                <input type="text" class="form-control" id="registration_place" name="registration_place" value="{{ car_detail.registration_place }}">
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="registration_no" class="form-label">Registration Number</label>
+                                    <input type="text" class="form-control" id="registration_no" name="registration_no" value="{{ car_detail.registration_no}}">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="last_service" class="form-label">Last Service</label>
+                                <input type="date" class="form-control" id="last_service" name="last_service" value="{{ car_detail.last_service_date|date:'Y-m-d' }}">
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="vehicle_loc" class="form-label">Location of Vehicle</label>
+                                    <input type="text" class="form-control" id="vehicle_location" name="vehicle_location" value="{{ car_detail.vehicle_location}}">
+                                </div>
+                            </div>
+                            
+                        </div>
+                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--Interior-->
+<div class="modal fade" id="interiorModal" tabindex="-1" aria-labelledby="interiorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST" action="{% url 'dealer:update-interior' car_detail.id %}">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="interiorModalLabel">Edit Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Pre-filled form inputs with current data -->
+                     <div class="card">
+                        <div class = "card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="power_steering" class="form-label">Power Steering</label>
+                                <!--<input type="text" class="form-control" id="power_steering" name="power_steering" value="{{ car_detail.power_steering }}">-->
+                                <select name="power_steering" id="power_steering" class="form-control select2-templating" data-live-search="true">
+                                        
+                                        <option value="">Select</option>
+                                        {% if car_detail.power_steering %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="cruise_control" class="form-label">Cruise Control</label>
+                                    <!--<input type="text" class="form-control" id="cruise_control" name="cruise_control" value="{{ car_detail.cruise_control }}">-->
+                                    <select name="cruise_control" id="cruise_control" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if car_detail.cruise_control %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="navigation_system" class="form-label">Navigation System</label>
+                                <!--<input type="text" class="form-control" id="navigation_system" name="navigation_system" value="{{ car_detail.navigation_system }}">-->
+                                <select name="navigation_system" id="navigation_system" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if car_detail.navigation_system %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="adjustable_steering" class="form-label">Adjustable Steering</label>
+                                    <!--<input type="text" class="form-control" id="adjustable_steering" name="adjustable_steering" value="{{ car_detail.adjustable_steering }}">-->
+                                    <select name="adjustable_steering" id="adjustable_steering" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if car_detail.adjustable_steering %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="steering_control" class="form-label">Steering Control</label>
+                                <!--<input type="text" class="form-control" id="steering_control" name="steering_control" value="{{ car_detail.steering_control }}">-->
+                                <select name="steering_control" id="steering_control" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if car_detail.steering_control %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="air_conditioning" class="form-label">Air Conditioning</label>
+                                    <!--<input type="text" class="form-control" id="air_conditioning" name="air_conditioning" value="{{ car_detail.air_conditioning}}">-->
+                                    <select name="air_conditioning" id="air_conditioning" class="form-control select2-templating" data-live-search="true">
+                                    
+                                        <option value="Automatic Air Control" {% if car_detail.air_conditioning == "Automatic Air Control"  %}selected{% endif %}>Automatic Air Control</option>
+                                        <option value="Manual Control" {% if car_detail.air_conditioning == "Manual Control"  %}selected{% endif %}>Manual Control</option>
+                                        <option value="With Heater" {% if car_detail.air_conditioning == "With Heater"  %}selected{% endif %}>With Heater</option>
+                                        <option value="Without Heater" {% if car_detail.air_conditioning == "Without Heater"  %}selected{% endif %}>Without Heater</option>
+                                        <option value="No AC" {% if car_detail.air_conditioning == "No AC"  %}selected{% endif %}>No AC</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="power_window" class="form-label">Power Windows</label>
+                                <!--<input type="text" class="form-control" id="power_window" name="power_window" value="{{ car_detail.power_window }}">-->
+                                <select name="power_window" id="power_window" class="form-control select2-templating" data-live-search="true">
+                                   
+                                        <option value="Front Window Only" {% if car_detail.power_window == "Front Window Only"  %}selected{% endif %}>Front Window Only</option>
+                                        <option value="All Four Power Window" {% if car_detail.power_window == "All Four Power Window"  %}selected{% endif %}>All Four Power Window</option>
+                                    </select>
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--Exterior-->
+<div class="modal fade" id="exteriorModal" tabindex="-1" aria-labelledby="exteriorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST" action="{% url 'dealer:update-exterior' car_detail.id %}">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exteriorModalLabel">Edit Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                     <div class="card">
+                        <div class = "card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="alloy_wheel" class="form-label">Alloy Wheel</label>
+                                <!--<input type="text" class="form-control" id="alloy_wheel" name="alloy_wheel" value="{{ car_detail.alloy_wheel }}">-->
+                                <select class="form-control" id="alloy_wheel" name="alloy_wheel">
+                                        {% if car_detail.alloy_wheel %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="sun_roof" class="form-label">Sun Roof</label>
+                                    <!--<input type="text" class="form-control" id="sun_roof" name="sun_roof" value="{{ car_detail.sun_roof }}">-->
+                                    <select class="form-control" id="sun_roof" name="sun_roof">
+                                        {% if car_detail.sun_roof %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="adjustable_orvm" class="form-label">Adjustable ORVMs</label>
+                                    <!--<input type="text" class="form-control" id="adjustable_orvm" name="adjustable_orvm" value="{{ car_detail.adjustable_orvm }}">-->
+                                    <select class="form-control" id="adjustable_orvm" name="adjustable_orvm">
+                                        <option value="Electrically Adjustable" {% if car_detail.adjustable_orvm == "Electrically Adjustable"  %} selected {% endif %}>Electrically Adjustable</option>
+                                        <option value="Manually Adjustable" {% if car_detail.adjustable_orvm == "Manually Adjustable"  %} selected {% endif %}>Manually Adjustable</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                        </div>
+                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--Infotainment-->
+<div class="modal fade" id="infotainmentModal" tabindex="-1" aria-labelledby="infotainmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST" action="{% url 'dealer:update-infotainment' car_detail.id %}">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="infotainmentModalLabel">Edit Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                     <div class="card">
+                        <div class = "card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="bluetooth" class="form-label">Bluetooth</label>
+                                <!--<input type="text" class="form-control" id="bluetooth" name="bluetooth" value="{{ car_detail.bluetooth }}">-->
+                                <select class="form-control" id="bluetooth" name="bluetooth" >
+                                    {% if car_detail.bluetooth %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                    {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                    {% endif %}
+                                </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="am_fm_radio" class="form-label">AM/FM Radio</label>
+                                    <!--<input type="text" class="form-control" id="am_fm_radio" name="am_fm_radio" value="{{ car_detail.am_fm_radio }}">-->
+                                    <select  class="form-control" id="am_fm_radio" name="am_fm_radio">
+                                        {% if car_detail.am_fm_radio %}
+                                                <option data-tokens="Yes" selected>Yes</option>
+                                                <option data-tokens="No">No</option>
+                                        {% else %}
+                                                <option data-tokens="Yes">Yes</option>
+                                                <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="usb_compatibility" class="form-label">USB Compatibility</label>
+                                    <!--<input type="text" class="form-control" id="usb_compatibility" name="usb_compatibility" value="{{ car_detail.usb_compatibility }}">-->
+                                    <select>
+                                        <option value="Electrically Adjustable" {% if car_detail.usb_compatibility == "Electrically Adjustable"  %} selected {% endif %}>Electrically Adjustable</option>
+                                        <option value="Manually Adjustable" {% if car_detail.usb_compatibility == "Manually Adjustable"  %} selected {% endif %}> Manually Adjustable</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="aux_compatibility" class="form-label">AUX Compatibility</label>
+                                    <!--<input type="text" class="form-control" id="aux_compatibility" name="aux_compatibility" value="{{ car_detail.aux_compatibility }}">-->
+                                     <select name="aux_compatibility" id="aux_compatibility" class="form-control select2-templating" data-live-search="true">
+
+                                            {% if car_detail.aux_compatibility %}
+                                                <option data-tokens="Yes" selected>Yes</option>
+                                                <option data-tokens="No">No</option>
+                                            {% else %}
+                                                <option data-tokens="Yes">Yes</option>
+                                                <option data-tokens="No" selected>No</option>
+                                            {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="android_car_play" class="form-label">Android Auto/Apple Car Play</label>
+                                    <!--<input type="text" class="form-control" id="android_car_play" name="android_car_play" value="{{ car_detail.android_car_play }}">-->
+                                    <select name="android_car_play" id="android_car_play" class="form-control">
+                                       <option value="">Select</option>
+                                        {% if car_detail.android_car_play %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="wireless_charger" class="form-label">Wireless Charger</label>
+                                    <!--<input type="text" class="form-control" id="wireless_charger" name="wireless_charger" value="{{ car_detail.wireless_charger }}">-->
+                                    <select name="wireless_charger" id="wireless_charger" class="form-control">
+                                        <option value="">Select</option>
+                                        {% if car_detail.wireless_charger %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--Safety Features-->
+<div class="modal fade" id="safetyModal" tabindex="-1" aria-labelledby="safetyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST" action="{% url 'dealer:update-safety' car_detail.id %}">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="safetyModalLabel">Edit Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                     <div class="card">
+                        <div class = "card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="abs" class="form-label">ABS</label>
+                                <!--<input type="text" class="form-control" id="abs" name="abs" value="{{ car_detail.abs }}">-->
+                                <select id="abs" name="abs" class="form-control">
+                                       
+                                        {% if car_detail.abs %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="ebd" class="form-label">EBD</label>
+                                    <!--<input type="text" class="form-control" id="ebd" name="ebd" value="{{ car_detail.ebd }}">-->
+                                    <select name="ebd" id="ebd" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if car_detail.ebd %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="anti_theft_device" class="form-label">Anti-Theft Device</label>
+                                    <!--<input type="text" class="form-control" id="anti_theft_device" name="anti_theft_device" value="{{ car_detail.anti_theft_device }}">-->
+                                    <select name="anti_theft_device" id="anti_theft_device" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if car_detail.anti_theft_device %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="aux_compatibility" class="form-label">Rear Parking Camera</label>
+                                    <!--<input type="text" class="form-control" id="rear_parking_camera" name="rear_parking_camera" value="{{ car_detail.rear_parking_camera }}">-->
+                                    <select name="rear_parking_camera" id="rear_parking_camera" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if car_detail.rear_parking_camera %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>    
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="rear_parking_sensor" class="form-label">Rear Parking Sensors</label>
+                                    <!--<input type="text" class="form-control" id="rear_parking_sensor" name="rear_parking_sensor" value="{{ car_detail.rear_parking_sensor}}">-->
+                                    <select name="rear_parking_sensor" id="rear_parking_sensor" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if car_detail.rear_parking_sensor %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="front_parking_camera" class="form-label">Front Parking Camera</label>
+                                    <!--<input type="text" class="form-control" id="front_parking_camera" name="front_parking_camera" value="{{ car_detail.front_parking_camera }}">-->
+                                    <select name="front_parking_camera" id="front_parking_camera" class="form-control select2-templating" data-live-search="true">
+                                        <!--<option value="">Select</option>-->
+                                        {% if car_detail.front_parking_camera %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>    
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="lock_system" class"form-label">Lock System</label>
+                                    <!--<input type="text" class="form-control" id="lock_system" name="lock_system" value="{{car_detail.lock_system}}">-->
+                                    <select name="lock_sensor" id="lock_sensor" class="form-control select2-templating" data-live-search="true">
+                                       <!--<option value="">Select</option>-->
+                                        <option value="Central Locking" {% if car_detail.lock_sensor == "Central Locking" %} selected {% endif %}>Central Locking</option>
+                                        <option value="Remote Control Central Locking" {% if car_detail.lock_sensor == "Remote Control Central Locking" %} selected {% endif %}>Remote Control Central Locking</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="total_air_bag" class="form-label">Number of Airbags</label>
+                                    <!--<input type="text" class="form-control" id="total_air_bag" name="total_air_bag" value="{{car_detail.total_air_bag}}">-->
+                                    <select name="total_air_bag" id="total_air_bag" class="form-control select2-templating" data-live-search="true">
+                                        <!--<option value="">Select</option>-->
+                                        <option value=1 {% if car_detail.total_air_bag == 1 %} selected {% endif %}>1 Bags</option>
+                                        <option value=2 {% if car_detail.total_air_bag == 2 %} selected {% endif %}>2 Bags</option>
+                                        <option value=4 {% if car_detail.total_air_bag == 4 %} selected {% endif %}>4 Bags</option>
+                                        <option value=6 {% if car_detail.total_air_bag == 6 %} selected {% endif %}>6 Bags</option>
+                                        <option value=8 {% if car_detail.total_air_bag == 8 %} selected {% endif %}>8 Bags</option>
+                                        <option value=10 {% if car_detail.total_air_bag == 10 %} selected {% endif %}>10 Bags</option>
+                                        <option value=0 {% if car_detail.total_air_bag == 0 %} selected {% endif %}>None</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--Vehicle Conditions-->
+<div class="modal fade" id="vehicleModal" tabindex="-1" aria-labelledby="vehicleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST" action="{% url 'dealer:update-vehicle' car_detail.id %}">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="vehicleModalLabel">Edit Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                     <div class="card">
+                        <div class = "card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="battery_status" class="form-label">Battery Status</label>
+                                <!--<input type="text" class="form-control" id="battery_status" name="battery_status" value="{{ car_detail.battery_status }}">-->
+                                <select name="battery_status" id="battery_status" class="form-control select2-templating" data-live-search="true">
+                                        <!--<option value="">Select</option>-->
+                                        <option data-tokens="New" {% if car_detail.battery_status == "New" %} selected {% endif %}>New</option>
+                                        <option data-tokens="Old" {% if car_detail.battery_status == "Old" %} selected {% endif %}>Old</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="tyre_condition" class="form-label">Tyre Condition</label>
+                                    <!--<input type="text" class="form-control" id="tyre_condition" name="tyre_condition" value="{{ car_detail.tyre_condition }}">-->
+                                    <select name="tyre_condition" id="tyre_condition" class="form-control select2-templating" data-live-search="true">
+                                        <!--<option value="">Select</option>-->
+                                        <option data-tokens="New" {% if car_detail.tyre_condition == "New" %} selected {% endif %}>New</option>
+                                        <option data-tokens="Old" {% if car_detail.tyre_condition == "Old" %} selected {% endif %}>Old</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="vehicle_warranty" class="form-label">Vehicle Certification / Company Warranty [If Any]</label>
+                                    <!--<input type="text" class="form-control" id="vehicle_warranty" name="vehicle_warranty" value="{{ car_detail.vehicle_warranty }}">-->
+                                    <select name="vehicle_certificate" id="vehicle_certificate" class="form-control select2-templating" data-live-search="true">
+                                         <option value="">Select</option>
+                                        {% if car_detail.vehicle_warranty %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="vehicle_warranty_date" class="form-label">IF YES then mentioned Company Warranty Valid Till</label>
+                                    <input type="text" class="form-control" id="vehicle_warranty_date" name="vehicle_warranty_date" value="{{ car_detail.vehicle_warranty_date|date:'Y-m-d' }}">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="accidental" class="form-label">Accidental</label>
+                                    <!--<input type="text" class="form-control" id="accidental" name="accidental" value="{{ car_detail.accidental }}">-->
+                                    <select name="accidental" id="accidental" class="form-control select2-templating" data-live-search="true">
+                                         <!--<option value="">Select</option>-->
+                                        {% if car_detail.accidental %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Additional-->
+<div class="modal fade" id="additionalModal" tabindex="-1" aria-labelledby="additionalModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST" action="{% url 'dealer:update-additional' car_detail.id %}">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="additionalModalLabel">Edit Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                     <div class="card">
+                        <div class = "card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                <label for="finance" class="form-label">Finance</label>
+                                <!--<input type="text" class="form-control" id="finance" name="finance" value="{{ car_detail.finance }}">-->
+                                 <select name="finance" id="finance" class="form-control select2-templating" data-live-search="true">
+                                       <!--<option value="">Select</option>-->
+                                        {% if car_detail.finance %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="exchange" class="form-label">Exchange</label>
+                                    <!--<input type="text" class="form-control" id="exchange" name="exchange" value="{{ car_detail.exchange }}">-->
+                                    <select name="exchange" id="exchange" class="form-control select2-templating" data-live-search="true">
+                                        <option value="">Select</option>
+                                        {% if car_detail.exchange %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="extended_warranty" class="form-label"> Extended Warranty</label>
+                                    <!--<input type="text" class="form-control" id="extended_warranty" name="extended_warranty" value="{{car_detail.extended_warranty}}">-->
+                                    <select name="extended_warranty" id="extended_warranty" class="form-control select2-templating" data-live-search="true">
+                                         <option value="">Select</option>
+                                        {% if car_detail.extended_warranty %}
+                                            <option data-tokens="Yes" selected>Yes</option>
+                                            <option data-tokens="No">No</option>
+                                        {% else %}
+                                            <option data-tokens="Yes">Yes</option>
+                                            <option data-tokens="No" selected>No</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea name="description" id="description" class="form-control" maxlength="225" rows="5" placeholder="If any additional information about the car" value="{{car_detail.description}}"></textarea>
+                                </div>
+                            </div>
+                            
+                        </div>
+                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--top detail-->
+<!--top model-->
+<div class="modal fade" id="topModal" tabindex="-1" aria-labelledby="topModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST" action="{% url 'dealer:update-top' car_detail.id %}">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="topModalLabel">Edit Car Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Pre-filled form inputs with current data -->
+                     <div class="card">
+                        <div class = "card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="brand_name" class="form-label">Brand Name</label>
+                                    <!--<input type="text" class="form-control" id="brand_name" name="brand_name" value="{{ car_detail.variant.model.brand.name }}">-->
+                                    <select class="form-control" id="brand_name" name="brand_name">
+                                        {% for car_brand in car_brands %}
+                                            {% if car_detail.variant.model.brand.id == car_brand.id %}
+                                                <option value="{{car_brand.id}}" selected>{{car_brand.name}}</option>
+                                            {% else %}
+                                                <option value="{{car_brand.id}}">{{car_brand.name}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="model_name" class="form-label">Model Name</label>
+                                    <!--<input type="text" class="form-control" id="model_name" name="model_name" value="{{ car_detail.variant.model.name }}">-->
+                                    <select class="form-select addcar-select" data-live-search="true" data-width="100%" name="car_model" id="car_model" >
+                                    <option value="{{car_detail.variant.model.id}}" selected>{{car_detail.variant.model.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="variant_name" class="form-label">Variant Name</label>
+                                    <!--<input type="text" class="form-control" id="variant_name" name="variant_name" value="{{ car_detail.variant.name }}">-->
+                                    
+                                    <select class="form-control" data-live-search="true" data-width="100%" name="car_variants" id="car_variants" >
+                                    <option value="{{car_detail.variant.id}}" selected>{{car_detail.variant.name}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="demand_price" class="form-label">Demand Price</label>
+                                    <input type="text" class="form-control" id="demand_price" name="demand_price" value="{{ car_detail.demand_price }}">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="ownership" class="form-label">OwnerShip</label>
+                                    <!--<input type="text" class="form-control" id="ownership" name="ownership" value="{{car_detail.ownership}}">-->
+                                    <select class="form-control" id="ownership" name="ownership" >
+                                    <option value="1st Owner" {% if car_detail.ownership == "1st Owner"  %}selected{% endif %}>First</option>
+                                    <option value="2nd Owner" {% if car_detail.ownership == "2nd Owner"  %}selected{% endif %}>Second</option>
+                                    <option value="3rd Owner" {% if car_detail.ownership == "3rd Owner"  %}selected{% endif %}>Third</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="fuel_type" class="form-label">Fuel Type</label>
+                                    <!--<input type="text" class="form-control" id="fuel_type" name="fuel_type" value="{{car_detail.fuel_type}}">-->
+                                    <select class="form-control select2-templating" data-live-search="true" name="fuel_type" id="fuel_type">
+                                            <!--<option value="">Select</option>-->
+                                            <option data-tokens="CNG" {% if car_detail.fuel_type == "CNG"  %}selected{% endif %}>CNG</option>
+                                            <option data-tokens="Hybrid" {% if car_detail.fuel_type == "Hybrid"  %}selected{% endif %}>Hybrid</option>
+                                            <option data-tokens="Diesel" {% if car_detail.fuel_type == "Diesel"  %}selected{% endif %}>Diesel</option>
+                                            <option data-tokens="Petrol" {% if car_detail.fuel_type == "Petrol"  %}selected{% endif %}>Petrol</option>
+                                        </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="engine_capacity" class="form-label">Engine Capacity</label>
+                                    <input type="text" class="form-control" name="engine_capacity" id="engine_capacity" value="{{car_detail.engine_capacity|default:''}}">
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="color" class="form-label"> Color </label>
+                                    <input type="text" class="form-control" name="color" id="color" value="{{car_detail.color|default:''}}">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="transmission" class="form-label">Transmission</label>
+                                    <!--<input type="text" class="form-control" name="transmission" id="transmission" value="{{ car_detail.transmission}}">-->
+                                    <select class="form-control" name="transmission" id="transmission">
+                                        
+                                        <option value="Manual" {% if car_detail.transmission == "Manual"  %}selected{% endif %}>Manual</option>
+                                        <option value="Automatic" {% if car_detail.transmission == "Automatic" %}selected{% endif %}>Automatic</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="total_km_driven" class="form-label"> KM Driven</label>
+                                    <input type="text" class="form-control" name="total_km_driven" id="total_km_driven" value="{{car_detail.total_km_driven|default:''}}">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="total_keys">Total No. of Keys</label>
+                                        <select name="total_keys" id="total_keys" class="form-control select2-templating" data-live-search="true" >
+                                            <option value="">Select</option>
+                                            <option value=1 {% if car_detail.total_keys == "1"  %} selected {% endif %}>1 Keys</option>
+                                            <option value=2 {% if car_detail.total_keys == "2"  %} selected {% endif %}>2 Keys</option>
+                                        </select>
+                                </div>
+                                <div class="col-lg-6 col-sm-12"> 
+                                    <label for="car_year">Year</label>
+                                    <input name="car_year" id="car_year" class="form-control form_control" type="text"  placeholder="Year" value="{{car_detail.car_year |default:''}}">  
+                                </div>      
+                            </div>
+                        </div>
+                     </div>
+                </div>
+                        <!-- Add other fields similarly -->
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

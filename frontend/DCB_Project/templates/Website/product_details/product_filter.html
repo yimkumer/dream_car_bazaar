@@ -1,0 +1,243 @@
+
+{% block common_css %}
+
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  
+
+    <style>
+        #slider-range {
+            width: 300px; /* Adjust the width to make it shorter */
+            margin: 20px 0;
+        }
+
+        #amount {
+            font-size: 1rem;
+            color: #f6931f;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .search-container {
+            max-width: 400px; /* Center and limit the form width */
+            margin: 0 auto;
+        }
+    </style>
+    
+{% endblock %}
+
+
+<!-- Inner Page Breadcrumb -->
+<section class="advance_search_menu_sectn bgc-thm2 pt20 pb10  mt70-992">
+  <div class="container">
+    <form method="get" action="{% url 'website_car_filter' %}">
+        <div class="row">
+          <div class="col col-sm-4 col-lg-2">
+            <div class="advance_search_style">
+              <select class="form-select" name="car_brand" id="car_brand">
+                <option>Select Brands</option>
+                {% for car_brand in car_brands %}
+                <option value="{{car_brand.id}}">{{car_brand.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-lg-2">
+            <div class="car_models advance_search_style" id="car_models">
+              <select class="form-select" id="car_model">
+                <option value="">Select Models</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-lg-2">
+            <div class="car_prices advance_search_style">
+              <select class="form-select" id="car_variants">
+                <option value="">Select Variants</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-lg-2">
+            <div class="advance_search_style">
+              <input class="form-control form_control" type="text" placeholder="Location.....">
+            </div>
+          </div>
+    
+    
+          <div class="col-6 col-sm-4 col-lg-2">
+            <div class="advance_search_style">
+              <a class="advance_dd_btn" href="#collapseAdvanceSearch" data-bs-toggle="collapse" role="button"
+                aria-expanded="false" aria-controls="collapseAdvanceSearch"><span class="flaticon-cogwheel"></span> More
+                Filter</a>
+            </div>
+          </div>
+          <div class="col-6 col-sm-4 col-lg-2">
+            <div class="advance_search_style">
+              <button type="submit" class="btn search_btn btn-thm" href="#"><span class="flaticon-magnifiying-glass"></span>
+                Search</button>
+            </div>
+          </div>
+        </div>
+    </form>
+    <div class="collapse" id="collapseAdvanceSearch">
+      <div class="row bgc-thm2">
+        <div class="col-12 col-sm-4 col-lg-2">
+          <div class="advance_search_style">
+            <select class="form-select">
+              <option>--Owners--</option>
+              <option value="1st Owner">1st Owners</option>
+              <option value="2nd Owner">2nd Owner</option>
+              <option value="3rd Owner">3rd Owner</option>
+              <option value="4th Owner">4th Owner</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 col-lg-2">
+          <div class="advance_search_style">
+            <select class="form-select">
+              <option>--Model Year--</option>
+              <option value="2010">2010</option>
+              <option value="2012">2012</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 col-lg-2">
+          <div class="advance_search_style">
+            <select class="form-select">
+              <option>--Fuel Type--</option>
+              <option value="CNG">CNG</option>
+              <option value="Hybrid">Hybrid</option>
+              <option value="Diesel">Diesel</option>
+              <option value="Petrol">Petrol</option>
+              <option value="Electric">Electric</option>
+              <option value="LPG">LPG</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 col-lg-2">
+          <div class="advance_search_style">
+            <select class="form-select">
+              <option>--Transmission--</option>
+              <option value="Manual">Manual</option>
+              <option value="Automatic">Automatic</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 col-lg-2">
+          <div class="advance_search_style">
+            <input class="form-control form_control" type="text" placeholder="KM Driven......">
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 col-lg-2">
+          <div class="advance_search_style">
+            <input class="form-control form_control" type="text" placeholder="Car Color.....">
+          </div>
+        </div>
+      </div>
+
+      <!--Pricing-->
+      <div class="row">
+        <h3 class="mb20 short_code_title text-white">Pricing</h3>
+         
+            <form method="GET">
+                <label for="amount">Price range:</label>
+                <input type="text" id="amount" readonly style="border:0;" value="{{ min_price_display }} - {{ max_price_display }}">
+                <div id="slider-range"></div>
+    
+                <input type="hidden" id="min_price" name="min_price" value="{{ min_price }}">
+                <input type="hidden" id="max_price" name="max_price" value="{{ max_price }}">
+                
+                <!--<button type="submit">Search</button>-->
+            </form>
+    
+            <ul>
+            {% for car in cars %}
+                <li>{{ car.name }} - ${{ car.price }}</li>
+            {% empty %}
+                <li>No cars found in this price range.</li>
+            {% endfor %}
+            </ul>
+    <div class="col-lg-3">
+          <div class="shortcode_widget_checkbox mb30-md">
+            <div class="ui_kit_checkbox">
+              <div class="df mb20">
+                <input type="checkbox" class="custom-control-input" id="verified">
+                <label class="custom-control-label text-white" for="verified">Verified Listing</label>
+              </div>
+              <div class="df mb20">
+                <input type="checkbox" class="custom-control-input" id="non-verified">
+                <label class="custom-control-label text-white" for="non-verified">Non Verified Listing</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      <!--  <div class="col-lg-3">-->
+      <!--    <div class="shortcode_widget_checkbox mb30-md">-->
+      <!--      <div class="ui_kit_checkbox">-->
+      <!--        <div class="df mb20">-->
+      <!--          <input type="checkbox" class="custom-control-input" id="0 - 2Lakh">-->
+      <!--          <label class="custom-control-label text-white" for="0 - 2Lakh" >0 - 2Lakh</label>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!--    </div>-->
+      <!--  </div>-->
+      <!--  <div class="col-lg-3">-->
+      <!--    <div class="shortcode_widget_checkbox mb30-md">-->
+      <!--      <div class="ui_kit_checkbox">-->
+      <!--        <div class="df mb20">-->
+      <!--          <input type="checkbox" class="custom-control-input" id="2Lakh - 5Lakh">-->
+      <!--          <label class="custom-control-label text-white" for="2Lakh - 5Lakh">2Lakh - 5Lakh</label>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!--    </div>-->
+      <!--  </div>-->
+      <!--  <div class="col-lg-3">-->
+      <!--    <div class="shortcode_widget_checkbox mb30-md">-->
+      <!--      <div class="ui_kit_checkbox">-->
+      <!--        <div class="df mb20">-->
+      <!--          <input type="checkbox" class="custom-control-input" id="5Lakh - 10Lakh">-->
+      <!--          <label class="custom-control-label text-white" for="5Lakh - 10Lakh">5Lakh - 10Lakh</label>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!--    </div>-->
+      <!--  </div>-->
+      <!--  <div class="col-lg-3">-->
+      <!--    <div class="shortcode_widget_checkbox mb30-md">-->
+      <!--      <div class="ui_kit_checkbox">-->
+      <!--        <div class="df">-->
+      <!--          <input type="checkbox" class="custom-control-input" id="10Lakh - 20Lakh">-->
+      <!--          <label class="custom-control-label text-white" for="10Lakh - 20Lakh">10Lakh - 20Lakh</label>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!--    </div>-->
+      <!--  </div>-->
+      <!--</div>-->
+    </div>
+
+  </div>
+</section>
+
+{% block js %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+ <script>
+        $(function() {
+            $("#slider-range").slider({
+                range: true,
+                min: 100000,
+                max: 50000000,  // Adjusted for INR (5 million as a high cap)
+                values: [{{ min_price }}, {{ max_price }}],
+                slide: function(event, ui) {
+                    // Display ₹ (INR) symbol instead of $
+                    $("#amount").val("₹" + ui.values[0].toLocaleString() + " - ₹" + ui.values[1].toLocaleString());
+                    $("#min_price").val(ui.values[0]);
+                    $("#max_price").val(ui.values[1]);
+                }
+            });
+            // Set initial display of values with ₹
+            $("#amount").val("₹" + $("#slider-range").slider("values", 0).toLocaleString() + " - ₹" + $("#slider-range").slider("values", 1).toLocaleString());
+        });
+    </script>
+{% endblock %}
+<!-- End Section -->

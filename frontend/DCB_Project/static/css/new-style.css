@@ -1,0 +1,740 @@
+    .section-header {
+        padding-bottom: 55px;
+    }
+    
+    .section-header h2 {
+        margin-bottom: 30px;
+    }
+    
+    .looking-car {
+        border: 3px solid #e1e1e1;
+        border-radius: 0 30px;
+        padding: 58px 25px;
+        position: relative;
+        width: 420px;
+    }
+    
+    .looking-cat-image {
+        position: absolute;
+        right: -75px;
+        top: 80px;
+        max-width: 270px;
+    }
+    
+    .looking-cat-image img {
+        max-width: 100%;
+    }
+    
+    .looking-car-content {
+        width: 60%;
+    }
+    
+    .looking-car span {
+        font-weight: 300;
+    }
+    
+    .looking-car-content p {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        margin-bottom: 26px;
+        width: 85%;
+    }
+    
+    .new-car-btn {
+        border: medium none;
+        border-radius: 3px;
+        color: #fff !important;
+        font-size: 16px;
+        font-weight: 800;
+        line-height: 30px;
+        margin: auto;
+        padding: 5px 15px;
+        transition: all .3s linear 0s;
+        display: inline-block;
+        font-weight: 400;
+        line-height: 1.5;
+        text-align: center;
+        text-decoration: none;
+        vertical-align: middle;
+        cursor: pointer;
+        user-select: none;
+        background-color: transparent;
+        border: 1px solid transparent;
+        background: #228dcb none repeat scroll 0 0 !important;
+        fill: #228dcb !important;
+    }
+    
+    .mobile-view {
+        display: none !important;
+    }
+    
+    .car-title a {
+        font-size: 14px !important;
+    }
+    
+    .list-inline-item a i {
+        margin-right: 5px;
+    }
+    
+    @media (max-width: 767px) {
+        .mobile-view {
+            display: block !important;
+        }
+        .desktop-banner {
+            display: none !important;
+        }
+        .col-list-3{
+            width: 100% !important;
+        }
+    }
+    
+    @media (max-width: 992px) {
+        .mobile-view {
+            display: block !important;
+        }
+        .desktop-banner {
+            display: none !important;
+        }
+        .col-list-3{
+            width: 100% !important;
+        }
+    }
+    
+    .mobile_menu_main_logo .nav_logo_img {
+        width: 80px !important;
+        margin-top: 8px !important;
+    }
+    
+    .mobile-menu .header.stylehome1 {
+        background-color: #0a2357 !important;
+    }
+    /* ...............................................................Featured Car Section....................................................... */
+    
+    .col-list-3:nth-child(3n+1) {
+        clear: left;
+    }
+    
+    .col-list-3 {
+        float: left;
+        padding: 0 15px;
+        width: 33%;
+    }
+    
+    .featured-car-list {
+        background: #fff none repeat scroll 0 0;
+        box-shadow: 0 0 10px rgb(0 0 0 / 20%);
+        margin: 0 auto 15px;
+        transition-duration: .3s;
+        -moz-transition-duration: .3s;
+        -o-transition-duration: .3s;
+        -webkit-transition-duration: .3s;
+        -ms-transition-duration: .3s;
+    }
+    
+    .featured-car-img {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .label_icon {
+        color: #fff;
+        font-size: 13px;
+        line-height: 26px;
+        padding: 0 12px;
+        position: absolute;
+        right: 10px;
+        text-align: center;
+        top: 10px;
+        background: #228dcb none repeat scroll 0 0 !important;
+        fill: #228dcb !important;
+    }
+    
+    .compare_item {
+        background: rgba(0, 0, 0, .8);
+        left: 10px;
+        padding: 0 12px;
+        position: absolute;
+        top: 10px;
+    }
+    
+    .compare_item .checkbox {
+        margin: 4px 0;
+        padding: 0;
+    }
+    
+    .checkbox input[type=checkbox],
+    .radio input[type=radio] {
+        display: none;
+    }
+    
+    .compare_item .checkbox label {
+        color: #fff;
+        font-weight: 400;
+        font-size: 13px;
+    }
+    
+    .checkbox label,
+    .radio label {
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 400;
+        padding-left: 26px;
+        position: relative;
+    }
+    
+    .compare_item .checkbox label::before {
+        background: #fff none repeat scroll 0 0;
+        border: 0 none;
+        height: 12px;
+        top: 4px;
+        width: 12px;
+    }
+    
+    .checkbox label::before {
+        background-color: rgba(0, 0, 0, 0);
+        border: 1px solid #111;
+        content: "";
+        display: inline-block;
+        height: 16px;
+        left: 0;
+        position: absolute;
+        top: 4px;
+        width: 16px;
+    }
+    
+    .featured-car-content {
+        padding: 20px;
+        overflow: hidden;
+    }
+    
+    .featured-car-content a {
+        color: #111;
+        font-size: 16px;
+        font-weight: 900;
+    }
+    
+    .price_info {
+        overflow: hidden;
+    }
+    
+    .featured-price {
+        float: left;
+        width: 50%;
+        font-size: 14px;
+        font-weight: 700;
+    }
+    
+    .price_info .car-location {
+        float: right;
+        margin: 0 auto;
+        width: 50%;
+    }
+    
+    .car-location {
+        display: inline-block;
+        margin-left: 24px;
+        color: #919090;
+        font-size: 13px;
+    }
+    
+    .price_info .car-location>span {
+        display: block;
+        line-height: 30px;
+    }
+    
+    .featured-car-content ul {
+        border-top: 1px solid #e7e6e6;
+        margin-bottom: 0;
+        margin-left: auto;
+        margin-right: auto;
+        overflow: hidden;
+        padding: 20px 0 0;
+    }
+    
+    .featured-car-content li {
+        float: left;
+        font-size: 13px;
+        list-style: outside none none;
+        margin-bottom: 8px;
+        width: 50%;
+    }
+    
+    .featured-car-content li .fa {
+        font-size: 15px;
+        margin-right: 8px;
+    }
+    /* .............................................................Our Main Features.................................................. */
+    
+    .ptb-80 {
+        padding-top: 80px;
+        padding-bottom: 80px;
+    }
+    
+    .mission-section .single-mission h3 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #000000;
+        text-transform: capitalize;
+    }
+    
+    .mission-section .single-mission p {
+        margin-bottom: 30px;
+    }
+    
+    .mission-section .single-mission .mission-service {
+        margin-bottom: 30px;
+        position: relative;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+    }
+    
+    .mission-section .single-mission .mission-service i {
+        font-size: 40px;
+        color: #be2026;
+        position: relative;
+        margin-right: 20px;
+        width: 50px;
+        height: 50px;
+        background-color: #e7e8e7;
+        text-align: center;
+        line-height: 50px;
+        border-radius: 70% 30% 30% 70% / 60% 40% 60% 40%;
+    }
+    
+    .mission-section .single-mission .mission-service .text h3 {
+        text-transform: capitalize;
+    }
+    
+    .mission-section .single-mission h3 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #000000;
+        text-transform: capitalize;
+    }
+    
+    .mission-section .single-mission .mission-service .text p {
+        max-width: 300px;
+        margin-bottom: 0;
+    }
+    
+    .mission-section .single-mission p {
+        margin-bottom: 30px;
+    }
+    /* ................................................................Our Plans.................................................... */
+    
+    .single-inventory {
+        text-align: center;
+        background: #ffffff;
+        -webkit-box-shadow: 0px 0px 13px 0px #e7e7e7;
+        box-shadow: 0px 0px 13px 0px #e7e7e7;
+        padding: 40px;
+        position: relative;
+        overflow: hidden;
+        -webkit-transition: .5s;
+        transition: .5s;
+        z-index: 1;
+        margin-bottom: 30px;
+    }
+    
+    .single-inventory .inventory-top h3 {
+        text-transform: capitalize;
+        font-size: 20px;
+        color: #403f3f;
+        -webkit-transition: .5s;
+        transition: .5s;
+    }
+    
+    .single-inventory .inventory-top h4 {
+        color: #666666;
+        font-size: 16px;
+        margin-bottom: 30px;
+        -webkit-transition: .5s;
+        transition: .5s;
+    }
+    
+    .single-inventory .inventory-top h4 span {
+        font-size: 22px;
+        font-weight: 700;
+        color: #000000;
+        -webkit-transition: .5s;
+        transition: .5s;
+    }
+    
+    .single-inventory .inventory-top .image img {
+        width: 40%;
+        margin-bottom: 25px;
+    }
+    
+    .single-inventory .inventory-top .hover-image img {
+        display: none;
+        width: 40%;
+        -webkit-transition: .5s;
+        transition: .5s;
+    }
+    
+    .single-inventory .inventroy-content ul {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .single-inventory .inventroy-content ul li {
+        color: #5c5c5c;
+        text-transform: capitalize;
+        -webkit-transition: .5s;
+        transition: .5s;
+        margin-bottom: 8px;
+    }
+    
+    .single-inventory .inventroy-content .custom-btn2 {
+        margin-top: 30px;
+        padding: 5px 35px;
+        font-size: 14px;
+        -webkit-transition: .5s;
+        transition: .5s;
+    }
+    
+    .custom-btn2 {
+        display: inline-block;
+        background-color: #0e3d71;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: capitalize;
+        color: #ffffff;
+        padding: 12px 35px;
+        margin-right: 20px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .single-inventory:hover::after {
+        height: 100%;
+    }
+    
+    .single-inventory::after {
+        content: "";
+        position: absolute;
+        background: #0e3d71;
+        width: 100%;
+        height: 5px;
+        bottom: 0;
+        left: 0;
+        -webkit-transition: .5s;
+        transition: .5s;
+        z-index: -1;
+    }
+    
+    .single-inventory:hover .hover-image img {
+        margin: auto;
+        display: table;
+        margin-bottom: 25px;
+    }
+    
+    .single-inventory:hover img {
+        display: none;
+    }
+    
+    .single-inventory.active-color {
+        background: #0e3d71;
+    }
+    
+    .single-inventory.active-color h3 {
+        color: #ffff;
+    }
+    
+    .single-inventory.active-color h3 {
+        color: #ffff;
+    }
+    
+    .single-inventory.active-color h4 {
+        color: #ffffff;
+    }
+    
+    .single-inventory.active-color h4 span {
+        color: #ffffff;
+    }
+    
+    .single-inventory.active-color ul li {
+        color: #ffffff;
+    }
+    
+    .single-inventory.active-color .custom-btn2 {
+        background: #ffffff;
+        color: #0e3d71;
+    }
+    
+    .single-inventory:hover h3 {
+        color: #ffff;
+    }
+    
+    .single-inventory:hover h4 {
+        color: #ffffff;
+    }
+    
+    .single-inventory:hover h4 span {
+        color: #ffffff;
+    }
+    
+    .single-inventory:hover ul li {
+        color: #ffffff;
+    }
+    
+    .single-inventory:hover .custom-btn2 {
+        background: #ffffff;
+        color: #0e3d71;
+    }
+    
+    .popular-brand .thumb {
+        border-radius: 0px !important;
+        overflow: hidden;
+        position: relative;
+        border: 1px solid #000;
+        box-shadow: 0 0 10px #0000003b;
+    }
+    
+    .popular-brands {
+        width: 100px;
+    }
+    /* ................................................................................................... */
+    
+    .watermark-image::after {
+        content: 'DCB';
+    }
+    
+    .cars-details-features {
+        padding: 10px;
+        border: 1px solid #777;
+        box-shadow: 0 0 3px #c9c9c9;
+        border-radius: 3px;
+    }
+    
+    .car-details-row {
+        margin: 15px 0px;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .car-details-row:last-child {
+        border: none !important;
+        margin-bottom: 0 !important;
+    }
+    
+    .points-details p {
+        margin-bottom: 5px;
+        font-size: 12px;
+    }
+    
+    .points-details h4 {
+        font-size: 14px;
+    }
+    
+    .mbp_pagination_comments .mbp_first {
+        padding: 20px;
+        box-shadow: 0 0 5px #0000005c;
+        margin-bottom: 30px;
+        border-radius: 10px;
+    }
+    
+    #ecww-header {
+        background: #1a93cc url(../img/emicalculator.png) 50% 50% no-repeat !important;
+    }
+    
+    .highcharts-container {
+        display: none !important;
+    }
+    
+    .popular-listing-listing {
+        background: #ffffff;
+        padding: 5px;
+        box-shadow: 0 0 10px #0000001c;
+        margin-bottom: 50px;
+        border-radius: 20px;
+    }
+    
+    .copyright-container {
+        border-top: 1px solid #fff;
+    }
+    /* .......................................................................DCB Services Section..................................................... */
+    
+    .dcb-service-card {
+        height: 100%;
+        flex-direction: column;
+        transition: all 0.2s ease;
+        border-radius: 12px;
+        display: flex;
+        color: #3B3B3B;
+        background-color: white;
+        box-shadow: 0 1px 8px #2c2c2c2a;
+        padding: 20px;
+    }
+    
+    .dcb-service-card .text-part {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+    
+    .services-con .service-card .explore-more-btn {
+        padding-bottom: 4px;
+    }
+    
+    .dcb-service-card .img-con {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .explore-more-btn {
+        display: flex;
+        align-items: center;
+        color: #124D99;
+        font-weight: bold;
+        padding: 8px 0 0;
+        width: fit-content;
+    }
+    
+    .explore-more-btn .fa {
+        margin-left: 5px;
+    }
+    
+    .dcb-card-title {
+        font-size: 18px;
+        font-weight: 600;
+    }
+    /* ...........................................................Sell Your Car................................................... */
+    
+    .sell-car-cta {
+        background: #0A2357 !important;
+    }
+    
+    .sell-car-cta h2 {
+        font-size: 40px;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+    
+    .sell-car-cta h3 {
+        color: #fff;
+        margin-bottom: 40px;
+    }
+    
+    .sell-car-cta button {
+        font-size: 20px;
+        padding: 10px 20px;
+        background-color: #0277bb;
+        border: none;
+        color: #fff;
+    }
+    /* .............................................................Car Details Page...................................................... */
+    
+    .details-nav {
+        margin: 10px 0px;
+        display: flex;
+    }
+    
+    .details-nav ul li {
+        display: inline-block;
+        margin-right: 10px;
+    }
+    
+    .details-nav ul li a {
+        color: #0a2357;
+        border: 1px solid #0a2357;
+        padding: 5px 14px;
+        display: block;
+        margin-bottom: 10px;
+    }
+    
+    .details-nav ul li a i {
+        padding-right: 10px;
+    }
+    
+    .widget-padding {
+        padding: 30px 25px;
+        background: #0a2357;
+    }
+    
+    .iv_pricing_widget .widget_meta span {
+        font-size: 12px;
+        position: relative;
+        font-weight: 500;
+    }
+    
+    .btn-meta {
+        padding: 4px 12px;
+        font-size: 12px;
+        color: #575757;
+        font-weight: 600;
+        border-radius: 3px;
+        background: #f6f6f6;
+        display: inline-block;
+    }
+    
+    .iv-meta span {
+        font-size: 12px;
+        font-weight: 500;
+    }
+    
+    .iv-meta span i {
+        margin-right: 4px;
+    }
+    
+    .iv-meta span+span {
+        margin-left: 32px;
+        position: relative;
+    }
+    
+    .iv-meta span+span::before {
+        content: "";
+        position: absolute;
+        left: -16px;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+        width: 1px;
+        height: 13px;
+        background: rgba(122, 122, 122, .6);
+    }
+    
+    .meta-tags-badge {
+        background-color: #D0473A;
+        border-radius: 5px;
+        color: #fff;
+        font-size: 10px;
+        font-style: normal;
+        font-weight: 600;
+        padding: 5px 15px;
+        text-align: center;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+    }
+    
+    .iv-meta span {
+        font-size: 12px;
+        font-weight: 500;
+    }
+    /* ..........................................................................Sell Used Car........................................................ */
+    
+    .sell-banner-main {
+        /* padding: 250px 40px; */
+        background-size: cover !important;
+        background-position: center !important;
+    }
+    
+    .sell-banner-overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #0000007d;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+    /* ......................... */
