@@ -19,17 +19,9 @@ cd DCB_Project
 3. Install dependencies :
 pip install -r requirements.txt
 
-4. Install and Configure PostgreSQL:
+4. Environment Setup Create .env in project root
 
-psql -U postgres
-
-CREATE DATABASE dreamcar_dreamcarbazaar;
-
-5. Update Database Configuration Update settings.py
-
-6. Environment Setup Create .env in project root
-
-7. Initialize Database
+5. Initialize Database
 
 python manage.py makemigrations
 
