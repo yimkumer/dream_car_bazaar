@@ -13,8 +13,6 @@ A web application for buying and selling used cars, built with Django 4.1.3.
 1. Clone the repository :
 git clone <your-repository-url>
 
-cd dream_car_bazaar
-
 cd DCB_Project
 
 2. Create and activate virtual environment
